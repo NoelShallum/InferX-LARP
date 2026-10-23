@@ -185,6 +185,18 @@ export const QOS_PRESETS: QosPreset[] = [
   { id: 'floor', label: 'Custom tok/s/user floor', help: 'Serve as many concurrent requests as keep every user above a speed you set.' },
 ];
 
+export interface ThroughputPreset {
+  id: 'report' | 'adjusted' | 'roofline';
+  label: string;
+  help: string;
+}
+
+export const THROUGHPUT_PRESETS: ThroughputPreset[] = [
+  { id: 'report', label: "Report's points as printed", help: "The report's published throughput points as printed (a power law through them), moved between cards and weight formats by the roofline but not between request shapes. Reproduces the report." },
+  { id: 'adjusted', label: 'Report, adjusted to the request', help: "The report's number at its own reference operating point, taken to describe each model's observed traffic, carried onto the roofline's shape. More concurrency, a longer context or a prompt-heavy request move it as the physics says, and nothing exceeds what the memory bus can deliver. Identical to the report at the reference point on observed traffic." },
+  { id: 'roofline', label: 'Roofline only', help: 'Ignore the report\'s estimates and compute speed from memory bandwidth, tensor throughput and the request shape, with the kernel efficiency fitted to the three throughput points the report states as measured.' },
+];
+
 /** Tax and route costs. */
 export const TAX = {
   fiat: rep(0.2517, 'Report §2.4', 'About 25.17% on profit after expenses'),

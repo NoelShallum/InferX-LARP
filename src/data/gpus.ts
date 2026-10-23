@@ -19,6 +19,8 @@ export interface Gpu {
   vramGB: V;
   bwGBs: V;
   tdpW: V;
+  /** Peak dense tensor-core throughput in TFLOPS at the precision the tensor cores run in; null where the card has none. */
+  tflops: { fp16: V; fp8: V | null; fp4: V | null };
   /** Weight formats the card runs natively. */
   quants: Quant[];
   quantsProv: Prov;
@@ -50,6 +52,11 @@ export const GPUS: Gpu[] = [
     vramGB: srcd(96, NVIDIA_PRO, '96 GB GDDR7 with ECC on all three editions'),
     bwGBs: rep(1792, 'Report §5.2', 'Quoted as 1,792 GB/s'),
     tdpW: srcd(600, NVIDIA_PRO, 'Workstation Edition 600 W; Max-Q 300 W; Server 400-600 W'),
+    tflops: {
+      fp4: srcd(2000, 'https://www.nvidia.com/content/dam/en-zz/Solutions/products/workstations/professional-desktop-gpus/rtx-pro-6000-max-q/workstation-datasheet-blackwell-rtx-pro-6000-max-q-nvidia-us-5349650-web.pdf', 'Datasheet lists 4,000 AI TOPS, footnoted as effective FP4 with sparsity; dense is half'),
+      fp8: drv(1000, 'Half of the FP4 rate', 'Blackwell tensor cores halve throughput per doubling of precision; the datasheet gives only the FP4 figure'),
+      fp16: drv(500, 'Quarter of the FP4 rate', 'Same rule; the datasheet gives only the FP4 figure'),
+    },
     quants: ['nvfp4', 'mxfp4', 'fp8', 'awq4', 'fp16'],
     quantsProv: rep(0, 'Report §5.1', 'Report serves NVFP4 and FP8 on this card').p,
     link: 'pcie',
@@ -69,6 +76,11 @@ export const GPUS: Gpu[] = [
     vramGB: rep(48, 'Report §5.1'),
     bwGBs: srcd(960, 'https://lenovopress.lenovo.com/lp1940.pdf', 'Lenovo product guide and Macnica table agree; report §5.2 also quotes 960 GB/s'),
     tdpW: srcd(300, 'https://lenovopress.lenovo.com/lp1940.pdf', 'Several sources list 300 W board power'),
+    tflops: {
+      fp4: null,
+      fp8: srcd(728, 'https://forums.developer.nvidia.com/t/l40-vs-rtx-6000-ada-fp16-fp8-throughput/245204', 'Datasheet quotes 1,457 tensor TFLOPS, which the forum thread reads as FP8 with sparsity; dense is half'),
+      fp16: drv(364, 'Half of the FP8 rate', 'Ada tensor cores run FP16 at half the FP8 rate'),
+    },
     quants: ['fp8', 'awq4', 'nvfp4', 'mxfp4', 'fp16'],
     quantsProv: est(0, 'Report §5.2', 'Report: Ada has no FP4 compute. FP8 and AWQ are used on it, and NVFP4 weights fit (§5.1), so NVFP4 and MXFP4 are assumed to run weight-only through software kernels.').p,
     link: 'pcie',
@@ -88,6 +100,7 @@ export const GPUS: Gpu[] = [
     vramGB: ph(8, 'Report §8.6', 'Report says Whisper-turbo and embedding models fit in 6-8 GB; exact card size not given'),
     bwGBs: ph(224, 'No source yet', 'Not used until a non-text probe is modelled'),
     tdpW: ph(130, 'No source yet'),
+    tflops: { fp4: null, fp8: null, fp16: ph(0, 'No source yet', 'Not used: the card is the control plane') },
     quants: ['fp16', 'awq4'],
     quantsProv: ph(0, 'No source yet').p,
     link: 'pcie',
@@ -107,6 +120,11 @@ export const GPUS: Gpu[] = [
     vramGB: srcd(32, 'https://www.techspot.com/specs/gpu/303357-nvidia-geforce-rtx-5090.html', '32 GB GDDR7, 512-bit'),
     bwGBs: srcd(1792, 'https://www.techradar.com/computing/gpu/nvidia-rtx-5090-vs-rtx-4090', 'About 1,792 GB/s'),
     tdpW: srcd(575, 'https://www.techspot.com/specs/gpu/303357-nvidia-geforce-rtx-5090.html'),
+    tflops: {
+      fp4: srcd(1676, 'https://geizhals.de/nvidia-geforce-rtx-5090-founders-edition-a3381601.html', 'Dense; the 3,352 AI TOPS marketing figure is FP4 with sparsity'),
+      fp8: srcd(838, 'https://geizhals.de/nvidia-geforce-rtx-5090-founders-edition-a3381601.html', 'Dense'),
+      fp16: srcd(419, 'https://geizhals.de/nvidia-geforce-rtx-5090-founders-edition-a3381601.html', 'Dense. GeForce cards may run FP32-accumulate tensor maths at half this rate; not modelled'),
+    },
     quants: ['nvfp4', 'mxfp4', 'fp8', 'awq4', 'fp16'],
     quantsProv: est(0, 'Report §7.1', 'Report assumes NVFP4 weights on the 5090').p,
     link: 'pcie',
@@ -125,6 +143,11 @@ export const GPUS: Gpu[] = [
     vramGB: ph(24, 'No source yet', '24 GB as commonly listed; not checked this session'),
     bwGBs: srcd(1008, 'https://www.techradar.com/computing/gpu/nvidia-rtx-5090-vs-rtx-4090', 'A comparison table lists about 1,010 GB/s'),
     tdpW: srcd(450, 'https://www.techradar.com/computing/gpu/nvidia-rtx-5090-vs-rtx-4090', 'TGP 450 W'),
+    tflops: {
+      fp4: null,
+      fp8: srcd(660, 'https://www.gpuperhour.com/compare/l40s-vs-rtx-4090', 'Third-party comparison table, dense'),
+      fp16: ph(330, 'No source yet', 'Half the FP8 rate by the Ada rule; GeForce cards may run FP32-accumulate at half of that, not modelled'),
+    },
     quants: ['fp8', 'awq4', 'mxfp4', 'fp16'],
     quantsProv: ph(0, 'No source yet', 'Ada tensor cores support FP8; assumed').p,
     link: 'pcie',
@@ -144,6 +167,11 @@ export const GPUS: Gpu[] = [
     vramGB: ph(48, 'No source yet', '48 GB as commonly listed; not checked this session'),
     bwGBs: ph(864, 'No source yet', 'Not checked this session'),
     tdpW: ph(350, 'No source yet', 'Not checked this session'),
+    tflops: {
+      fp4: null,
+      fp8: srcd(733, 'https://lenovopress.lenovo.com/lp1812.pdf', 'Lenovo product guide: 733 TFLOPS dense, 1,466 with sparsity'),
+      fp16: drv(362, 'Half of the FP8 rate', 'Ada tensor cores run FP16 at half the FP8 rate; matches a 362 figure in a third-party table'),
+    },
     quants: ['fp8', 'awq4', 'mxfp4', 'fp16'],
     quantsProv: ph(0, 'No source yet').p,
     link: 'pcie',
@@ -162,6 +190,11 @@ export const GPUS: Gpu[] = [
     vramGB: srcd(80, IX_SPECS, '80 GB HBM3'),
     bwGBs: srcd(3350, IX_SPECS, '3.35 TB/s'),
     tdpW: srcd(700, IX_HW),
+    tflops: {
+      fp4: null,
+      fp8: srcd(1979, IX_SPECS, 'Dense'),
+      fp16: srcd(989, IX_SPECS, 'BF16, dense'),
+    },
     quants: ['fp8', 'mxfp4', 'awq4', 'fp16'],
     quantsProv: srcd(0, IX_SPECS, 'Hopper has FP8 but no FP4 tensor support').p,
     link: 'nvlink',
@@ -180,6 +213,11 @@ export const GPUS: Gpu[] = [
     vramGB: srcd(141, IX_SPECS, '141 GB HBM3e'),
     bwGBs: srcd(4800, IX_SPECS, '4.8 TB/s'),
     tdpW: srcd(700, IX_HW),
+    tflops: {
+      fp4: null,
+      fp8: srcd(1979, IX_SPECS, 'Dense'),
+      fp16: srcd(989, IX_SPECS, 'BF16, dense'),
+    },
     quants: ['fp8', 'mxfp4', 'awq4', 'fp16'],
     quantsProv: srcd(0, IX_SPECS, 'Hopper has FP8 but no FP4 tensor support').p,
     link: 'nvlink',
@@ -198,6 +236,11 @@ export const GPUS: Gpu[] = [
     vramGB: srcd(180, IX_SPECS, '180 GB HBM3e'),
     bwGBs: srcd(8000, IX_SPECS, '8 TB/s'),
     tdpW: srcd(1000, IX_HW),
+    tflops: {
+      fp4: srcd(9000, IX_SPECS, 'Dense'),
+      fp8: srcd(4500, IX_SPECS, 'Dense'),
+      fp16: srcd(2250, IX_SPECS, 'BF16, dense'),
+    },
     quants: ['nvfp4', 'mxfp4', 'fp8', 'awq4', 'fp16'],
     quantsProv: srcd(0, IX_SPECS, 'Blackwell has FP4 and FP8').p,
     link: 'nvlink',
@@ -216,6 +259,11 @@ export const GPUS: Gpu[] = [
     vramGB: srcd(32, 'https://images.nvidia.com/content/technologies/volta/pdf/tesla-volta-v100-datasheet.pdf', '32 GB HBM2 variant'),
     bwGBs: srcd(900, 'https://images.nvidia.com/content/technologies/volta/pdf/tesla-volta-v100-datasheet.pdf', '900 GB/s on the PCIe card (V100S is 1,134 GB/s)'),
     tdpW: srcd(250, 'https://images.nvidia.com/content/technologies/volta/pdf/tesla-volta-v100-datasheet.pdf', 'PCIe 250 W; SXM2 is 300 W'),
+    tflops: {
+      fp4: null,
+      fp8: null,
+      fp16: srcd(112, 'https://images.nvidia.com/content/technologies/volta/pdf/tesla-volta-v100-datasheet.pdf', 'Tensor performance of the PCIe card (SXM2 is 125)'),
+    },
     quants: ['fp16', 'awq4'],
     quantsProv: srcd(0, 'https://images.nvidia.com/content/technologies/volta/pdf/tesla-volta-v100-datasheet.pdf', 'Volta has no FP8, FP4 or BF16 tensor support, so FP16 or INT4 only').p,
     link: 'pcie',
@@ -232,11 +280,12 @@ export const GPU_BY_ID: Record<string, Gpu> = Object.fromEntries(GPUS.map((g) =>
 
 /** Cost of editions and heat, applied to the owned PRO 6000 only. */
 export const PRO6000_EDITION = {
-  workstation: { label: 'Workstation 600 W', decode: 1, prov: rep(1, 'Report §2.5').p },
+  workstation: { label: 'Workstation 600 W', decode: 1, prefill: 1, prov: rep(1, 'Report §2.5').p },
   maxq: {
     label: 'Max-Q 300 W',
     decode: 0.95,
-    prov: rep(0.95, 'Report §5.2', 'Max-Q loses about 5% on decode and 28-48% on prefill').p,
+    prefill: 0.62,
+    prov: rep(0.95, 'Report §5.2', 'Max-Q loses about 5% on decode and 28-48% on prefill; prefill uses the midpoint, 0.62').p,
   },
 } as const;
 

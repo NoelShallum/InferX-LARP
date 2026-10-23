@@ -55,7 +55,7 @@ describe('throughput curve and speculative decoding', () => {
     expect(mtpGain(info, 1)).toBeGreaterThan(mtpGain(info, 16));
   });
   it('a stricter per-user speed floor lowers concurrency and total throughput', () => {
-    const base = { model, gpu: pro, proGpu: pro, count: 1, quant: 'nvfp4' as const, mtp: false, extraMult: 1, avgContextTokens: 15300 };
+    const base = { model, gpu: pro, proGpu: pro, count: 1, quant: 'nvfp4' as const, mtp: false, extraMult: 1, shape: { avgTokens: 15300, outShare: 0.041, cacheHit: 0.41 } };
     const loose = capacityFor({ ...base, qos: { mode: 'floor', floorTps: 20 } });
     const strict = capacityFor({ ...base, qos: { mode: 'floor', floorTps: 60 } });
     expect(strict.cPerGpu).toBeLessThan(loose.cPerGpu);
@@ -185,11 +185,11 @@ describe('live data sources', () => {
     expect(lm.shape!.outShare).toBeLessThan(0.2);
   });
   it('the OpenRouter-competitive quality bar is the median live stream speed for the model', () => {
-    const router = { ...live, qos: { mode: 'router' as const, floorTps: 40 } };
+    const router = { ...live, qos: { mode: 'router' as const, floorTps: 40, ttftP90Sec: 10 } };
     const f = floorFor('qwen38_27b', router);
     expect(f.v).not.toBeNull();
     expect(f.floor).toBe(OPENROUTER.models['qwen38_27b']!.summary.p50TpsMedian);
-    const none = floorFor('qwen38_27b', { ...router, qos: { mode: 'floor' as const, floorTps: 40 } });
+    const none = floorFor('qwen38_27b', { ...router, qos: { mode: 'floor' as const, floorTps: 40, ttftP90Sec: 10 } });
     expect(none.floor).toBe(40);
   });
   it('a rented slot is charged the live rent', () => {

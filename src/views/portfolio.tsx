@@ -258,6 +258,14 @@ function SlotCard({ r }: { r: SlotResult }) {
               {fmtNum(cap.cNode, 0)} · {fmtTps(cap.userTps)} tok/s each
             </b>
           </div>
+          {cap.serving ? (
+            <div>
+              <span>Prefill takes · first token p90</span>
+              <b>
+                {fmtPct(cap.serving.share)} of GPU time · {cap.serving.ttftP90 >= 10 ? cap.serving.ttftP90.toFixed(0) : cap.serving.ttftP90.toFixed(1)} s
+              </b>
+            </div>
+          ) : null}
           <div>
             <span>If fully busy</span>
             <b>
@@ -314,12 +322,13 @@ function SlotCard({ r }: { r: SlotResult }) {
         <>
           {cap.kvLimited ? (
             <div class="warnbox">
-              The KV pool holds about {fmtNum(cap.kvConcPerGpu, 0)} users per GPU at {fmtTokens(r.shape?.avgTokens ?? 0)}-token context, fewer than the {fmtNum(cap.cPerGpu, 0)} this operating point assumes.{' '}
-              {model?.kvBytesPerTok.p.kind === 'placeholder' ? <ProvBadge p={model.kvBytesPerTok.p} /> : null}
+              The KV pool holds about {fmtNum(cap.kvConcPerGpu, 0)} users per GPU at {fmtTokens(r.shape?.avgTokens ?? 0)}-token context, fewer than the {fmtNum(cap.cPerGpu, 0)} this operating point assumes.
             </div>
           ) : null}
           {cap.extrapolated ? <div class="warnbox">This operating point is beyond the highest measured concurrency; throughput is extrapolated.</div> : null}
-          {cap.belowFloor ? <div class="warnbox">Even one user falls below the tok/s/user floor on this card.</div> : null}
+          {cap.belowFloor ? <div class="warnbox">{cap.ttftLimited ? 'Even one user waits longer for a first token than the limit allows on this card.' : 'Even one user falls below the tok/s/user floor on this card.'}</div> : null}
+          {cap.ttftLimited && !cap.belowFloor ? <div class="warnbox">Concurrency is held down by the time-to-first-token limit, not the speed floor: prefill queues requests before they start.</div> : null}
+          {cap.basisNote ? <div class="warnbox">{cap.basisNote}</div> : null}
           {r.aboveElasticityData ? <div class="warnbox">Priced above 1.2× the median, where the report has no data; share is a guess.</div> : null}
           <details class="evidence">
             <summary>
@@ -341,8 +350,11 @@ function SlotCard({ r }: { r: SlotResult }) {
                 </li>
               ))}
               <li>
-                <span>Uncached prefill needed at full load: ≥ {fmtNum(r.prefillTpsAtCapacity, 0)} tok/s</span>
-                <ProvBadge p={{ kind: 'placeholder', src: 'Not modelled yet', note: 'Prefill capacity arrives with the roofline engine in phase 3' }} />
+                <span>
+                  Uncached prefill at full load: {fmtNum(r.prefillTpsAtCapacity, 0)} tok/s
+                  {cap.serving ? ` against ${fmtNum(cap.serving.prefill.tokPerSec, 0)} tok/s the card can prefill` : ''}
+                </span>
+                <ProvBadge p={cap.serving ? { kind: 'placeholder', src: 'Roofline', note: 'Prefill speed is compute-bound; its efficiency is not fitted to any measurement' } : { kind: 'report', src: 'Not modelled on the report\'s own numbers', note: 'Switch the throughput basis to see prefill limits' }} />
               </li>
             </ul>
           </details>

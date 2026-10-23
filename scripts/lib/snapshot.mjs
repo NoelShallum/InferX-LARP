@@ -16,3 +16,13 @@ export function writeSnapshot(name, payload, now = new Date(), compact = (p) => 
 }
 
 export const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+export const REPO_DIR = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../..');
+
+/** Write a JSON file under the repository, relative to its root. */
+export function writeJson(rel, payload) {
+  const file = path.join(REPO_DIR, rel);
+  fs.mkdirSync(path.dirname(file), { recursive: true });
+  fs.writeFileSync(file, JSON.stringify(payload, null, 1) + '\n');
+  return rel;
+}

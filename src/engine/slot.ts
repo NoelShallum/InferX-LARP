@@ -264,6 +264,8 @@ export function evaluateSlot(slot: Slot, settings: Settings, opts: SlotEvalOpts 
     : settings.qos.mode === 'report'
       ? { mode: 'report' as const, floorTps: settings.qos.floorTps }
       : { mode: 'floor' as const, floorTps: routerFloor ? routerFloor.floor : settings.qos.floorTps };
+  // The report's throughput points are taken to describe the model's traffic as observed; other workloads are adjusted from there.
+  const observed = slotShape({ ...slot, workloadId: 'observed' }, settings);
   const capacity = capacityFor({
     model,
     gpu,
@@ -271,10 +273,14 @@ export function evaluateSlot(slot: Slot, settings: Settings, opts: SlotEvalOpts 
     count: slot.count,
     quant: slot.quant,
     mtp: slot.mtp,
-    qos,
+    qos: { ...qos, ttftP90Sec: settings.qos.ttftP90Sec },
     extraMult,
     extraNotes,
-    avgContextTokens: shape.avgTokens,
+    shape: { avgTokens: shape.avgTokens, outShare: shape.outShare, cacheHit: shape.cacheHit },
+    baseShape: observed ? { avgTokens: observed.avgTokens, outShare: observed.outShare, cacheHit: observed.cacheHit } : undefined,
+    basis: settings.throughput,
+    prefillMult: edition ? edition.prefill : 1,
+    batch: wl.batch,
   });
   if (!capacity.ok) return emptyResult(slot, gpu, capacity.reason, { capacity, shape });
 

@@ -1,5 +1,6 @@
 import { type V, type Prov, rep, meas, est, drv, ph } from './provenance';
 import type { Quant } from './gpus';
+import { ARCH, activeFromConfigV, kvPerTokV, type ArchInfo } from './arch';
 
 export interface TputPoint {
   /** Concurrent requests. */
@@ -27,8 +28,10 @@ export interface Model {
   /** Weight size in GB at quants the report lists. Other quants are derived from parameter count. */
   weights: Partial<Record<Quant, V>>;
   defaultQuant: Quant;
-  /** KV bytes per token at FP8 KV cache. */
+  /** KV bytes per context token at FP8 KV cache (full-attention layers; sliding-window and recurrent layers are in `net`). */
   kvBytesPerTok: V;
+  /** What the Hugging Face config says about memory and compute; null if the config was not read. */
+  net: ArchInfo | null;
   /** Measured concurrent requests on a PRO 6000 at 8K and 32K context (report §5.1). */
   conc8k: V | null;
   conc32k: V | null;
@@ -51,7 +54,7 @@ const T51 = 'Report §5.1';
 
 const kvGeneric = (bytes: number, why: string): V => ph(bytes, 'No source yet', why);
 
-export const MODELS: Model[] = [
+const RAW_MODELS: Omit<Model, 'net'>[] = [
   {
     id: 'qwen38_27b',
     name: 'Qwen3.8-27B',
@@ -356,6 +359,24 @@ export const MODELS: Model[] = [
     note: 'Barely fits a PRO 6000 and carries only 1.5B paid tokens a day.',
   },
 ];
+
+/** Replace placeholder memory figures with what each model's Hugging Face config says. */
+function withArch(m: Omit<Model, 'net'>): Model {
+  const net = ARCH[m.id] ?? null;
+  if (!net) return { ...m, net: null };
+  const out: Model = { ...m, net, kvBytesPerTok: kvPerTokV(net) };
+  if (m.activeB.p.kind === 'placeholder') {
+    const a = activeFromConfigV(net);
+    if (a) out.activeB = a;
+  }
+  if (m.mtp) {
+    const head = net.mtpLayers > 0 ? `The checkpoint ships an MTP head (config: ${net.mtpLayers} layer${net.mtpLayers > 1 ? 's' : ''}).` : 'The config shows no MTP head, so this checkpoint may need a separate draft model.';
+    out.mtp = { ...m.mtp, note: `${m.mtp.note} ${head}` };
+  }
+  return out;
+}
+
+export const MODELS: Model[] = RAW_MODELS.map(withArch);
 
 export const MODEL_BY_ID: Record<string, Model> = Object.fromEntries(MODELS.map((m) => [m.id, m]));
 

@@ -11,7 +11,10 @@ Agreed in the interview before building. Kept here so the reasons survive.
 ## Throughput
 
 - **Roofline model plus published points.** No benchmark harness for the owned boxes in v1.
-- InferenceX has no measured data for one PRO 6000, Ada or 5090 on 27–35B models, so the report's published points are the anchors and the roofline fills the gaps (phase 3).
+- InferenceX has no measured data for one PRO 6000, Ada or 5090 on 27–35B models, so the report's published points are the anchors and the roofline fills the gaps.
+- Default basis: the report's number at its reference operating point, carried onto the roofline's shape ("measured where it exists, scaling model elsewhere"). The report's points as printed and the roofline alone are one switch away.
+- The roofline's memory efficiency and step overhead are fitted to three PRO 6000 points (Qwen3.8-27B at 16 concurrent, measured; gpt-oss-120b and gpt-oss-20b at 50). Prefill efficiency has no measurement and is a placeholder.
+- Model architecture (KV per token, sliding windows, recurrent state, experts, active parameters) comes from Hugging Face configs, tagged Sourced with the commit.
 - **Multi-GPU rentals are in scope now.** InferenceX measured curves are used where they exist; a tensor-parallel scaling model fills the rest.
 
 ## Demand and price
@@ -54,7 +57,8 @@ Every value is tagged measured, report, report estimate, derived, sourced or pla
 
 1. Interface and planner on the report's static numbers, with the economics engine behind it. **Done.**
 2. Vast.ai browser scrape (done once live, then scripted) and an OpenRouter script, with dated snapshots; replace the static prices. **Done.**
-3. Roofline engine, starting with PRO 6000 × Qwen3.8-27B end to end, then every model and card. Next.
+3. Roofline engine, starting with PRO 6000 × Qwen3.8-27B end to end, then every model and card. **Done** (Hugging Face configs, roofline, prefill and first-token time).
+4. Next: InferenceX measured multi-GPU curves, a measurement run on the owned cards, AMD and A100.
 
 ## Acceptance
 

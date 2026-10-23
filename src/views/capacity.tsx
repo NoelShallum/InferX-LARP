@@ -1,7 +1,8 @@
 import { useState } from 'preact/hooks';
 import { GPU_BY_ID, GPUS, QUANT_LABEL, type Quant } from '../data/gpus';
 import { MODELS, MODEL_BY_ID } from '../data/models';
-import { GPU_MEM_UTIL, OVERHEAD_GB_PER_GPU, chooseQuant, MIN_KV_TOKENS } from '../engine/capacity';
+import { ARCH_SNAPSHOT_AT } from '../data/arch';
+import { GPU_MEM_UTIL, OVERHEAD_GB_PER_GPU, chooseQuant, kvUsersAt, MIN_KV_TOKENS, seqKvBytes } from '../engine/capacity';
 import { fmtNum, fmtTokens } from '../engine/units';
 import { ChartCard, StackedBar } from '../ui/charts';
 import { Field, SelectInput, Segmented } from '../ui/controls';
@@ -25,8 +26,10 @@ export function CapacityView() {
   const kvFactor = kv === 'bf16' ? 2 : 1;
   const fit = chooseQuant(model, gpu, n, quant);
   const kvBytes = model.kvBytesPerTok.v * kvFactor;
-  const kvTokens = fit.fits || fit.kvPoolGB > 0 ? (fit.kvPoolGB * 1e9) / kvBytes : 0;
-  const usersAtCtx = kvTokens / ctx;
+  const usersAtCtx = fit.fits || fit.kvPoolGB > 0 ? kvUsersAt(model, fit, ctx, kvFactor) : 0;
+  const kvTokens = usersAtCtx * ctx;
+  const net = model.net;
+  const perUserFixed = net ? seqKvBytes(model, 0, kvFactor) + (net.window ? net.slidingTokBytes * net.window * kvFactor : 0) : 0;
   const totalVram = gpu.vramGB.v * n;
   const unused = totalVram * (1 - GPU_MEM_UTIL.v);
 
@@ -92,7 +95,7 @@ export function CapacityView() {
           <div class="sub">{fit.reason}</div>
           <div class="kv" style={{ borderTop: 0, marginTop: 0, paddingTop: 0 }}>
             <div>
-              <span>KV tokens that fit</span>
+              <span>Context tokens that fit</span>
               <b>{fmtTokens(kvTokens)}</b>
             </div>
             <div>
@@ -105,6 +108,12 @@ export function CapacityView() {
                 {(kvBytes / 1000).toFixed(1)} KB <ProvBadge p={model.kvBytesPerTok.p} compact />
               </b>
             </div>
+            {net && perUserFixed > 0 ? (
+              <div>
+                <span>Fixed per user (window and state)</span>
+                <b>{(perUserFixed / 1e6).toFixed(0)} MB</b>
+              </div>
+            ) : null}
             <div>
               <span>Weights</span>
               <b>
@@ -159,7 +168,7 @@ export function CapacityView() {
                     </td>
                     <td>{QUANT_LABEL[f.quant]}</td>
                     <td class="num">{f.kvPoolGB.toFixed(1)} GB</td>
-                    <td class="num">{fmtNum((f.kvPoolGB * 1e9) / kvBytes / ctx, 0)}</td>
+                    <td class="num">{fmtNum(kvUsersAt(model, f, ctx, kvFactor), 0)}</td>
                     <td class={f.fits ? '' : 'miss'}>{f.fits ? (f.forced ? 'Fits with host-RAM offload' : 'Fits') : f.reason}</td>
                   </tr>
                 ))}
@@ -190,7 +199,7 @@ export function CapacityView() {
                     <td>{m.name}</td>
                     <td>{QUANT_LABEL[f.quant]}</td>
                     <td class="num">{f.kvPoolGB.toFixed(1)} GB</td>
-                    <td class="num">{fmtNum((f.kvPoolGB * 1e9) / (m.kvBytesPerTok.v * kvFactor) / ctx, 0)}</td>
+                    <td class="num">{fmtNum(kvUsersAt(m, f, ctx, kvFactor), 0)}</td>
                     <td class={f.fits ? '' : 'miss'}>{f.fits ? (f.forced ? 'Fits with host-RAM offload' : 'Fits') : f.reason}</td>
                   </tr>
                 ))}
@@ -199,8 +208,47 @@ export function CapacityView() {
           </div>
         </section>
       </div>
+      {net ? (
+        <section class="card" aria-label="Architecture">
+          <h2>{model.name}: what the config says</h2>
+          <div class="sub">
+            Read from <a href={net.configUrl} target="_blank" rel="noreferrer">{net.repo}</a> on {ARCH_SNAPSHOT_AT.slice(0, 10)}. Only the layers that keep a full cache grow with context; sliding-window layers stop at their window and linear-attention or Mamba layers keep a fixed state.
+          </div>
+          <div class="kv" style={{ borderTop: 0, marginTop: 0, paddingTop: 0 }}>
+            <div>
+              <span>Layers</span>
+              <b>
+                {net.layers} ({[net.layerMix.full ? `${net.layerMix.full} full attention` : '', net.layerMix.sliding ? `${net.layerMix.sliding} sliding ${net.window}` : '', net.layerMix.linear ? `${net.layerMix.linear} linear` : '', net.layerMix.mamba ? `${net.layerMix.mamba} Mamba` : '', net.layerMix.other ? `${net.layerMix.other} expert-only` : ''].filter(Boolean).join(', ')})
+              </b>
+            </div>
+            <div>
+              <span>Recurrent state per user</span>
+              <b>{net.stateBytes > 0 ? `${(net.stateBytes / 1e6).toFixed(0)} MB` : 'none'}</b>
+            </div>
+            <div>
+              <span>Experts</span>
+              <b>{net.moe ? `${net.moe.topK} of ${net.moe.experts}` : 'dense'}</b>
+            </div>
+            <div>
+              <span>Active parameters</span>
+              <b>
+                <Val v={model.activeB} fmt={(x) => `${x}B`} />
+              </b>
+            </div>
+            <div>
+              <span>Speculative-decoding head</span>
+              <b>{net.mtpLayers > 0 ? `yes, ${net.mtpLayers} layer${net.mtpLayers > 1 ? 's' : ''}` : 'none in the config'}</b>
+            </div>
+            <div>
+              <span>Maximum context</span>
+              <b>{net.maxPositions ? fmtTokens(net.maxPositions) : '—'}</b>
+            </div>
+          </div>
+          {net.note ? <p class="small">{net.note}</p> : null}
+        </section>
+      ) : null}
       <p class="small">
-        Catalog: {GPUS.filter((g) => g.role === 'serve').length} serving GPUs, {MODELS.length} models. KV bytes per token are placeholders for most models until the Hugging Face configs are pulled in phase 3.
+        Catalog: {GPUS.filter((g) => g.role === 'serve').length} serving GPUs, {MODELS.length} models. KV figures come from each model's Hugging Face config; the report's own users-at-8K and users-at-32K figures are limited by first-token time, not memory, so they are not comparable.
       </p>
     </div>
   );

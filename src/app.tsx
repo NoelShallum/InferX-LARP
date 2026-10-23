@@ -1,7 +1,7 @@
 import { FX_INR_PER_USD, PRO6000_EDITION, SUMMER_DERATE } from './data/gpus';
 import { OR_DAY, RENT_VIEW_LABEL, VAST_DAY, type RentView } from './data/live';
-import { AVAILABILITY_PRESETS, CASES, CASE_LABEL, LISTING_ODDS, QOS_PRESETS, ROUTE_COSTS, SCENARIOS, ZDR_SHARE_BONUS, type CaseId, type CostLevel } from './data/scenarios';
-import { NEUTRAL_WHATIF } from './engine/types';
+import { AVAILABILITY_PRESETS, CASES, CASE_LABEL, LISTING_ODDS, QOS_PRESETS, ROUTE_COSTS, SCENARIOS, THROUGHPUT_PRESETS, ZDR_SHARE_BONUS, type CaseId, type CostLevel } from './data/scenarios';
+import { NEUTRAL_WHATIF, type Settings } from './engine/types';
 import { resolveCase } from './engine/slot';
 import { fmtPct } from './engine/units';
 import { goTo, resetAll, settings, theme, updateSettings, view, VIEWS } from './state';
@@ -92,7 +92,7 @@ function Assumptions() {
         <OverrideNumber label="Monthly price trend" effective={eff.priceTrend} scenarioValue={sc.priceTrend} scale={100} suffix="% a month" step={0.5} min={-20} max={20} onChange={(v) => updateSettings({ override: { ...s.override, priceTrend: v } })} />
         <OverrideNumber label="First listed month" effective={eff.listingMonth} scenarioValue={sc.listingMonth} suffix="month" step={1} min={1} max={12} onChange={(v) => updateSettings({ override: { ...s.override, listingMonth: v === null ? null : Math.round(v) } })} />
         <Field label={<>Owned PRO 6000 edition <ProvBadge p={PRO6000_EDITION[s.proEdition].prov} compact /></>}>
-          <SelectInput label="PRO 6000 edition" value={s.proEdition} options={[{ id: 'workstation', label: 'Workstation 600 W' }, { id: 'maxq', label: 'Max-Q 300 W (decode ×0.95)' }]} onChange={(v) => updateSettings({ proEdition: v })} />
+          <SelectInput label="PRO 6000 edition" value={s.proEdition} options={[{ id: 'workstation', label: 'Workstation 600 W' }, { id: 'maxq', label: 'Max-Q 300 W (decode ×0.95, prefill ×0.62)' }]} onChange={(v) => updateSettings({ proEdition: v })} />
         </Field>
         <Field label={<>Bar cost level <ProvBadge p={ROUTE_COSTS.upsInr.base.p} compact /></>}>
           <Segmented label="Bar cost level" value={s.costLevel} options={(['low', 'base', 'high'] as CostLevel[]).map((c) => ({ id: c, label: CASE_LABEL[c] }))} onChange={(v) => updateSettings({ costLevel: v })} />
@@ -149,7 +149,11 @@ function Filters() {
           <SelectInput label="Quality bar" value={s.qos.mode} options={QOS_PRESETS.map((q) => ({ id: q.id, label: q.label }))} onChange={(v) => updateSettings({ qos: { ...s.qos, mode: v } })} />
           {s.qos.mode === 'floor' ? <NumberInput label="Minimum tokens per second per user" value={s.qos.floorTps} min={1} max={200} step={1} width={70} suffix="tok/s/user" onChange={(v) => updateSettings({ qos: { ...s.qos, floorTps: v } })} /> : null}
           {s.qos.mode === 'router' ? <span class="small">median live stream speed, per model</span> : null}
+          {s.qos.mode !== 'report' && s.throughput !== 'report' ? <NumberInput label="Time to first token, 90th percentile" value={s.qos.ttftP90Sec} min={0.5} max={120} step={0.5} width={64} suffix="s p90 TTFT" onChange={(v) => updateSettings({ qos: { ...s.qos, ttftP90Sec: v } })} /> : null}
         </span>
+      </Field>
+      <Field label="Throughput">
+        <SelectInput<Settings['throughput']> label="Throughput basis" value={s.throughput} options={THROUGHPUT_PRESETS.map((t) => ({ id: t.id, label: t.label }))} onChange={(v) => updateSettings({ throughput: v })} />
       </Field>
       <Field label="Prices">
         <span class="small" title="Run npm run data to refresh these">
@@ -214,7 +218,7 @@ export function App() {
         <V />
       </main>
       <footer class="small" style={{ marginTop: '28px' }}>
-        Numbers are built on the report "Inference as a Service: Platforms, Models and Margins" (22 Oct 2026) and the InferenceX repositories. Prices and traffic are live as of the last data run; the roofline engine for prefill and time to first token comes next. Not financial or legal advice.
+        Numbers are built on the report "Inference as a Service: Platforms, Models and Margins" (22 Oct 2026) and the InferenceX repositories. Prices and traffic are live as of the last data run; architecture figures come from each model's Hugging Face config. Throughput follows the report's points unless you switch it to the roofline. Not financial or legal advice.
       </footer>
       <Popover />
     </div>

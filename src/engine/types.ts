@@ -1,4 +1,5 @@
 import type { Quant } from '../data/gpus';
+import type { ThroughputBasis } from './capacity';
 import type { RentStat, RentView } from '../data/live';
 import type { CaseId, CostLevel } from '../data/scenarios';
 
@@ -80,7 +81,9 @@ export interface Settings {
   afterTax: boolean;
   route: Route;
   costLevel: CostLevel;
-  qos: { mode: 'report' | 'floor' | 'router'; floorTps: number };
+  qos: { mode: 'report' | 'floor' | 'router'; floorTps: number; /** 90th-percentile time to first token the operating point must stay under, seconds. */ ttftP90Sec: number };
+  /** 'report': the report's throughput points as printed. 'adjusted': those points moved to this request's context length and prefill load. 'roofline': physics alone. */
+  throughput: ThroughputBasis;
   /** Where market token prices, traffic and request shape come from. */
   marketSource: 'live' | 'report';
   /** Where GPU rent comes from. */
