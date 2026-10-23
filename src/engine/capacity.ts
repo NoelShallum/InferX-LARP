@@ -7,14 +7,14 @@ import { calibrationFor } from './calibration';
 import { bestIxCurve, ixProv, type IxCurve } from '../data/ix';
 import { decodeTps, requestParts, roofClassOf, roofParamsFor, servingPoint, type Bound, type ServingPoint, type ShapeIn } from './roofline';
 
-export const GPU_MEM_UTIL = ph(0.9, 'vLLM default gpu_memory_utilization', 'Share of VRAM the serving engine may use');
-export const OVERHEAD_GB_PER_GPU = ph(4, 'No source yet', 'CUDA context, activations and graph capture per GPU; the report does not give one');
-export const MIN_KV_TOKENS = ph(32768, 'No source yet', 'A model counts as fitting only if the KV pool holds at least one 32K-token user');
-export const DRAFT_COST = ph(0.08, 'No source yet', 'Cost of one draft step relative to a decode step');
-export const MTP_DEFAULT_CSAT = ph(64, 'No source yet', 'Concurrency at which speculative decoding stops helping when nothing was measured');
-export const VOLTA_KERNEL_PENALTY = ph(0.6, 'No source yet', 'Older attention and GEMM kernels on Volta (no FlashAttention-2, no FP8)');
-export const MAX_EXTRAPOLATION = ph(1.6, 'No source yet', 'How far past the last measured concurrency the report-anchored curve is trusted');
-export const ROOFLINE_MAX_CONC = ph(512, 'No source yet', 'Largest concurrency the physics-only curve is searched to');
+export const GPU_MEM_UTIL = ph(0.9, 'vLLM default gpu_memory_utilization', 'Share of VRAM the serving engine may use', undefined, 'of VRAM');
+export const OVERHEAD_GB_PER_GPU = ph(4, 'No source yet', 'CUDA context, activations and graph capture per GPU; the report does not give one', undefined, 'GB per GPU');
+export const MIN_KV_TOKENS = ph(32768, 'No source yet', 'A model counts as fitting only if the KV pool holds at least one 32K-token user', undefined, 'tokens of KV');
+export const DRAFT_COST = ph(0.08, 'No source yet', 'Cost of one draft step relative to a decode step', undefined, 'of a decode step');
+export const MTP_DEFAULT_CSAT = ph(64, 'No source yet', 'Concurrency at which speculative decoding stops helping when nothing was measured', undefined, 'concurrent requests');
+export const VOLTA_KERNEL_PENALTY = ph(0.6, 'No source yet', 'Older attention and GEMM kernels on Volta (no FlashAttention-2, no FP8)', undefined, '× the roofline speed');
+export const MAX_EXTRAPOLATION = ph(1.6, 'No source yet', 'How far past the last measured concurrency the report-anchored curve is trusted', undefined, '× the last measured concurrency');
+export const ROOFLINE_MAX_CONC = ph(512, 'No source yet', 'Largest concurrency the physics-only curve is searched to', undefined, 'concurrent requests per GPU');
 
 /** Where throughput comes from: the report's points as printed, the report's points adjusted to the request, or the roofline alone. */
 export type ThroughputBasis = 'report' | 'adjusted' | 'roofline';
@@ -125,7 +125,7 @@ export function reportShape(model: Model): ShapeIn | null {
 }
 
 /** Context length the report's throughput points were measured at, used when moving them between cards and weight formats. */
-export const REPORT_TEST_CTX = ph(8700, 'Report §5.1', 'The report measures at 8K prompts; half an average output is added');
+export const REPORT_TEST_CTX = ph(8700, 'Report §5.1', 'The report measures at 8K prompts; half an average output is added', undefined, 'tokens of context');
 
 /** Speed of one config relative to another on the same model, from the roofline, at concurrency `c` per GPU. */
 function rooflineRatio(model: Model, target: { gpu: Gpu; quant: Quant }, anchor: { gpu: Gpu; quant: Quant }, c: number): number | null {
@@ -204,7 +204,7 @@ export function curveFor(model: Model, gpu: Gpu, quant: Quant, proGpu: Gpu): Cur
       multNote = `Roofline ratio to a PRO 6000 (${gpu.bwGBs.v} against ${proGpu.bwGBs.v} GB/s, weights and cache read per step)${gpu.arch === 'Volta' ? ' × Volta kernel penalty' : ''}`;
       multProv =
         gpu.arch === 'Volta'
-          ? { kind: 'placeholder', src: 'Roofline and kernel penalty', note: 'Roofline ratio times a placeholder penalty for Volta kernels' }
+          ? { kind: 'placeholder', src: 'Roofline and kernel penalty', note: 'Roofline ratio times a placeholder penalty for Volta kernels', value: VOLTA_KERNEL_PENALTY.p.value, unit: VOLTA_KERNEL_PENALTY.p.unit }
           : { kind: 'derived', src: 'Roofline', note: 'Decode speed follows the bytes a step reads. The kernel efficiency fitted on the PRO 6000 is assumed to carry over to this card; no measurement checks that.' };
     }
   }
@@ -522,12 +522,12 @@ export function capacityFor(a: CapacityArgs): Capacity {
   const multipliers = [
     ...(basis === 'report' && curve ? [{ name: curve.source === 'scaled' ? 'GPU scaling' : 'Quant scaling', value: curve.mult, prov: curve.multProv }] : []),
     ...(basis !== 'report' && evidence.kind !== 'none' && evidence.prov ? [{ name: evidence.kind === 'inferencex' ? 'Anchored to InferenceX measurement' : 'Anchored to the report\'s measured point', value: at.k, prov: evidence.prov }] : []),
-    ...(a.mtp ? [{ name: 'MTP gain', value: gain(c), prov: { kind: (info?.calibrated ? 'derived' : 'placeholder') as Prov['kind'], src: 'Acceptance length', note: info ? `AL/(1+k·ρ) = ${info.s1.toFixed(2)} at one user, fading to 1 by about ${Number.isFinite(info.cSat) ? Math.round(info.cSat) : '∞'} concurrent` : '' } }] : []),
+    ...(a.mtp ? [{ name: 'MTP gain', value: gain(c), prov: { kind: (info?.calibrated ? 'derived' : 'placeholder') as Prov['kind'], src: 'Acceptance length', note: info ? `AL/(1+k·ρ) = ${info.s1.toFixed(2)} at one user, fading to 1 by about ${Number.isFinite(info.cSat) ? Math.round(info.cSat) : '∞'} concurrent` : '', ...(info && !info.calibrated ? { value: info.s1.toFixed(2), unit: '× gain at one user' } : {}) } }] : []),
     ...(n > 1
       ? [{ name: `${n}-GPU scaling`, value: eff, prov: ix ? ixProv(ix) : { kind: 'derived' as const, src: 'Roofline', note: `Weights split over ${n} GPUs; the all-reduce latency and effective ${a.gpu.link === 'nvlink' ? 'NVLink' : 'PCIe'} bandwidth are fitted to InferenceX multi-GPU runs${a.gpu.link === 'pcie' ? ' (four PRO 6000 points only)' : ''}.` } }]
       : []),
     ...(basis !== 'report' && at.serving && Math.abs(at.prefillFactor - 1) > 0.005
-      ? [{ name: 'Prefill share', value: at.prefillFactor, prov: { kind: (prefillIsGuess ? 'placeholder' : 'derived') as Prov['kind'], src: 'Roofline', note: `Prefill takes ${(at.serving.share * 100).toFixed(0)}% of GPU time at this load (${Math.round(at.serving.freshTokens)} fresh prompt tokens per request at ${Math.round(at.serving.prefill.tokPerSec)} tok/s). Prefill efficiency is fitted to InferenceX time-to-first-token runs on H100, H200 and B200.` } }]
+      ? [{ name: 'Prefill share', value: at.prefillFactor, prov: { kind: (prefillIsGuess ? 'placeholder' : 'derived') as Prov['kind'], src: 'Roofline', note: `Prefill takes ${(at.serving.share * 100).toFixed(0)}% of GPU time at this load (${Math.round(at.serving.freshTokens)} fresh prompt tokens per request at ${Math.round(at.serving.prefill.tokPerSec)} tok/s). Prefill efficiency is fitted to InferenceX time-to-first-token runs on H100, H200 and B200.`, ...(prefillIsGuess ? { value: String(Number(pBase.etaPrefill.toPrecision(3))), unit: 'of peak tensor throughput' } : {}) } }]
       : []),
     ...(a.extraNotes ?? []),
   ];

@@ -86,7 +86,7 @@ export const GPUS: Gpu[] = [
     link: 'pcie',
     rentUsdHr: est(0.65, 'Report §4.6', 'Midpoint of the report\'s $0.5-0.8/h for an L40S or 6000 Ada'),
     rentInrHr: null,
-    buyInr: ph(650_000, 'No source yet', 'Placeholder, enter a real quote'),
+    buyInr: ph(650_000, 'No source yet', 'Placeholder, enter a real quote', undefined, '₹'),
     owned: 1,
     ixCost: null,
     note: 'Owned.',
@@ -97,10 +97,10 @@ export const GPUS: Gpu[] = [
     short: '3050',
     arch: 'Ampere',
     role: 'control-plane',
-    vramGB: ph(8, 'Report §8.6', 'Report says Whisper-turbo and embedding models fit in 6-8 GB; exact card size not given'),
-    bwGBs: ph(224, 'No source yet', 'Not used until a non-text probe is modelled'),
-    tdpW: ph(130, 'No source yet'),
-    tflops: { fp4: null, fp8: null, fp16: ph(0, 'No source yet', 'Not used: the card is the control plane') },
+    vramGB: ph(8, 'Report §8.6', 'Report says Whisper-turbo and embedding models fit in 6-8 GB; exact card size not given', undefined, 'GB'),
+    bwGBs: ph(224, 'No source yet', 'Not used until a non-text probe is modelled', undefined, 'GB/s'),
+    tdpW: ph(130, 'No source yet', undefined, undefined, 'W'),
+    tflops: { fp4: null, fp8: null, fp16: ph(0, 'No source yet', 'Not used: the card is the control plane', undefined, 'TFLOPS') },
     quants: ['fp16', 'awq4'],
     quantsProv: ph(0, 'No source yet').p,
     link: 'pcie',
@@ -130,7 +130,7 @@ export const GPUS: Gpu[] = [
     link: 'pcie',
     rentUsdHr: rep(0.72, 'Report §7.1', 'Median on-demand rent'),
     rentInrHr: null,
-    buyInr: ph(350_000, 'No source yet', 'Placeholder, enter a real quote'),
+    buyInr: ph(350_000, 'No source yet', 'Placeholder, enter a real quote', undefined, '₹'),
     owned: 0,
     ixCost: null,
   },
@@ -140,18 +140,18 @@ export const GPUS: Gpu[] = [
     short: 'RTX 4090',
     arch: 'Ada Lovelace',
     role: 'serve',
-    vramGB: ph(24, 'No source yet', '24 GB as commonly listed; not checked this session'),
+    vramGB: ph(24, 'No source yet', '24 GB as commonly listed; not checked this session', undefined, 'GB'),
     bwGBs: srcd(1008, 'https://www.techradar.com/computing/gpu/nvidia-rtx-5090-vs-rtx-4090', 'A comparison table lists about 1,010 GB/s'),
     tdpW: srcd(450, 'https://www.techradar.com/computing/gpu/nvidia-rtx-5090-vs-rtx-4090', 'TGP 450 W'),
     tflops: {
       fp4: null,
       fp8: srcd(660, 'https://www.gpuperhour.com/compare/l40s-vs-rtx-4090', 'Third-party comparison table, dense'),
-      fp16: ph(330, 'No source yet', 'Half the FP8 rate by the Ada rule; GeForce cards may run FP32-accumulate at half of that, not modelled'),
+      fp16: ph(330, 'No source yet', 'Half the FP8 rate by the Ada rule; GeForce cards may run FP32-accumulate at half of that, not modelled', undefined, 'TFLOPS'),
     },
     quants: ['fp8', 'awq4', 'mxfp4', 'fp16'],
     quantsProv: ph(0, 'No source yet', 'Ada tensor cores support FP8; assumed').p,
     link: 'pcie',
-    rentUsdHr: ph(0.35, 'No source yet', 'Placeholder; Vast.ai live prices replace it in phase 2'),
+    rentUsdHr: ph(0.35, 'No source yet', 'Placeholder; Vast.ai live prices replace it in phase 2', undefined, '$ per GPU-hour'),
     rentInrHr: null,
     buyInr: null,
     owned: 0,
@@ -164,9 +164,9 @@ export const GPUS: Gpu[] = [
     short: 'L40S',
     arch: 'Ada Lovelace',
     role: 'serve',
-    vramGB: ph(48, 'No source yet', '48 GB as commonly listed; not checked this session'),
-    bwGBs: ph(864, 'No source yet', 'Not checked this session'),
-    tdpW: ph(350, 'No source yet', 'Not checked this session'),
+    vramGB: ph(48, 'No source yet', '48 GB as commonly listed; not checked this session', undefined, 'GB'),
+    bwGBs: ph(864, 'No source yet', 'Not checked this session', undefined, 'GB/s'),
+    tdpW: ph(350, 'No source yet', 'Not checked this session', undefined, 'W'),
     tflops: {
       fp4: null,
       fp8: srcd(733, 'https://lenovopress.lenovo.com/lp1812.pdf', 'Lenovo product guide: 733 TFLOPS dense, 1,466 with sparsity'),
@@ -267,7 +267,7 @@ export const GPUS: Gpu[] = [
     quants: ['fp16', 'awq4'],
     quantsProv: srcd(0, 'https://images.nvidia.com/content/technologies/volta/pdf/tesla-volta-v100-datasheet.pdf', 'Volta has no FP8, FP4 or BF16 tensor support, so FP16 or INT4 only').p,
     link: 'pcie',
-    rentUsdHr: ph(0.2, 'No source yet', 'Placeholder; Vast.ai live prices replace it in phase 2'),
+    rentUsdHr: ph(0.2, 'No source yet', 'Placeholder; Vast.ai live prices replace it in phase 2', undefined, '$ per GPU-hour'),
     rentInrHr: null,
     buyInr: null,
     owned: 0,
@@ -275,6 +275,14 @@ export const GPUS: Gpu[] = [
     note: 'Volta has no FP8 KV cache and older attention kernels; throughput here is a rough scaling.',
   },
 ];
+
+// A placeholder list of weight formats states which formats it assumes.
+for (const g of GPUS) {
+  if (g.quantsProv.kind === 'placeholder') {
+    g.quantsProv.value = g.quants.map((q) => QUANT_LABEL[q]).join(', ');
+    g.quantsProv.unit = 'weight formats';
+  }
+}
 
 export const GPU_BY_ID: Record<string, Gpu> = Object.fromEntries(GPUS.map((g) => [g.id, g]));
 

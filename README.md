@@ -38,7 +38,7 @@ Every number carries a badge, and anything computed on top of tagged inputs show
 
 Hugging Face config figures (KV bytes per token, recurrent state, expert counts, active parameters) are tagged **Sourced**, with the commit they were read at.
 
-The **Data audit** view lists every placeholder so none hides.
+The **Data audit** view lists every placeholder so none hides, each with the value it currently holds and its unit.
 
 ## Live data
 
@@ -121,7 +121,8 @@ npm run data       # refresh live prices (see Live data)
 - **Phase 2:** live Vast.ai prices (a headless-browser scrape, then scripted) and an OpenRouter script, both saved as dated snapshots. The dashboard defaults to live data with the report as a switch, and has an OpenRouter-competitive quality bar from live stream speeds.
 - **Phase 3:** model architecture from Hugging Face configs, a roofline for decode, prefill and time to first token, three throughput bases, a first-token limit in the quality bar, KV counting for sliding windows and recurrent state.
 - **Phase 4:** InferenceX measured runs (single card and tensor-parallel) fit the roofline per card family and anchor it where a card and model were measured; multi-GPU nodes use the fitted all-reduce model.
-- **Phase 5 (this version):** five high-traffic models from live data and Hugging Face files, on nodes of 1, 2, 4 and 8 cards; MiniMax-M3's InferenceX runs are held out of the fit as an out-of-sample check (median output speed within 0.78–1.27× of measured, first-token time within about 3×); outside the report-points basis, an operating point can no longer hold more users than the KV pool does, which lowers the rented 5090 trial.
+- **Phase 6 (this version):** every placeholder states the value it currently holds and its unit, in its badge, the evidence lists, the summary popovers and the Data audit; a test keeps it so. GLM-5.3's total parameters now come from the config instead of a placeholder.
+- **Phase 5:** five high-traffic models from live data and Hugging Face files, on nodes of 1, 2, 4 and 8 cards; MiniMax-M3's InferenceX runs are held out of the fit as an out-of-sample check (median output speed within 0.78–1.27× of measured, first-token time within about 3×); outside the report-points basis, an operating point can no longer hold more users than the KV pool does, which lowers the rented 5090 trial.
 - **Next:** a measurement run on your own cards to fit dense prefill and the Ada, AMD and A100.
 
 What this version does not do yet is listed at the bottom of the Data audit view.

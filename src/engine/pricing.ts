@@ -7,7 +7,7 @@ import type { Pricing } from './types';
 
 export { DAYS_PER_MONTH, DEFAULT_AVG_TOKENS };
 export const ELASTICITY_CEILING = 1.2;
-export const ABOVE_CEILING_PENALTY_POWER = ph(2, 'No source yet', 'Report: no data above 1.2× the median and a dear endpoint falls to the bottom of the routing order; the steepness is a guess');
+export const ABOVE_CEILING_PENALTY_POWER = ph(2, 'No source yet', 'Report: no data above 1.2× the median and a dear endpoint falls to the bottom of the routing order; the steepness is a guess', undefined, 'exponent on the price ratio');
 
 export interface Shape {
   avgTokens: number;

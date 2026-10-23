@@ -1,5 +1,5 @@
 import { signal } from '@preact/signals';
-import { KIND_GLYPH, KIND_HELP, KIND_LABEL, KIND_ORDER, type Prov, type ProvKind, type V } from '../data/provenance';
+import { KIND_GLYPH, KIND_HELP, KIND_LABEL, KIND_ORDER, provValue, type Prov, type ProvKind, type V } from '../data/provenance';
 
 interface PopState {
   x: number;
@@ -35,17 +35,24 @@ const hide = () => {
 };
 
 function describe(p: Prov): { title: string; lines: string[] } {
-  const lines = [p.src];
+  const inUse = provValue(p);
+  const lines = inUse && p.kind === 'placeholder' ? [`Value in use: ${inUse}`, p.src] : [p.src];
   if (p.note) lines.push(p.note);
   if (p.asOf) lines.push(`As of ${p.asOf}`);
   lines.push(KIND_HELP[p.kind]);
   return { title: KIND_LABEL[p.kind], lines };
 }
 
-/** Marks where a number comes from. Placeholders are loud on purpose. */
-export function ProvBadge({ p, compact = false }: { p: Prov; compact?: boolean }) {
+const clip = (t: string, n: number) => (t.length > n ? `${t.slice(0, n - 1)}…` : t);
+
+/**
+ * Marks where a number comes from. Placeholders are loud on purpose and say what value is in use: in the badge itself
+ * where it stands alone, and in the popover everywhere (`showValue` is off beside a number that already prints it).
+ */
+export function ProvBadge({ p, compact = false, showValue = !compact }: { p: Prov; compact?: boolean; showValue?: boolean }) {
   const d = describe(p);
-  const label = `${KIND_LABEL[p.kind]}. ${p.src}${p.note ? `. ${p.note}` : ''}`;
+  const inUse = p.kind === 'placeholder' ? provValue(p) : null;
+  const label = `${KIND_LABEL[p.kind]}${inUse ? `, value in use ${inUse}` : ''}. ${p.src}${p.note ? `. ${p.note}` : ''}`;
   return (
     <span
       class={`prov${compact ? ' compact' : ''}`}
@@ -60,6 +67,7 @@ export function ProvBadge({ p, compact = false }: { p: Prov; compact?: boolean }
     >
       <span aria-hidden="true">{KIND_GLYPH[p.kind]}</span>
       <span class="txt">{p.kind === 'report-est' ? 'Est.' : KIND_LABEL[p.kind]}</span>
+      {inUse && showValue ? <span class="val">{clip(inUse, 30)}</span> : null}
     </span>
   );
 }
@@ -80,13 +88,22 @@ export function weakest(provs: Prov[]): Prov | null {
 }
 
 /** One badge summarising a list of inputs by their weakest member. */
-export function ProvSummary({ provs, compact = false }: { provs: Prov[]; compact?: boolean }) {
+export function ProvSummary({ provs, compact = false, items }: { provs: Prov[]; compact?: boolean; items?: { label: string; prov: Prov }[] }) {
   const w = weakest(provs);
   if (!w) return null;
   const counts = Object.fromEntries(KIND_ORDER.map((k) => [k, 0])) as Record<ProvKind, number>;
   provs.forEach((p) => (counts[p.kind] += 1));
   const lines = KIND_ORDER.filter((k) => counts[k] > 0).map((k) => `${counts[k]} ${KIND_LABEL[k].toLowerCase()}`);
-  const d = { title: `Weakest input: ${KIND_LABEL[w.kind].toLowerCase()}`, lines: [lines.join(', '), 'Open the evidence list for each input.'] };
+  // The placeholders in use, each with the value it carries.
+  const inUse = (items ?? [])
+    .filter((i) => i.prov.kind === 'placeholder' && provValue(i.prov))
+    .map((i) => `${i.label}: ${provValue(i.prov)}`);
+  const shown = [...new Set(inUse)].slice(0, 8);
+  const more = new Set(inUse).size - shown.length;
+  const d = {
+    title: `Weakest input: ${KIND_LABEL[w.kind].toLowerCase()}`,
+    lines: [lines.join(', '), ...(shown.length ? ['Placeholders in use:', ...shown, ...(more > 0 ? [`and ${more} more`] : [])] : []), 'Open the evidence list for each input.'],
+  };
   return (
     <span
       class={`prov${compact ? ' compact' : ''}`}
@@ -109,7 +126,7 @@ export function Val({ v, fmt, compact = true }: { v: V; fmt?: (x: number) => str
   const n = typeof v.v === 'number' ? (fmt ? fmt(v.v) : String(v.v)) : String(v.v);
   return (
     <span>
-      {n} <ProvBadge p={v.p} compact={compact} />
+      {n} <ProvBadge p={v.p} compact={compact} showValue={false} />
     </span>
   );
 }
@@ -120,7 +137,7 @@ export function KindLegend() {
       <span>Where numbers come from:</span>
       {KIND_ORDER.filter((k) => k !== 'live' && k !== 'user').map((k) => (
         <span key={k} title={KIND_HELP[k]}>
-          <ProvBadge p={{ kind: k, src: KIND_HELP[k] }} />
+          <ProvBadge p={{ kind: k, src: 'Badge legend' }} />
         </span>
       ))}
     </div>

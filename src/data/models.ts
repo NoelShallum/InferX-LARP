@@ -1,6 +1,6 @@
 import { type V, type Prov, rep, meas, est, srcd, drv, ph } from './provenance';
 import type { Quant } from './gpus';
-import { ARCH, activeFromConfigV, kvPerTokV, type ArchInfo } from './arch';
+import { ARCH, activeFromConfigV, kvPerTokV, totalFromConfigV, type ArchInfo } from './arch';
 
 export interface TputPoint {
   /** Concurrent requests. */
@@ -54,7 +54,7 @@ export interface Model {
 const T52 = 'Report §5.2';
 const T51 = 'Report §5.1';
 
-const kvGeneric = (bytes: number, why: string): V => ph(bytes, 'No source yet', why);
+const kvGeneric = (bytes: number, why: string): V => ph(bytes, 'No source yet', why, undefined, 'bytes per token');
 
 const HF = (repo: string) => `https://huggingface.co/${repo}`;
 const SUM = 'Safetensors files of the checkpoint, summed from the Hugging Face file tree on 23 Oct 2026';
@@ -78,7 +78,7 @@ const LIVE_ONLY: Omit<Model, 'net'>[] = [
       fp8: srcd(510.3, HF('deepseek-ai/DeepSeek-V4.1-Flash'), `${SUM}. The released checkpoint keeps attention and Engram in FP8 and experts in FP4; treated here as FP8.`),
     },
     defaultQuant: 'nvfp4',
-    kvBytesPerTok: ph(890, 'No source yet', 'Replaced by the model card figure'),
+    kvBytesPerTok: ph(890, 'No source yet', 'Replaced by the model card figure', undefined, 'bytes per token'),
     ...NO_POINTS,
     pointsQuant: { pro6000: 'nvfp4', ada: 'nvfp4' },
     mtp: null,
@@ -91,14 +91,14 @@ const LIVE_ONLY: Omit<Model, 'net'>[] = [
     name: 'GLM-5.3',
     orSlug: 'z-ai/glm-5.3',
     arch: 'moe',
-    paramsB: ph(744, 'No source yet', 'Replaced by the figure derived from the config'),
-    activeB: ph(40, 'No source yet', 'Replaced by the figure derived from the config'),
+    paramsB: ph(744, 'No source yet', 'Replaced by the figure derived from the config', undefined, 'billion parameters'),
+    activeB: ph(40, 'No source yet', 'Replaced by the figure derived from the config', undefined, 'billion active parameters'),
     weights: {
       nvfp4: srcd(464.1, HF('nvidia/GLM-5.3-NVFP4'), SUM),
       fp8: srcd(755.6, HF('zai-org/GLM-5.3'), `${SUM}. The released checkpoint is FP8.`),
     },
     defaultQuant: 'nvfp4',
-    kvBytesPerTok: ph(55000, 'No source yet', 'Replaced by the figure from the config'),
+    kvBytesPerTok: ph(55000, 'No source yet', 'Replaced by the figure from the config', undefined, 'bytes per token'),
     ...NO_POINTS,
     pointsQuant: { pro6000: 'nvfp4', ada: 'nvfp4' },
     mtp: null,
@@ -117,7 +117,7 @@ const LIVE_ONLY: Omit<Model, 'net'>[] = [
       fp8: srcd(328.3, HF('zai-org/GLM-5.3-Flash'), `${SUM}. The released checkpoint is FP8.`),
     },
     defaultQuant: 'nvfp4',
-    kvBytesPerTok: ph(7000, 'No source yet', 'Replaced by the figure from the config'),
+    kvBytesPerTok: ph(7000, 'No source yet', 'Replaced by the figure from the config', undefined, 'bytes per token'),
     ...NO_POINTS,
     pointsQuant: { pro6000: 'nvfp4', ada: 'nvfp4' },
     mtp: null,
@@ -136,7 +136,7 @@ const LIVE_ONLY: Omit<Model, 'net'>[] = [
       fp8: srcd(443.7, HF('MiniMaxAI/MiniMax-M3-MXFP8'), SUM),
     },
     defaultQuant: 'nvfp4',
-    kvBytesPerTok: ph(90000, 'No source yet', 'Replaced by the figure from the config'),
+    kvBytesPerTok: ph(90000, 'No source yet', 'Replaced by the figure from the config', undefined, 'bytes per token'),
     ...NO_POINTS,
     pointsQuant: { pro6000: 'nvfp4', ada: 'nvfp4' },
     mtp: null,
@@ -154,7 +154,7 @@ const LIVE_ONLY: Omit<Model, 'net'>[] = [
       mxfp4: srcd(172.9, HF('XiaomiMiMo/MiMo-V2.6-Flash-RL'), `${SUM}. The released checkpoint keeps attention in FP8 and experts in MXFP4.`),
     },
     defaultQuant: 'mxfp4',
-    kvBytesPerTok: ph(11500, 'No source yet', 'Replaced by the figure from the config'),
+    kvBytesPerTok: ph(11500, 'No source yet', 'Replaced by the figure from the config', undefined, 'bytes per token'),
     ...NO_POINTS,
     pointsQuant: { pro6000: 'mxfp4', ada: 'mxfp4' },
     mtp: null,
@@ -192,7 +192,7 @@ const RAW_MODELS: Omit<Model, 'net'>[] = [
     refIdx: 0,
     pointsQuant: { pro6000: 'nvfp4', ada: 'awq4' },
     mtp: {
-      al: ph(2.32, 'InferenceX qwen3.8next_mtp.yaml', 'Proxy: acceptance length of the sibling Qwen3.8-Flash-Next at 3 draft tokens (thinking on). No curve exists for Qwen3.8-27B.'),
+      al: ph(2.32, 'InferenceX qwen3.8next_mtp.yaml', 'Proxy: acceptance length of the sibling Qwen3.8-Flash-Next at 3 draft tokens (thinking on). No curve exists for Qwen3.8-27B.', undefined, 'tokens per step'),
       k: 3,
       measured: { c: 32, tps: meas(1752, T52, 'Measured with MTP speculative decoding at concurrency 32') },
       note: 'Fade-out calibrated so the gain at 32 concurrent matches the measured 1,752 tok/s.',
@@ -222,7 +222,7 @@ const RAW_MODELS: Omit<Model, 'net'>[] = [
     refIdx: 0,
     pointsQuant: { pro6000: 'fp8', ada: 'nvfp4' },
     mtp: {
-      al: ph(2.32, 'InferenceX qwen3.8next_mtp.yaml', 'Proxy: Qwen3.8-Flash-Next acceptance length. Whether this checkpoint ships an MTP head is not checked.'),
+      al: ph(2.32, 'InferenceX qwen3.8next_mtp.yaml', 'Proxy: Qwen3.8-Flash-Next acceptance length. Whether this checkpoint ships an MTP head is not checked.', undefined, 'tokens per step'),
       k: 3,
       note: 'No measured MTP point. Fade-out uses a placeholder saturation concurrency.',
     },
@@ -282,7 +282,7 @@ const RAW_MODELS: Omit<Model, 'net'>[] = [
     name: 'gpt-oss-120b',
     arch: 'moe',
     paramsB: rep(120, T51, 'From the model name'),
-    activeB: ph(5.1, 'No source yet', 'Active parameters as remembered; not in the report'),
+    activeB: ph(5.1, 'No source yet', 'Active parameters as remembered; not in the report', undefined, 'billion active parameters'),
     weights: { mxfp4: meas(66, T51, 'About 66 GB at MXFP4') },
     defaultQuant: 'mxfp4',
     kvBytesPerTok: kvGeneric(18_400, 'From the gpt-oss architecture as remembered (18 full-attention layers, 8 KV heads, head dim 64, FP8); verify in phase 3'),
@@ -304,7 +304,7 @@ const RAW_MODELS: Omit<Model, 'net'>[] = [
     name: 'gpt-oss-20b',
     arch: 'moe',
     paramsB: rep(20, T51, 'From the model name'),
-    activeB: ph(3.6, 'No source yet', 'Active parameters as remembered; not in the report'),
+    activeB: ph(3.6, 'No source yet', 'Active parameters as remembered; not in the report', undefined, 'billion active parameters'),
     weights: { mxfp4: meas(13, T51, 'About 13 GB at MXFP4') },
     defaultQuant: 'mxfp4',
     kvBytesPerTok: kvGeneric(12_300, 'From the gpt-oss architecture as remembered (12 full-attention layers, 8 KV heads, head dim 64, FP8); verify in phase 3'),
@@ -352,14 +352,14 @@ const RAW_MODELS: Omit<Model, 'net'>[] = [
     arch: 'dense',
     paramsB: rep(12, 'Report §5.3', 'From the model name'),
     activeB: rep(12, 'Report §5.3', 'Dense'),
-    weights: { fp8: ph(12.2, 'No source yet', 'About one byte per parameter; not in the report') },
+    weights: { fp8: ph(12.2, 'No source yet', 'About one byte per parameter; not in the report', undefined, 'GB of weights') },
     defaultQuant: 'fp8',
     kvBytesPerTok: kvGeneric(81_920, 'From the Mistral Nemo architecture as remembered (40 layers, 8 KV heads, head dim 128, FP8); verify in phase 3'),
     conc8k: null,
     conc32k: null,
     pro6000: [
-      { c: 16, tps: ph(2100, 'No source yet', 'The report has no throughput row for Nemo. Placeholder; revenue is anchored to the report\'s §6.1 busy-hour figure.') },
-      { c: 64, tps: ph(5200, 'No source yet', 'Placeholder') },
+      { c: 16, tps: ph(2100, 'No source yet', 'The report has no throughput row for Nemo. Placeholder; revenue is anchored to the report\'s §6.1 busy-hour figure.', undefined, 'tok/s') },
+      { c: 64, tps: ph(5200, 'No source yet', 'Placeholder', undefined, 'tok/s') },
     ],
     ada: [],
     refIdx: 0,
@@ -416,7 +416,7 @@ const RAW_MODELS: Omit<Model, 'net'>[] = [
     name: 'Mistral Small 4 119B',
     arch: 'moe',
     paramsB: rep(119, T51, 'From the model name'),
-    activeB: ph(6.5, 'No source yet', 'Placeholder'),
+    activeB: ph(6.5, 'No source yet', 'Placeholder', undefined, 'billion active parameters'),
     weights: { nvfp4: meas(70.8, T51) },
     defaultQuant: 'nvfp4',
     kvBytesPerTok: kvGeneric(60_000, 'Placeholder; report: about 12 GB of KV left on a PRO 6000'),
@@ -476,6 +476,10 @@ function withArch(m: Omit<Model, 'net'>): Model {
   const net = ARCH[m.id] ?? null;
   if (!net) return { ...m, net: null };
   const out: Model = { ...m, net, kvBytesPerTok: kvPerTokV(net) };
+  if (m.paramsB.p.kind === 'placeholder') {
+    const t = totalFromConfigV(net);
+    if (t) out.paramsB = t;
+  }
   if (m.activeB.p.kind === 'placeholder') {
     const a = activeFromConfigV(net);
     if (a) out.activeB = a;
@@ -499,10 +503,10 @@ export const CAL_MODELS: Model[] = [
     name: 'Qwen3.5-397B-A17B',
     arch: 'moe',
     paramsB: rep(397, 'InferenceX display name', 'From the model name'),
-    activeB: ph(17, 'No source yet', 'Replaced by the figure derived from the config'),
+    activeB: ph(17, 'No source yet', 'Replaced by the figure derived from the config', undefined, 'billion active parameters'),
     weights: { nvfp4: srcd(251.2, 'https://huggingface.co/nvidia/Qwen3.5-397B-A17B-NVFP4', 'Safetensors files of the NVFP4 checkpoint InferenceX serves, summed from the Hugging Face file tree on 23 Oct 2026') },
     defaultQuant: 'nvfp4',
-    kvBytesPerTok: ph(15_000, 'No source yet', 'Replaced by the figure from the config'),
+    kvBytesPerTok: ph(15_000, 'No source yet', 'Replaced by the figure from the config', undefined, 'bytes per token'),
     conc8k: null,
     conc32k: null,
     pro6000: [],

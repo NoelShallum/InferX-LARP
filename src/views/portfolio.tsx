@@ -1,6 +1,7 @@
 import { useState } from 'preact/hooks';
 import { GPU_BY_ID, QUANT_LABEL } from '../data/gpus';
 import { MODEL_BY_ID } from '../data/models';
+import { provValue, type Prov } from '../data/provenance';
 import { CASES, CASE_LABEL, PROGRAM, type CaseId } from '../data/scenarios';
 import { makeSlot, PRESETS } from '../engine/defaults';
 import { programCosts } from '../engine/portfolio';
@@ -227,7 +228,7 @@ function SlotCard({ r }: { r: SlotResult }) {
       {r.ok && !lium && r.hasPlaceholder ? (
         <div class="row" style={{ marginTop: '6px' }}>
           <span class="chip warn">⚠ Some inputs here are placeholders</span>
-          <span class="small">See the evidence list below.</span>
+          <span class="small">{placeholdersIn(r.evidence.map((e) => ({ label: e.label, prov: e.prov })), cap?.multipliers ?? [])}</span>
         </div>
       ) : null}
       {r.ok && !lium && cap ? (
@@ -334,7 +335,7 @@ function SlotCard({ r }: { r: SlotResult }) {
           {r.aboveElasticityData ? <div class="warnbox">Priced above 1.2× the median, where the report has no data; share is a guess.</div> : null}
           <details class="evidence">
             <summary>
-              Evidence and assumptions <ProvSummary provs={[...r.evidence.map((e) => e.prov), ...cap.multipliers.map((m) => m.prov)]} compact />
+              Evidence and assumptions <ProvSummary provs={[...r.evidence.map((e) => e.prov), ...cap.multipliers.map((m) => m.prov)]} items={[...cap.multipliers.map((m) => ({ label: m.name, prov: m.prov })), ...r.evidence.map((e) => ({ label: e.label, prov: e.prov }))]} compact />
             </summary>
             <ul>
               {cap.multipliers.map((m, i) => (
@@ -356,7 +357,7 @@ function SlotCard({ r }: { r: SlotResult }) {
                   Uncached prefill at full load: {fmtNum(r.prefillTpsAtCapacity, 0)} tok/s
                   {cap.serving ? ` against ${fmtNum(cap.serving.prefill.tokPerSec, 0)} tok/s the card can prefill` : ''}
                 </span>
-                <ProvBadge p={cap.serving ? { kind: 'placeholder', src: 'Roofline', note: 'Prefill speed is compute-bound; its efficiency is not fitted to any measurement' } : { kind: 'report', src: 'Not modelled on the report\'s own numbers', note: 'Switch the throughput basis to see prefill limits' }} />
+                <ProvBadge p={cap.serving ? { kind: 'placeholder', src: 'Roofline', note: 'Prefill speed is compute-bound; its efficiency is not fitted to any measurement', value: fmtNum(cap.serving.prefill.tokPerSec, 0), unit: 'tok/s prefill' } : { kind: 'report', src: 'Not modelled on the report\'s own numbers', note: 'Switch the throughput basis to see prefill limits' }} />
               </li>
             </ul>
           </details>
@@ -393,6 +394,14 @@ function AddCard() {
 
 type Pc = ReturnType<typeof programCosts>['costs'];
 
+/** The placeholders behind a card, each with the value it carries, for the line under its header. */
+function placeholdersIn(items: { label: string; prov: Prov }[], multipliers: { name: string; prov: Prov }[]): string {
+  const all = [...multipliers.map((m) => ({ label: m.name, prov: m.prov })), ...items].filter((i) => i.prov.kind === 'placeholder');
+  const text = [...new Set(all.map((i) => (provValue(i.prov) ? `${i.label} ${provValue(i.prov)}` : i.label)))];
+  if (text.length === 0) return 'See the evidence list below.';
+  return `In use: ${text.slice(0, 4).join('; ')}${text.length > 4 ? `; and ${text.length - 4} more` : ''}.`;
+}
+
 export function PortfolioView() {
   const [compare, setCompare] = useState(false);
   const s = settings.value;
@@ -404,6 +413,7 @@ export function PortfolioView() {
   const evCase = ev.find((e) => e.caseId === s.caseId)!;
   const gain = s.afterTax ? st.afterTaxMarginUsd : st.marginUsd;
   const allProvs = st.results.flatMap((r) => [...r.evidence.map((e) => e.prov), ...(r.capacity?.multipliers.map((m) => m.prov) ?? [])]);
+  const allItems = st.results.flatMap((r) => [...r.evidence.map((e) => ({ label: e.label, prov: e.prov })), ...(r.capacity?.multipliers.map((m) => ({ label: m.name, prov: m.prov })) ?? [])]);
   const capUsd = PROGRAM.stakeCapInr.v / s.fx;
   const showStake = tl.dependsOnListing && (tl.peakStakeUsd > 0 || tl.program.rejectedUsd > 0);
   const lium = st.results.filter((r) => r.kind === 'lium').length;
@@ -461,7 +471,7 @@ export function PortfolioView() {
       <div class="top-grid">
         <div class="hero" aria-label="Headline result">
           <div class="h-label">
-            Gain per steady month, {CASE_LABEL[s.caseId].toLowerCase()} case {s.afterTax ? '(after tax)' : '(pre-tax)'} <ProvSummary provs={allProvs} />
+            Gain per steady month, {CASE_LABEL[s.caseId].toLowerCase()} case {s.afterTax ? '(after tax)' : '(pre-tax)'} <ProvSummary provs={allProvs} items={allItems} />
           </div>
           <div class={`h-value ${gain >= 0 ? 'pos' : 'neg'}`}>
             <M usd={gain} signed />

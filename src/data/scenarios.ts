@@ -63,8 +63,8 @@ export const SECOND_MODEL_DELAY = rep(2, 'Report §6.5', 'A listed provider adds
 /** OpenRouter routing priority by measured uptime. Share multipliers are assumptions. */
 export const UPTIME_TIERS = [
   { min: 0.95, label: 'Normal priority', mult: rep(1, 'Report §3.1', '95% or better gets normal priority') },
-  { min: 0.8, label: 'Lower priority', mult: ph(0.5, 'No source yet', 'Report: 80-94% gets lower priority; the share penalty is a guess') },
-  { min: 0, label: 'Fallback traffic only', mult: ph(0.1, 'No source yet', 'Report: under 80% gets fallback traffic only; the share is a guess') },
+  { min: 0.8, label: 'Lower priority', mult: ph(0.5, 'No source yet', 'Report: 80-94% gets lower priority; the share penalty is a guess', undefined, '× the share') },
+  { min: 0, label: 'Fallback traffic only', mult: ph(0.1, 'No source yet', 'Report: under 80% gets fallback traffic only; the share is a guess', undefined, '× the share') },
 ];
 
 export interface AvailabilityPreset {
@@ -78,13 +78,13 @@ export const AVAILABILITY_PRESETS: AvailabilityPreset[] = [
   {
     id: 'ups-gateway',
     label: 'UPS + off-site gateway + hourly card',
-    availability: ph(0.99, 'No source yet', 'The report gives no uptime figure for the full protection stack'),
+    availability: ph(0.99, 'No source yet', 'The report gives no uptime figure for the full protection stack', undefined, 'of hours up'),
     help: 'Report §9.4 layers 1-3: blips ride through, traffic is redirected during planned cuts.',
   },
   {
     id: 'ups-only',
     label: 'UPS only',
-    availability: ph(0.97, 'No source yet'),
+    availability: ph(0.97, 'No source yet', undefined, undefined, 'of hours up'),
     help: 'Clean shutdowns, but planned 5-9 hour cuts still take the endpoint down.',
   },
   {
@@ -96,7 +96,7 @@ export const AVAILABILITY_PRESETS: AvailabilityPreset[] = [
   {
     id: 'dc',
     label: 'Data-centre host (rented card)',
-    availability: ph(0.995, 'No source yet', 'Rented cards sit in data centres with redundant power; the report gives no figure'),
+    availability: ph(0.995, 'No source yet', 'Rented cards sit in data centres with redundant power; the report gives no figure', undefined, 'of hours up'),
     help: 'Default for rented cards.',
   },
   {
@@ -132,7 +132,7 @@ export const WORKLOADS: WorkloadPreset[] = [
     label: 'As observed on OpenRouter',
     help: 'Each model\'s own request shape, calibrated to the report\'s busy-hour revenue.',
     shape: null,
-    floorTps: ph(40, 'No source yet', 'Placeholder floor until OpenRouter speed data is pulled in phase 2'),
+    floorTps: ph(40, 'No source yet', 'Placeholder floor until OpenRouter speed data is pulled in phase 2', undefined, 'tok/s per user'),
   },
   {
     id: 'agentic',
@@ -143,35 +143,35 @@ export const WORKLOADS: WorkloadPreset[] = [
       outShare: rep(0.041, 'Report §5.3'),
       cacheHit: null,
     },
-    floorTps: ph(40, 'No source yet'),
+    floorTps: ph(40, 'No source yet', undefined, undefined, 'tok/s per user'),
   },
   {
     id: 'chat',
     label: 'Chat',
     help: 'Short prompts, longer answers, some prefix reuse.',
-    shape: { avgTokens: ph(3000, 'No source yet'), outShare: ph(0.15, 'No source yet'), cacheHit: ph(0.3, 'No source yet') },
-    floorTps: ph(40, 'No source yet'),
+    shape: { avgTokens: ph(3000, 'No source yet', undefined, undefined, 'tokens per request'), outShare: ph(0.15, 'No source yet', undefined, undefined, 'of tokens are output'), cacheHit: ph(0.3, 'No source yet', undefined, undefined, 'of the prompt read from cache') },
+    floorTps: ph(40, 'No source yet', undefined, undefined, 'tok/s per user'),
   },
   {
     id: 'roleplay',
     label: 'Roleplay',
     help: 'Long-lived conversations with medium context and good prefix reuse.',
-    shape: { avgTokens: ph(8000, 'No source yet'), outShare: ph(0.06, 'No source yet'), cacheHit: ph(0.6, 'No source yet') },
-    floorTps: ph(30, 'No source yet'),
+    shape: { avgTokens: ph(8000, 'No source yet', undefined, undefined, 'tokens per request'), outShare: ph(0.06, 'No source yet', undefined, undefined, 'of tokens are output'), cacheHit: ph(0.6, 'No source yet', undefined, undefined, 'of the prompt read from cache') },
+    floorTps: ph(30, 'No source yet', undefined, undefined, 'tok/s per user'),
   },
   {
     id: 'batch',
     label: 'Batch / offline',
     help: 'No interactivity target, so the card runs flat out. Sold by hours at a discount, not routed.',
-    shape: { avgTokens: ph(4000, 'No source yet'), outShare: ph(0.2, 'No source yet'), cacheHit: ph(0, 'No source yet') },
-    floorTps: ph(8, 'No source yet'),
+    shape: { avgTokens: ph(4000, 'No source yet', undefined, undefined, 'tokens per request'), outShare: ph(0.2, 'No source yet', undefined, undefined, 'of tokens are output'), cacheHit: ph(0, 'No source yet', undefined, undefined, 'of the prompt read from cache') },
+    floorTps: ph(8, 'No source yet', undefined, undefined, 'tok/s per user'),
     batch: true,
   },
 ];
 
 export const WORKLOAD_BY_ID: Record<string, WorkloadPreset> = Object.fromEntries(WORKLOADS.map((w) => [w.id, w]));
 
-export const BATCH_DISCOUNT = ph(0.5, 'No source yet', 'Provider batch APIs commonly price at about half of realtime; assumed');
+export const BATCH_DISCOUNT = ph(0.5, 'No source yet', 'Provider batch APIs commonly price at about half of realtime; assumed', undefined, '× the realtime price');
 
 export interface QosPreset {
   id: 'report' | 'floor' | 'router';
@@ -249,7 +249,7 @@ export const PROGRAM = {
   reviewGpuId: 'rtx5090',
 };
 
-export const BUY_HORIZON_MONTHS = ph(24, 'No source yet', 'Planning horizon for buy-versus-rent payback; the report only fixes 12 months and a three-month rule');
+export const BUY_HORIZON_MONTHS = ph(24, 'No source yet', 'Planning horizon for buy-versus-rent payback; the report only fixes 12 months and a three-month rule', undefined, 'months');
 export const RENT_RULES = {
   exitMultiple: rep(1.5, 'Report §9.2', 'Hand a rented card back when monthly revenue falls below 1.5× its rent'),
   buyAfterMonths: rep(3, 'Report §7.5', 'Buy only after a rented card stayed above break-even for three months'),

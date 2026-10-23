@@ -1,63 +1,19 @@
 import { useMemo, useState } from 'preact/hooks';
-import { FX_INR_PER_USD, GPUS, HOURS_PER_MONTH, SUMMER_DERATE } from '../data/gpus';
-import { CACHE_PRICE_FRACTION, MARKET } from '../data/market';
-import { BYTES_PER_PARAM, GOLDEN_AL_QWEN38_FLASH_NEXT, MODELS } from '../data/models';
-import { liveRegister, OPENROUTER, OR_DAY, VAST, VAST_DAY } from '../data/live';
+import { MODELS } from '../data/models';
+import { OPENROUTER, OR_DAY, VAST, VAST_DAY } from '../data/live';
 import { KIND_LABEL, KIND_ORDER, collectProvenance, countByKind, type ProvKind } from '../data/provenance';
-import * as SC from '../data/scenarios';
 import { GPU_BY_ID, QUANT_LABEL } from '../data/gpus';
-import { bandwidthCeilingTps, decodeTps, ROOF_PROV } from '../engine/roofline';
+import { bandwidthCeilingTps, decodeTps } from '../engine/roofline';
 import { IX_CURVES, IX_DROPPED, IX_SNAPSHOT_AT, IX_RUN_URL } from '../data/ix';
 import { ARCH_SNAPSHOT_AT } from '../data/arch';
 import { fitGroups, fitLoss, fitRows, holdoutRows, HOLDOUT_MODELS } from '../engine/ix-fit';
-import { weightsGB, GPU_MEM_UTIL, OVERHEAD_GB_PER_GPU, MIN_KV_TOKENS, ROOFLINE_MAX_CONC, REPORT_TEST_CTX, DRAFT_COST, MTP_DEFAULT_CSAT, VOLTA_KERNEL_PENALTY, MAX_EXTRAPOLATION } from '../engine/capacity';
+import { weightsGB, REPORT_TEST_CTX } from '../engine/capacity';
+import { ALL } from '../data/register';
 import { checkStatus, runCrossChecks, type CheckRow } from '../engine/crosscheck';
 import { fmtInr, fmtPct } from '../engine/units';
 import { Field, SelectInput } from '../ui/controls';
 import { ProvBadge } from '../ui/prov';
 
-const ALL = {
-  gpus: GPUS,
-  models: MODELS,
-  market: MARKET,
-  scenarios: SC.SCENARIOS,
-  lium: SC.LIUM,
-  program: SC.PROGRAM,
-  routeCosts: SC.ROUTE_COSTS,
-  workloads: SC.WORKLOADS,
-  availability: SC.AVAILABILITY_PRESETS,
-  uptimeTiers: SC.UPTIME_TIERS,
-  live: liveRegister(),
-  constants: {
-    fx: FX_INR_PER_USD,
-    hoursPerMonth: HOURS_PER_MONTH,
-    cachePriceFraction: CACHE_PRICE_FRACTION,
-    summerDerate: SUMMER_DERATE,
-    priceElasticity: SC.ELASTICITY_PRICE,
-    latencyElasticity: SC.ELASTICITY_LATENCY,
-    zdrBonus: SC.ZDR_SHARE_BONUS,
-    ramp: SC.RAMP,
-    floorMonths: SC.FLOOR_MONTHS,
-    batchDiscount: SC.BATCH_DISCOUNT,
-    gpuMemUtil: GPU_MEM_UTIL,
-    overheadGbPerGpu: OVERHEAD_GB_PER_GPU,
-    minKvTokens: MIN_KV_TOKENS,
-    rooflineMaxConc: ROOFLINE_MAX_CONC,
-    reportTestCtx: REPORT_TEST_CTX,
-    roofline: ROOF_PROV,
-    draftCost: DRAFT_COST,
-    mtpDefaultCsat: MTP_DEFAULT_CSAT,
-    voltaPenalty: VOLTA_KERNEL_PENALTY,
-    maxExtrapolation: MAX_EXTRAPOLATION,
-    bytesPerParam: BYTES_PER_PARAM,
-    goldenAl: GOLDEN_AL_QWEN38_FLASH_NEXT,
-    buyHorizon: SC.BUY_HORIZON_MONTHS,
-    rentRules: SC.RENT_RULES,
-    listingOdds: SC.LISTING_ODDS,
-    secondModelDelay: SC.SECOND_MODEL_DELAY,
-    tax: SC.TAX,
-  },
-};
 
 const range = (a: number[]) => `${Math.min(...a).toFixed(2)}× and ${Math.max(...a).toFixed(2)}×`;
 
@@ -217,9 +173,12 @@ export function DataView() {
               {filtered.slice(0, limit).map((r, i) => (
                 <tr key={`${r.path}-${i}`}>
                   <td style={{ fontFamily: 'var(--mono)', fontSize: '12px' }}>{r.path}</td>
-                  <td class="num">{fmtVal(r.value)}</td>
+                  <td class="num">
+                    {fmtVal(r.value)}
+                    {r.prov.unit ? <span class="small"> {r.prov.unit}</span> : null}
+                  </td>
                   <td>
-                    <ProvBadge p={r.prov} />
+                    <ProvBadge p={r.prov} showValue={false} />
                   </td>
                   <td>{r.prov.src}</td>
                   <td class="small">{r.prov.note ?? ''}</td>
@@ -483,7 +442,10 @@ export function DataView() {
             <b>Phase 4:</b> InferenceX measured runs fit the roofline per card family and anchor it where a card and model were measured; multi-GPU nodes use the fitted all-reduce model.
           </li>
           <li>
-            <b>Phase 5 (this version):</b> the five busiest OpenRouter models (DeepSeek V4.1 Flash, GLM-5.3, GLM-5.3 Flash, MiniMax-M3, MiMo-V2.6 Flash) on nodes of 1, 2, 4 and 8 cards, from live data and Hugging Face files; MiniMax-M3's InferenceX runs check the roofline out of sample.
+            <b>Phase 5:</b> the five busiest OpenRouter models (DeepSeek V4.1 Flash, GLM-5.3, GLM-5.3 Flash, MiniMax-M3, MiMo-V2.6 Flash) on nodes of 1, 2, 4 and 8 cards, from live data and Hugging Face files; MiniMax-M3's InferenceX runs check the roofline out of sample.
+          </li>
+          <li>
+            <b>Phase 6 (this version):</b> every placeholder states the value it currently holds and its unit, wherever its badge appears.
           </li>
           <li>
             <b>Next:</b> a measurement run on your own cards to fit dense prefill on the PRO 6000 and Ada, then AMD and A100.

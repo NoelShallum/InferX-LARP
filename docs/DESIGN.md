@@ -48,7 +48,7 @@ INR and USD with a pre-tax and after-tax switch, using the report's agreed rule:
 
 ## Provenance
 
-Every value is tagged measured, report, report estimate, derived, sourced or placeholder. Placeholders are loud. The Data audit view lists all of them.
+Every value is tagged measured, report, report estimate, derived, sourced or placeholder. Placeholders are loud and say what they currently are: each carries the value in use and its unit ("0.6 × the roofline speed"), shown in its badge, in the evidence lists, in the summary popover and in the Data audit register. A test fails if a placeholder anywhere in the register lacks a value or a unit.
 
 ## Scope for now
 

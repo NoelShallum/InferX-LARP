@@ -4,7 +4,7 @@ import { type Prov, ph } from '../data/provenance';
 
 export const REPORT_SHARE_FACTOR = 0.3;
 export const DAYS_PER_MONTH = 30;
-export const DEFAULT_AVG_TOKENS = ph(15300, 'Report §5.3', "Qwen3.8-27B's average request, used for models whose own average is not stated");
+export const DEFAULT_AVG_TOKENS = ph(15300, 'Report §5.3', "Qwen3.8-27B's average request, used for models whose own average is not stated", undefined, 'tokens per request');
 
 export interface Calibration {
   /** Output tokens as a share of all tokens in a request. */

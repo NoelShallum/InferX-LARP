@@ -32,8 +32,8 @@ import type { Pricing, ResolvedCase, Settings, Slot } from './types';
 
 const ROOFLINE_ONLY_PROV: Prov = { kind: 'derived', src: 'Roofline fitted to InferenceX', note: 'No measurement for this model on this card: speed is the fitted roofline, accurate to about ±30% where checked' };
 
-export const POWER_TARIFF_INR_PER_KWH = ph(8, 'No source yet', 'Electricity price used for buy-slot power cost; the report folds power into the Lium bar instead');
-export const AVG_POWER_FRACTION = ph(0.8, 'No source yet', 'Average draw as a fraction of TDP while serving');
+export const POWER_TARIFF_INR_PER_KWH = ph(8, 'No source yet', 'Electricity price used for buy-slot power cost; the report folds power into the Lium bar instead', undefined, '₹ per kWh');
+export const AVG_POWER_FRACTION = ph(0.8, 'No source yet', 'Average draw as a fraction of TDP while serving', undefined, 'of TDP');
 
 export function resolveCase(settings: Settings, caseId: CaseId = settings.caseId): ResolvedCase {
   const sc = SCENARIOS[caseId];
@@ -354,7 +354,7 @@ export function evaluateSlot(slot: Slot, settings: Settings, opts: SlotEvalOpts 
     paybackServing = net > 0 ? capexUsd / net : null;
     const l = LIUM[gpu.id];
     paybackLium = l ? capexUsd / (l.netInr.v / fx) : null;
-    evidence.push({ label: 'Purchase price', prov: (slot.buyPriceInr ? { kind: 'user', src: 'Your input' } : (gpu.buyInr?.p ?? ph(0, 'No source yet').p)) as Prov });
+    evidence.push({ label: 'Purchase price', prov: (slot.buyPriceInr ? { kind: 'user', src: 'Your input' } : (gpu.buyInr?.p ?? ph(0, 'No source yet', undefined, undefined, '₹').p)) as Prov });
     evidence.push({ label: 'Power tariff', prov: POWER_TARIFF_INR_PER_KWH.p });
   }
   if (slot.ownership !== 'owned') costUsd += slot.ownership === 'rent' ? 0 : tools;

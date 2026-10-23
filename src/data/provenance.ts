@@ -25,6 +25,10 @@ export interface Prov {
   src: string;
   note?: string;
   asOf?: string;
+  /** What the dashboard is using right now, as text. Stamped on every placeholder so the badge can say it. */
+  value?: string;
+  /** What the value is measured in, where it is not obvious from the note. */
+  unit?: string;
 }
 
 export interface V<T = number> {
@@ -89,11 +93,33 @@ export const rep = mk<number>('report');
 export const est = mk<number>('report-est');
 export const srcd = mk<number>('sourced');
 export const drv = mk<number>('derived');
-export const ph = mk<number>('placeholder');
+const fmtPlaceholder = (v: number): string => (Number.isInteger(v) ? String(v) : String(Number(v.toPrecision(4))));
+
+/**
+ * An assumption with no reference. It records the value it carries (and its unit) so a badge can state what the
+ * dashboard is using, not only that it is a guess.
+ */
+export const ph = (v: number, src: string, note?: string, asOf?: string, unit?: string): V<number> => {
+  const out = mk<number>('placeholder')(v, src, note, asOf);
+  out.p.value = fmtPlaceholder(v);
+  if (unit) out.p.unit = unit;
+  return out;
+};
 export const live = mk<number>('live');
 
 export const repS = mk<string>('report');
-export const phS = mk<string>('placeholder');
+export const phS = (v: string, src: string, note?: string, asOf?: string, unit?: string): V<string> => {
+  const out = mk<string>('placeholder')(v, src, note, asOf);
+  out.p.value = v;
+  if (unit) out.p.unit = unit;
+  return out;
+};
+
+/** "0.6 × of roofline speed": the value in use with its unit, or null when the provenance does not state one. */
+export function provValue(p: Prov): string | null {
+  if (p.value === undefined) return null;
+  return p.unit ? `${p.value} ${p.unit}` : p.value;
+}
 export const repB = mk<boolean>('report');
 
 export function isV(x: unknown): x is V<unknown> {

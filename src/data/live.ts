@@ -215,7 +215,7 @@ function liveOnlyBase(modelId: string, m: OrModel): MarketRow | null {
     outMin: v(s.outMin ?? s.outMedian, 'Cheapest listed endpoint'),
     outMed: v(s.outMedian, 'Median across listed endpoints'),
     outMax: v(s.outMax ?? s.outMedian, 'Dearest listed endpoint'),
-    cacheHit: t.cacheHit != null ? v(t.cacheHit, 'Cached share of prompt tokens') : { v: 0.5, p: { kind: 'placeholder', src: 'No source yet', note: 'OpenRouter gave no cache figure for this model' } },
+    cacheHit: t.cacheHit != null ? v(t.cacheHit, 'Cached share of prompt tokens') : { v: 0.5, p: { kind: 'placeholder', src: 'No source yet', note: 'OpenRouter gave no cache figure for this model', value: '0.5', unit: 'of the prompt read from cache' } },
     busyHourMedianUsd: null,
     busyHourLowestUsd: null,
     typicalMedianUsd: null,

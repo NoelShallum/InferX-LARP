@@ -45,7 +45,7 @@ export function SensitivityView() {
             <>
               <Tornado items={items} ariaLabel="Tornado chart of how each input changes the result" fmt={(v) => fmtD(v)} />
               <p class="small">
-                Availability −5 points drops a 99% endpoint below OpenRouter's 95% line, where routing priority falls. The report gives no figure for that penalty, so the dashboard halves share <ProvBadge p={{ kind: 'placeholder', src: 'No source yet', note: 'Share multiplier below 95% uptime is a guess' }} compact />.
+                Availability −5 points drops a 99% endpoint below OpenRouter's 95% line, where routing priority falls. The report gives no figure for that penalty, so the dashboard halves share <ProvBadge p={{ kind: 'placeholder', src: 'No source yet', note: 'Share multiplier below 95% uptime is a guess', value: '0.5', unit: '× share' }} compact />.
               </p>
             </>
           }

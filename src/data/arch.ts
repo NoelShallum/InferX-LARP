@@ -101,6 +101,14 @@ export function kvPerTokV(a: ArchInfo): V {
   return kind(total, a.params?.source ?? a.configUrl, note, ARCH_SNAPSHOT_AT);
 }
 
+/** Total parameters in billions, from the Hugging Face file listing or the model card, for models that gave only a placeholder. */
+export function totalFromConfigV(a: ArchInfo): V | null {
+  if (!a.params) return null;
+  const v = Math.round((a.params.total / 1e9) * 10) / 10;
+  if (a.params.source) return srcd(v, a.params.source, 'Model card: total parameters', ARCH_SNAPSHOT_AT);
+  return drv(v, a.configUrl, 'Parameter count from the Hugging Face API for the checkpoint');
+}
+
 export function activeFromConfigV(a: ArchInfo): V | null {
   if (!a.params) return null;
   const v = Math.round((a.params.active / 1e9) * 10) / 10;

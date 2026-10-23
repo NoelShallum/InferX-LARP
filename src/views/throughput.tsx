@@ -3,7 +3,8 @@ import { GPU_BY_ID, QUANT_LABEL, type Gpu } from '../data/gpus';
 import { GOLDEN_AL_QWEN38_FLASH_NEXT, MODEL_BY_ID } from '../data/models';
 import { bestIxCurve, ixProv } from '../data/ix';
 import { THROUGHPUT_PRESETS, WORKLOAD_BY_ID } from '../data/scenarios';
-import { DRAFT_COST, REPORT_TEST_CTX, capacityFor, chooseQuant, curveFor, mtpInfo, weightsGB } from '../engine/capacity';
+import { DRAFT_COST, MTP_DEFAULT_CSAT, REPORT_TEST_CTX, capacityFor, chooseQuant, curveFor, mtpInfo, weightsGB } from '../engine/capacity';
+import { provValue } from '../data/provenance';
 import { makeSlot } from '../engine/defaults';
 import { bandwidthCeilingTps, decodeTps, prefillRate, requestParts } from '../engine/roofline';
 import { slotShape } from '../engine/slot';
@@ -449,7 +450,7 @@ export function ThroughputView() {
             </div>
             <div>
               <span>Calibration</span>
-              <b>{info?.calibrated ? 'to the measured point' : 'placeholder'}</b>
+              <b>{info?.calibrated ? 'to the measured point' : `placeholder: stops helping near ${provValue(MTP_DEFAULT_CSAT.p)}`}</b>
             </div>
           </div>
           <p class="small mt">{model.mtp.note}</p>

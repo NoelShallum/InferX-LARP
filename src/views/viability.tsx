@@ -250,7 +250,7 @@ export function ViabilityView() {
                   {ECON_MODELS.map((m) => (
                     <td key={m.id} class="num">
                       {cells.find((c) => c.row === r.id && c.col === m.id)?.text ?? '—'}
-                      {r.ownership === 'rent' && results.get(`${r.id}|${m.id}`)?.res.ok && results.get(`${r.id}|${m.id}`)!.count > 1 ? <span class="faint"> ×{results.get(`${r.id}|${m.id}`)!.count}</span> : null}
+                      {r.ownership === 'rent' && results.get(`${r.id}|${m.id}`)?.res.ok && results.get(`${r.id}|${m.id}`)!.count > 1 ? <span class="small"> ×{results.get(`${r.id}|${m.id}`)!.count}</span> : null}
                     </td>
                   ))}
                 </tr>
@@ -314,7 +314,7 @@ export function ViabilityView() {
               </div>
               {selRes.capacity?.multipliers.some((m) => m.prov.kind === 'placeholder') ? (
                 <div class="warnbox">
-                  This cell scales throughput from another card by memory bandwidth, which is a placeholder until the roofline engine arrives. <ProvBadge p={{ kind: 'placeholder', src: 'Bandwidth scaling' }} />
+                  This cell scales the report's throughput from another card by memory bandwidth, which is a placeholder; the other throughput bases do not use it. <ProvBadge p={{ kind: 'placeholder', src: 'Bandwidth scaling', value: selRes.capacity.multipliers.find((m) => m.prov.kind === 'placeholder')?.value.toFixed(2), unit: '× the PRO 6000 speed' }} />
                 </div>
               ) : null}
               {buyRes && buyRes.res.ok && selRow.ownership === 'rent' ? (
