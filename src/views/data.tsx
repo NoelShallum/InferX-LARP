@@ -243,10 +243,10 @@ export function DataView() {
         <h3 class="mt">Build order</h3>
         <ol class="plain">
           <li>
-            <b>Phase 1 (this version):</b> the interface, the portfolio planner and the economics engine on the report's static numbers.
+            <b>Phase 1:</b> the interface, the portfolio planner and the economics engine on the report's static numbers.
           </li>
           <li>
-            <b>Phase 2:</b> live Vast.ai (browser scrape, then a script) and OpenRouter prices with dated history.
+            <b>Phase 2 (this version):</b> live Vast.ai (browser scrape, then a script) and OpenRouter prices with dated history.
           </li>
           <li>
             <b>Phase 3:</b> roofline throughput, prefill and time to first token, a PRO 6000 × Qwen3.8-27B slice end to end, then every model and card.
