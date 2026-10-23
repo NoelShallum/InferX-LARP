@@ -9,6 +9,8 @@ import { elasticityFactor } from './pricing';
 import { reportSettings } from './crosscheck';
 import { evaluateSlot } from './slot';
 import { tornado } from './sensitivity';
+import { liveMarket, liveRent, OPENROUTER, orTrend, VAST, vastTrend } from '../data/live';
+import { floorFor, marketFor, rentFor } from './sources';
 
 const pro = GPU_BY_ID['pro6000']!;
 
@@ -113,7 +115,7 @@ describe('economics', () => {
   });
   it('program costs for the base case: build, two queue months, one review month, one bridge month', () => {
     const slot = makeSlot({ id: 'o', ownership: 'owned', boxKey: 'pro6000', gpuId: 'pro6000', modelId: 'qwen38_27b' });
-    const { costs } = programCosts([slot], DEFAULT_SETTINGS, 'base');
+    const { costs } = programCosts([slot], reportSettings('base'), 'base');
     const fx = DEFAULT_SETTINGS.fx;
     expect(costs.buildUsd * fx).toBeCloseTo(10_000, 0);
     expect(costs.queueUsd * fx).toBeCloseTo(2000, 0);
@@ -125,5 +127,102 @@ describe('economics', () => {
     const share = t.rows.find((r) => r.id === 'share')!;
     const avail = t.rows.find((r) => r.id === 'availability')!;
     expect(share.span).toBeGreaterThan(avail.span);
+  });
+});
+
+describe('live data sources', () => {
+  const live = { ...DEFAULT_SETTINGS, rentSource: 'live' as const, marketSource: 'live' as const };
+  const rpt = { ...DEFAULT_SETTINGS, rentSource: 'report' as const, marketSource: 'report' as const };
+
+  it('uses a live Vast.ai price for a rented RTX 5090 and tags it live', () => {
+    const r = rentFor(GPU_BY_ID['rtx5090']!, 1, live)!;
+    expect(r.p.kind).toBe('live');
+    expect(r.v).toBeGreaterThan(0.2);
+    expect(r.v).toBeLessThan(3);
+  });
+  it('uses the report price when the report source is chosen', () => {
+    const r = rentFor(GPU_BY_ID['pro6000']!, 1, rpt)!;
+    expect(r.v).toBe(1.64);
+    expect(r.p.kind).toBe('report');
+  });
+  const noOffer = Object.entries(VAST.gpus).find(([id, g]) => (g.nodes['1']?.views.r90.count ?? 0) === 0 && GPU_BY_ID[id]?.rentUsdHr)?.[0];
+  it('falls back to the catalog price, and says so, when no offer passes the filter', () => {
+    expect(noOffer).toBeDefined();
+    const gpu = GPU_BY_ID[noOffer!]!;
+    expect(liveRent(gpu.id, 1, 'r90', 'cheapest')).toBeNull();
+    const r = rentFor(gpu, 1, live)!;
+    expect(r.p.kind).not.toBe('live');
+    expect(r.v).toBe(gpu.rentUsdHr!.v);
+    expect(r.p.note).toContain('No Vast.ai offer passes');
+  });
+  it('a stricter reliability filter never lowers the cheapest price', () => {
+    for (const id of Object.keys(VAST.gpus)) {
+      const a = liveRent(id, 1, 'r90', 'cheapest');
+      const b = liveRent(id, 1, 'r98', 'cheapest');
+      if (a && b && !a.borrowedFromSingle && !b.borrowedFromSingle) expect(b.perGpu).toBeGreaterThanOrEqual(a.perGpu);
+    }
+  });
+  it('borrows the single-card per-GPU price when a larger node has no offer', () => {
+    const entry = Object.entries(VAST.gpus).find(([, g]) => (g.nodes['1']?.views.r90.count ?? 0) > 0 && (g.nodes['8']?.views.r90.count ?? 0) === 0);
+    expect(entry).toBeDefined();
+    const l = liveRent(entry![0], 8, 'r90', 'cheapest')!;
+    expect(l.borrowedFromSingle).toBe(true);
+    expect(l.nodeSize).toBe(1);
+  });
+  it('lays live OpenRouter numbers over the report row', () => {
+    const resolved = marketFor('qwen38_27b', live)!;
+    expect(resolved.live).not.toBeNull();
+    expect(resolved.row.endpoints.v).toBe(OPENROUTER.models['qwen38_27b']!.summary.endpointsListed);
+    expect(resolved.row.endpoints.p.kind).toBe('live');
+    const report = marketFor('qwen38_27b', rpt)!;
+    expect(report.live).toBeNull();
+    expect(report.row.endpoints.v).toBe(20);
+  });
+  it('observed request shape comes from live traffic totals', () => {
+    const lm = liveMarket('gptoss_120b', false)!;
+    expect(lm.shape).not.toBeNull();
+    expect(lm.shape!.outShare).toBeGreaterThan(0.05);
+    expect(lm.shape!.outShare).toBeLessThan(0.2);
+  });
+  it('the OpenRouter-competitive quality bar is the median live stream speed for the model', () => {
+    const router = { ...live, qos: { mode: 'router' as const, floorTps: 40 } };
+    const f = floorFor('qwen38_27b', router);
+    expect(f.v).not.toBeNull();
+    expect(f.floor).toBe(OPENROUTER.models['qwen38_27b']!.summary.p50TpsMedian);
+    const none = floorFor('qwen38_27b', { ...router, qos: { mode: 'floor' as const, floorTps: 40 } });
+    expect(none.floor).toBe(40);
+  });
+  it('a rented slot is charged the live rent', () => {
+    const slot = makeSlot({ id: 'r', ownership: 'rent', gpuId: 'rtx5090', modelId: 'qwen38_27b' });
+    const r = evaluateSlot(slot, { ...live, availabilityCustom: 1 });
+    const expected = rentFor(GPU_BY_ID['rtx5090']!, 1, live)!.v * 730;
+    expect(r.costUsd).toBeCloseTo(expected, 4);
+    expect(r.rentFallback).toBe(false);
+  });
+  it('flags a rented slot whose live price fell back', () => {
+    const slot = makeSlot({ id: 'r', ownership: 'rent', gpuId: noOffer!, modelId: 'gptoss_20b' });
+    const r = evaluateSlot(slot, live);
+    expect(r.rentFallback).toBe(true);
+  });
+});
+
+describe('trends from saved snapshots', () => {
+  const vsnap = (date: string, min: number | null) =>
+    ({ generatedAt: `${date}T10:00:00Z`, gpus: { rtx5090: { nodes: { '1': { views: { r90: { count: min === null ? 0 : 5, minPerGpu: min, medianPerGpu: min === null ? null : min + 0.3, p25PerGpu: null, cheapest: [] } } } } } } }) as unknown as Parameters<typeof vastTrend>[0][number];
+  it('lists one point per snapshot that had an offer, oldest first', () => {
+    const t = vastTrend([vsnap('2026-10-23', 0.7), vsnap('2026-10-24', null), vsnap('2026-10-25', 0.65)], 'rtx5090', 1, 'r90', 'cheapest');
+    expect(t).toEqual([{ date: '2026-10-23', value: 0.7 }, { date: '2026-10-25', value: 0.65 }]);
+  });
+  it('can follow the median instead of the cheapest', () => {
+    const t = vastTrend([vsnap('2026-10-23', 0.7)], 'rtx5090', 1, 'r90', 'median');
+    expect(t[0]!.value).toBeCloseTo(1.0, 6);
+  });
+  it('reads one OpenRouter measure per model, converting traffic to billions', () => {
+    const osnap = (date: string, tokens: number, med: number) =>
+      ({ generatedAt: `${date}T10:00:00Z`, models: { m: { summary: { endpointsListed: 5, outMedian: med, inMedian: 0.1, outMin: 0.5, p50TpsMedian: 40 }, traffic: { tokensPerDay: tokens } } } }) as unknown as Parameters<typeof orTrend>[0][number];
+    const h = [osnap('2026-10-23', 60e9, 2.3), osnap('2026-10-24', 66e9, 2.2)];
+    expect(orTrend(h, 'm', 'tokensPerDay').map((p) => p.value)).toEqual([60, 66]);
+    expect(orTrend(h, 'm', 'outMedian').map((p) => p.value)).toEqual([2.3, 2.2]);
+    expect(orTrend(h, 'missing', 'outMedian')).toEqual([]);
   });
 });

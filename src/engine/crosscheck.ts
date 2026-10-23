@@ -25,7 +25,7 @@ const L = (x: number) => x * LAKH;
 
 /** Settings that match the conditions the report states: no outage haircut, no what-ifs. */
 export function reportSettings(caseId: CaseId = 'base', over: Partial<Settings> = {}): Settings {
-  return { ...DEFAULT_SETTINGS, caseId, availabilityCustom: 1, killRules: false, ...over };
+  return { ...DEFAULT_SETTINGS, caseId, availabilityCustom: 1, killRules: false, marketSource: 'report', rentSource: 'report', ...over };
 }
 
 const MODELS_61 = ['qwen38_27b', 'qwen36_35b', 'gemma4_26b', 'gptoss_120b', 'gemma4_31b', 'llama33_70b', 'mistral_nemo', 'gptoss_20b'];

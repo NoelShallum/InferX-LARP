@@ -174,14 +174,15 @@ export const WORKLOAD_BY_ID: Record<string, WorkloadPreset> = Object.fromEntries
 export const BATCH_DISCOUNT = ph(0.5, 'No source yet', 'Provider batch APIs commonly price at about half of realtime; assumed');
 
 export interface QosPreset {
-  id: 'report' | 'floor';
+  id: 'report' | 'floor' | 'router';
   label: string;
   help: string;
 }
 
 export const QOS_PRESETS: QosPreset[] = [
   { id: 'report', label: 'Report convention', help: 'Each model runs at the operating point the report\'s busy-hour revenue is based on (15-25% of vendor peak).' },
-  { id: 'floor', label: 'Custom tok/s/user floor', help: 'Serve as many concurrent requests as keep every user above the floor. The OpenRouter-competitive preset arrives in phase 2.' },
+  { id: 'router', label: 'OpenRouter-competitive', help: "Serve as many concurrent requests as keep every user at the median typical stream speed of the model's listed OpenRouter endpoints (live)." },
+  { id: 'floor', label: 'Custom tok/s/user floor', help: 'Serve as many concurrent requests as keep every user above a speed you set.' },
 ];
 
 /** Tax and route costs. */

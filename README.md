@@ -19,8 +19,8 @@ Built on three things:
 | **Capacity** | Memory split into weights, overhead and KV pool; how many users fit at a context length; every model on a GPU and every GPU for a model. |
 | **Throughput** | Output tokens per second against tokens per second per user, per GPU, with MTP on or off and the operating point under the current quality bar. |
 | **Sensitivity** | A tornado of which inputs move the result, what-if sliders that apply to the whole dashboard, and break-even card use and price per card. |
-| **Prices** | The report's OpenRouter snapshot, GPU rent and purchase prices, and the Lium bar. |
-| **Data audit** | A register of every tagged number with where it came from, and a cross-check of the engine against 94 figures printed in the report. |
+| **Prices** | Live OpenRouter prices, traffic and stream speeds next to the report's snapshot, who sells each model, live Vast.ai rent by reliability tier, price trends once there are two snapshots, purchase prices and the Lium bar. |
+| **Data audit** | A register of every tagged number (including the live ones) with where it came from, and a cross-check of the engine against 94 figures printed in the report. |
 
 ## Where numbers come from
 
@@ -34,9 +34,35 @@ Every number carries a badge, and anything computed on top of tagged inputs show
 | **Derived** | Computed from other values; the note shows how. |
 | **Sourced** | Checked against a public datasheet or repository. |
 | **⚠ Placeholder** | An assumption with no reference yet. Treat as a guess. |
-| **Live** | Fetched by a collection script (phase 2). |
+| **Live** | Fetched by a collection script (`npm run data`), with the snapshot date. |
 
 The **Data audit** view lists every placeholder so none hides.
+
+## Live data
+
+Two scripts collect prices. Both write a full `data/live/<source>.latest.json` that the dashboard imports at build time, and a compact dated copy in `data/live/history/` so trends show once there are two snapshots.
+
+```bash
+npm run data            # both
+npm run data:vast       # Vast.ai GPU rent
+npm run data:openrouter # OpenRouter prices, traffic, stream speed
+```
+
+**Vast.ai** refuses plain HTTP clients (403), so the script opens `cloud.vast.ai/create/` in a real Chromium once, lets the page set up its session, and then runs every search from inside that page. It needs a Chrome or Chromium on the machine; `playwright-core` does not download one.
+
+| Variable | Effect |
+| --- | --- |
+| `CHROME_PATH` | Chrome or Chromium executable to use. |
+| `HEADED=1` | Show the window, in case Vast asks you to prove you are human. |
+| `GPUS=pro6000,rtx5090` | Only those catalog GPUs. |
+
+For each GPU and node size it keeps the cheapest and the median on-demand offer under four reliability views: **r90** (verified, reliability ≥ 0.90, the default), **r98**, **dc99** (data-centre, ≥ 0.99) and **any**. Interruptible bids are stored separately and never used as rent. Region is saved on each offer, and the dashboard looks anywhere.
+
+**OpenRouter** needs no browser. It reads the public API and the public stats endpoints: endpoint prices, cache-read prices, median stream speed per model (the basis of the OpenRouter-competitive quality bar), 7-day traffic and the request shape that follows from it. `MODELS=qwen38_27b,gptoss_120b` limits it.
+
+In the dashboard, **Market source** and **Rent source** (Assumptions → Data sources) switch between live and the report's snapshot. A rented card with no live offer at the chosen tier falls back, in order, to the live per-GPU price of a single card, then to the report's price, and is flagged each time. With both switched to the report, the engine reproduces the report's figures.
+
+Commit the new snapshot files to publish them: the Pages workflow builds from the repository.
 
 ## How the engine works
 
@@ -61,6 +87,7 @@ npm run dev        # http://localhost:5173
 npm test           # engine tests and the cross-check against the report
 npm run build      # static site in dist/
 npm run build:single   # one self-contained HTML file in dist-single/
+npm run data       # refresh live prices (see Live data)
 ```
 
 ## Deploy
@@ -69,8 +96,8 @@ npm run build:single   # one self-contained HTML file in dist-single/
 
 ## Status
 
-- **Phase 1 (this version):** the interface, the portfolio planner and the economics engine on the report's static numbers.
-- **Phase 2:** live Vast.ai prices (a headless-browser scrape, done once live, then scripted) and an OpenRouter script, both saved as dated snapshots so trends show.
+- **Phase 1:** the interface, the portfolio planner and the economics engine on the report's static numbers.
+- **Phase 2 (this version):** live Vast.ai prices (a headless-browser scrape, then scripted) and an OpenRouter script, both saved as dated snapshots. The dashboard defaults to live data with the report as a switch, and has an OpenRouter-competitive quality bar from live stream speeds.
 - **Phase 3:** roofline throughput, prefill and time to first token, PRO 6000 × Qwen3.8-27B end to end, then every model and card. InferenceX measured curves for multi-GPU nodes.
 
 What this version does not do yet is listed at the bottom of the Data audit view.

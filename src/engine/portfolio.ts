@@ -2,6 +2,7 @@ import { GPU_BY_ID, HOURS_PER_MONTH } from '../data/gpus';
 import { PROGRAM, type CaseId, CASES } from '../data/scenarios';
 import { taxRate } from './bars';
 import { evaluateSlot, resolveCase, type SlotResult } from './slot';
+import { rentFor } from './sources';
 import { listingMonthFor, slotTimeline, type SlotTimeline } from './timeline';
 import { MONTHS } from './timeline-constants';
 import type { Settings, Slot } from './types';
@@ -102,7 +103,7 @@ export function programCosts(slots: Slot[], settings: Settings, caseId?: CaseId)
   const c = resolveCase(settings, caseId);
   const fx = settings.fx;
   const review = GPU_BY_ID[PROGRAM.reviewGpuId]!;
-  const reviewRent = (review.rentUsdHr?.v ?? 0) * HOURS_PER_MONTH.v * settings.whatIf.rent;
+  const reviewRent = (rentFor(review, 1, settings)?.v ?? 0) * HOURS_PER_MONTH.v * settings.whatIf.rent;
   const tools = PROGRAM.toolsInrPerMonth.v / fx;
   const dependsOnListing = slots.some((s) => s.modelId !== 'lium');
   const buildUsd = PROGRAM.buildInr.v / fx;

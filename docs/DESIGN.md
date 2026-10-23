@@ -18,8 +18,8 @@ Agreed in the interview before building. Kept here so the reasons survive.
 
 - **Marketplace share model with a utilisation override.** A typical new endpoint gets 0.3 of an equal 1/N share of a model's paid OpenRouter traffic. Price elasticity −0.63, latency elasticity −0.46.
 - **Batch work** is sold either at a discount to the live price × hours sold, or at your own price per million tokens. Batch is not routed.
-- **Rent price:** cheapest reliable on-demand Vast.ai offer by default; the median is stored too.
-- **Quality bar:** adjustable minimum tokens per second per user and p90 time to first token. The OpenRouter-competitive preset needs live speed data (phase 2). Until then the report's convention is the default.
+- **Rent price:** cheapest reliable on-demand Vast.ai offer by default (verified, reliability ≥ 0.90, any region; the region is saved); the median and stricter tiers are stored too.
+- **Quality bar:** adjustable minimum tokens per second per user and p90 time to first token. The OpenRouter-competitive preset uses the median live stream speed per model (phase 2). The report's convention and a custom floor remain available.
 
 ## Workloads
 
@@ -52,9 +52,9 @@ Every value is tagged measured, report, report estimate, derived, sourced or pla
 
 ## Build order
 
-1. Interface and planner on the report's static numbers, with the economics engine behind it.
-2. Vast.ai browser scrape (done once live, then scripted) and an OpenRouter script, with dated snapshots; replace the static prices.
-3. Roofline engine, starting with PRO 6000 × Qwen3.8-27B end to end, then every model and card.
+1. Interface and planner on the report's static numbers, with the economics engine behind it. **Done.**
+2. Vast.ai browser scrape (done once live, then scripted) and an OpenRouter script, with dated snapshots; replace the static prices. **Done.**
+3. Roofline engine, starting with PRO 6000 × Qwen3.8-27B end to end, then every model and card. Next.
 
 ## Acceptance
 

@@ -1,0 +1,2898 @@
+{
+ "source": "openrouter.ai",
+ "generatedAt": "2026-10-23T11:30:26.311Z",
+ "notes": "Prices are dollars per million tokens. Traffic is the mean of the last full UTC days of standard (paid) traffic. Speed is the median of each endpoint's typical (p50) stream speed.",
+ "models": {
+  "qwen38_27b": {
+   "slug": "qwen/qwen3.8-27b",
+   "permaslug": "qwen/qwen3.8-27b-20260814",
+   "name": "Qwen: Qwen3.8 27B",
+   "contextLength": 1000000,
+   "summary": {
+    "endpointsListed": 21,
+    "endpointsUp": 20,
+    "inMin": 0.02,
+    "inMedian": 0.2,
+    "outMin": 0.5,
+    "outMedian": 2.3,
+    "outMax": 3.2,
+    "cacheFractionMedian": 0.45,
+    "cacheEndpoints": 19,
+    "speedEndpoints": 21,
+    "p50TpsMedian": 38,
+    "p50TpsP25": 27,
+    "p50LatencyMsMedian": 1110,
+    "uptime1dMedian": 99.55
+   },
+   "traffic": {
+    "days": 7,
+    "from": "2026-10-16",
+    "to": "2026-10-22",
+    "tokensPerDay": 66215400651,
+    "promptPerDay": 63498785763,
+    "completionPerDay": 2716614888,
+    "requestsPerDay": 4108185,
+    "avgTokensPerRequest": 16118,
+    "outShare": 0.041,
+    "cacheHit": 0.727,
+    "daily": [
+     {
+      "date": "2026-10-16",
+      "tokens": 62195100356,
+      "requests": 3910687
+     },
+     {
+      "date": "2026-10-17",
+      "tokens": 48215263977,
+      "requests": 3111743
+     },
+     {
+      "date": "2026-10-18",
+      "tokens": 44456369999,
+      "requests": 3075388
+     },
+     {
+      "date": "2026-10-19",
+      "tokens": 57403849636,
+      "requests": 5406166
+     },
+     {
+      "date": "2026-10-20",
+      "tokens": 84841929335,
+      "requests": 5311532
+     },
+     {
+      "date": "2026-10-21",
+      "tokens": 72017488857,
+      "requests": 3476072
+     },
+     {
+      "date": "2026-10-22",
+      "tokens": 94377802398,
+      "requests": 4465705
+     }
+    ]
+   },
+   "batch": null,
+   "endpoints": [
+    {
+     "provider": "Tenstorrent",
+     "quantization": "fp4",
+     "inPerM": 0.02,
+     "outPerM": 0.5,
+     "cachePerM": 0.009,
+     "status": 0,
+     "uptime1d": 99.03,
+     "uptime30m": 100,
+     "p50Tps": 16,
+     "p90Tps": 6,
+     "p50LatencyMs": 1021,
+     "requests30m": 1398,
+     "zdr": true
+    },
+    {
+     "provider": "Chutes",
+     "quantization": "fp8",
+     "inPerM": 0.039,
+     "outPerM": 1.25,
+     "cachePerM": 0.0039,
+     "status": 0,
+     "uptime1d": 99.93,
+     "uptime30m": 100,
+     "p50Tps": 27,
+     "p90Tps": 12,
+     "p50LatencyMs": 3129,
+     "requests30m": 6906,
+     "zdr": false
+    },
+    {
+     "provider": "Near AI",
+     "quantization": "fp8",
+     "inPerM": 0.04,
+     "outPerM": 1.35,
+     "cachePerM": 0.018,
+     "status": 0,
+     "uptime1d": 99.86,
+     "uptime30m": 100,
+     "p50Tps": 24,
+     "p90Tps": 21,
+     "p50LatencyMs": 5759.5,
+     "requests30m": 14858,
+     "zdr": true
+    },
+    {
+     "provider": "Cerebras",
+     "quantization": "fp16",
+     "inPerM": 0.99,
+     "outPerM": 1.49,
+     "cachePerM": 0.99,
+     "status": 0,
+     "uptime1d": 98.68,
+     "uptime30m": 100,
+     "p50Tps": 393,
+     "p90Tps": 123.4,
+     "p50LatencyMs": 358,
+     "requests30m": 1496,
+     "zdr": true
+    },
+    {
+     "provider": "DeepInfra",
+     "quantization": "bf16",
+     "inPerM": 0.15,
+     "outPerM": 1.875,
+     "cachePerM": 0.0375,
+     "status": 0,
+     "uptime1d": 99.38,
+     "uptime30m": 100,
+     "p50Tps": 38,
+     "p90Tps": 16,
+     "p50LatencyMs": 945,
+     "requests30m": 53946,
+     "zdr": true
+    },
+    {
+     "provider": "Ionstream",
+     "quantization": "fp8",
+     "inPerM": 0.04,
+     "outPerM": 1.95,
+     "cachePerM": 0.02,
+     "status": 0,
+     "uptime1d": 98.66,
+     "uptime30m": 100,
+     "p50Tps": 47,
+     "p90Tps": 18,
+     "p50LatencyMs": 725,
+     "requests30m": 1281,
+     "zdr": true
+    },
+    {
+     "provider": "AkashML",
+     "quantization": "fp8",
+     "inPerM": 0.225,
+     "outPerM": 1.98,
+     "cachePerM": 0.05,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 43,
+     "p90Tps": 17.700000000000017,
+     "p50LatencyMs": 625.5,
+     "requests30m": 2318,
+     "zdr": true
+    },
+    {
+     "provider": "Darkbloom",
+     "quantization": "fp4",
+     "inPerM": 0.035,
+     "outPerM": 2.2,
+     "cachePerM": 0.0175,
+     "status": 0,
+     "uptime1d": 98.6,
+     "uptime30m": 100,
+     "p50Tps": 24,
+     "p90Tps": 12,
+     "p50LatencyMs": 9459.5,
+     "requests30m": 404,
+     "zdr": false
+    },
+    {
+     "provider": "Reka",
+     "quantization": "fp8",
+     "inPerM": 0.04,
+     "outPerM": 2.2,
+     "cachePerM": 0.02,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 32,
+     "p90Tps": 18,
+     "p50LatencyMs": 764,
+     "requests30m": 4160,
+     "zdr": true
+    },
+    {
+     "provider": "Parasail",
+     "quantization": "fp8",
+     "inPerM": 0.24,
+     "outPerM": 2.2,
+     "cachePerM": 0.05,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 37,
+     "p90Tps": 19,
+     "p50LatencyMs": 684,
+     "requests30m": 7748,
+     "zdr": true
+    },
+    {
+     "provider": "Modal",
+     "quantization": "unknown",
+     "inPerM": 0.04,
+     "outPerM": 2.3,
+     "cachePerM": 0.02,
+     "status": 0,
+     "uptime1d": 99.93,
+     "uptime30m": 100,
+     "p50Tps": 93,
+     "p90Tps": 34,
+     "p50LatencyMs": 664,
+     "requests30m": 6612,
+     "zdr": true
+    },
+    {
+     "provider": "Wafer",
+     "quantization": "fp8",
+     "inPerM": 0.06,
+     "outPerM": 2.3,
+     "cachePerM": 0.059,
+     "status": 0,
+     "uptime1d": 99.03,
+     "uptime30m": 100,
+     "p50Tps": 66,
+     "p90Tps": 14,
+     "p50LatencyMs": 826.5,
+     "requests30m": 8278,
+     "zdr": true
+    },
+    {
+     "provider": "DekaLLM",
+     "quantization": "unknown",
+     "inPerM": 0.04,
+     "outPerM": 2.5,
+     "cachePerM": 0.02,
+     "status": 0,
+     "uptime1d": 99.43,
+     "uptime30m": 100,
+     "p50Tps": 81,
+     "p90Tps": 17,
+     "p50LatencyMs": 1128.5,
+     "requests30m": 5102,
+     "zdr": true
+    },
+    {
+     "provider": "ModelRun",
+     "quantization": "fp4",
+     "inPerM": 0.2,
+     "outPerM": 2.5,
+     "cachePerM": 0.09,
+     "status": 0,
+     "uptime1d": 98.47,
+     "uptime30m": 96.67,
+     "p50Tps": 174,
+     "p90Tps": 23,
+     "p50LatencyMs": 394,
+     "requests30m": 8881,
+     "zdr": true
+    },
+    {
+     "provider": "Mancer 2",
+     "quantization": "fp8",
+     "inPerM": 0.2,
+     "outPerM": 2.5,
+     "cachePerM": null,
+     "status": -2,
+     "uptime1d": 97.55,
+     "uptime30m": 90,
+     "p50Tps": 31,
+     "p90Tps": 21,
+     "p50LatencyMs": 3062,
+     "requests30m": 151,
+     "zdr": true
+    },
+    {
+     "provider": "Phala",
+     "quantization": "unknown",
+     "inPerM": 0.2,
+     "outPerM": 2.5,
+     "cachePerM": 0.05,
+     "status": 0,
+     "uptime1d": 97.5,
+     "uptime30m": 100,
+     "p50Tps": 71,
+     "p90Tps": 5,
+     "p50LatencyMs": 2698.5,
+     "requests30m": 1518,
+     "zdr": true
+    },
+    {
+     "provider": "Alibaba",
+     "quantization": "unknown",
+     "inPerM": 0.425,
+     "outPerM": 2.55,
+     "cachePerM": 0.085,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 38,
+     "p90Tps": 17,
+     "p50LatencyMs": 1390,
+     "requests30m": 5856,
+     "zdr": false
+    },
+    {
+     "provider": "CoreWeave",
+     "quantization": "fp8",
+     "inPerM": 0.4,
+     "outPerM": 3,
+     "cachePerM": 0.15,
+     "status": 0,
+     "uptime1d": 99.93,
+     "uptime30m": 100,
+     "p50Tps": 23,
+     "p90Tps": 17,
+     "p50LatencyMs": 1109.5,
+     "requests30m": 1676,
+     "zdr": true
+    },
+    {
+     "provider": "Novita",
+     "quantization": "unknown",
+     "inPerM": 0.42,
+     "outPerM": 3,
+     "cachePerM": 0.085,
+     "status": 0,
+     "uptime1d": 99.55,
+     "uptime30m": 100,
+     "p50Tps": 37,
+     "p90Tps": 11,
+     "p50LatencyMs": 3815,
+     "requests30m": 441,
+     "zdr": true
+    },
+    {
+     "provider": "Cloudflare",
+     "quantization": "unknown",
+     "inPerM": 0.45,
+     "outPerM": 3.2,
+     "cachePerM": 0.05,
+     "status": 0,
+     "uptime1d": 99.65,
+     "uptime30m": 100,
+     "p50Tps": 27,
+     "p90Tps": 11,
+     "p50LatencyMs": 7737,
+     "requests30m": 407,
+     "zdr": true
+    },
+    {
+     "provider": "Venice",
+     "quantization": "fp8",
+     "inPerM": 0.45,
+     "outPerM": 3.2,
+     "cachePerM": null,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 92,
+     "p90Tps": 47.3,
+     "p50LatencyMs": 1778.5,
+     "requests30m": 804,
+     "zdr": true
+    }
+   ]
+  },
+  "qwen36_35b": {
+   "slug": "qwen/qwen3.6-35b-a3b",
+   "permaslug": "qwen/qwen3.6-35b-a3b-20260415",
+   "name": "Qwen: Qwen3.6 35B A3B",
+   "contextLength": 262144,
+   "summary": {
+    "endpointsListed": 10,
+    "endpointsUp": 9,
+    "inMin": 0.05,
+    "inMedian": 0.1,
+    "outMin": 0.7,
+    "outMedian": 1,
+    "outMax": 1.8,
+    "cacheFractionMedian": 0.5,
+    "cacheEndpoints": 9,
+    "speedEndpoints": 10,
+    "p50TpsMedian": 91.8,
+    "p50TpsP25": 71,
+    "p50LatencyMsMedian": 587,
+    "uptime1dMedian": 99.67
+   },
+   "traffic": {
+    "days": 7,
+    "from": "2026-10-16",
+    "to": "2026-10-22",
+    "tokensPerDay": 89996274469,
+    "promptPerDay": 88384175387,
+    "completionPerDay": 1612099082,
+    "requestsPerDay": 4602698,
+    "avgTokensPerRequest": 19553,
+    "outShare": 0.0179,
+    "cacheHit": 0.6972,
+    "daily": [
+     {
+      "date": "2026-10-16",
+      "tokens": 386146523852,
+      "requests": 8908446
+     },
+     {
+      "date": "2026-10-17",
+      "tokens": 138143682094,
+      "requests": 5359967
+     },
+     {
+      "date": "2026-10-18",
+      "tokens": 14182898525,
+      "requests": 3513296
+     },
+     {
+      "date": "2026-10-19",
+      "tokens": 18288858142,
+      "requests": 3356256
+     },
+     {
+      "date": "2026-10-20",
+      "tokens": 23004722179,
+      "requests": 3524703
+     },
+     {
+      "date": "2026-10-21",
+      "tokens": 22879132938,
+      "requests": 3394866
+     },
+     {
+      "date": "2026-10-22",
+      "tokens": 27328103552,
+      "requests": 4161355
+     }
+    ]
+   },
+   "batch": null,
+   "endpoints": [
+    {
+     "provider": "Darkbloom",
+     "quantization": "fp4",
+     "inPerM": 0.05,
+     "outPerM": 0.7,
+     "cachePerM": 0.025,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 84,
+     "p90Tps": 31,
+     "p50LatencyMs": 609,
+     "requests30m": 1278,
+     "zdr": false
+    },
+    {
+     "provider": "AkashML",
+     "quantization": "fp8",
+     "inPerM": 0.1,
+     "outPerM": 0.9,
+     "cachePerM": 0.05,
+     "status": 0,
+     "uptime1d": 99.79,
+     "uptime30m": 100,
+     "p50Tps": 49,
+     "p90Tps": 32,
+     "p50LatencyMs": 566,
+     "requests30m": 27046,
+     "zdr": true
+    },
+    {
+     "provider": "DeepInfra",
+     "quantization": "fp8",
+     "inPerM": 0.1,
+     "outPerM": 0.95,
+     "cachePerM": 0.1,
+     "status": 0,
+     "uptime1d": 99.11,
+     "uptime30m": 100,
+     "p50Tps": 68,
+     "p90Tps": 45,
+     "p50LatencyMs": 693,
+     "requests30m": 12486,
+     "zdr": true
+    },
+    {
+     "provider": "Parasail",
+     "quantization": "fp8",
+     "inPerM": 0.1,
+     "outPerM": 0.95,
+     "cachePerM": 0.05,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 80,
+     "p90Tps": 49,
+     "p50LatencyMs": 608,
+     "requests30m": 31202,
+     "zdr": true
+    },
+    {
+     "provider": "DekaLLM",
+     "quantization": "unknown",
+     "inPerM": 0.1,
+     "outPerM": 1,
+     "cachePerM": 0.05,
+     "status": 0,
+     "uptime1d": 99.43,
+     "uptime30m": 100,
+     "p50Tps": 109,
+     "p90Tps": 56,
+     "p50LatencyMs": 425,
+     "requests30m": 5894,
+     "zdr": true
+    },
+    {
+     "provider": "Venice",
+     "quantization": "fp8",
+     "inPerM": 0.1,
+     "outPerM": 1,
+     "cachePerM": null,
+     "status": 0,
+     "uptime1d": 99.91,
+     "uptime30m": 100,
+     "p50Tps": 107,
+     "p90Tps": 57,
+     "p50LatencyMs": 688,
+     "requests30m": 1002,
+     "zdr": true
+    },
+    {
+     "provider": "CoreWeave",
+     "quantization": "fp8",
+     "inPerM": 0.25,
+     "outPerM": 1.25,
+     "cachePerM": 0.25,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 116,
+     "p90Tps": 86,
+     "p50LatencyMs": 390,
+     "requests30m": 2505,
+     "zdr": true
+    },
+    {
+     "provider": "AtlasCloud",
+     "quantization": "fp8",
+     "inPerM": 0.25,
+     "outPerM": 1.25,
+     "cachePerM": 0.25,
+     "status": -5,
+     "uptime1d": 33.4,
+     "uptime30m": 14.29,
+     "p50Tps": 156.5,
+     "p90Tps": 55.400000000000006,
+     "p50LatencyMs": 404.5,
+     "requests30m": 316,
+     "zdr": false
+    },
+    {
+     "provider": "Phala",
+     "quantization": "unknown",
+     "inPerM": 0.2,
+     "outPerM": 1.27,
+     "cachePerM": 0.056,
+     "status": 0,
+     "uptime1d": 99.07,
+     "uptime30m": 100,
+     "p50Tps": 99.5,
+     "p90Tps": 63,
+     "p50LatencyMs": 522,
+     "requests30m": 221,
+     "zdr": true
+    },
+    {
+     "provider": "SiliconFlow",
+     "quantization": "fp8",
+     "inPerM": 0.24,
+     "outPerM": 1.8,
+     "cachePerM": 0.15,
+     "status": 0,
+     "uptime1d": 99.55,
+     "uptime30m": 100,
+     "p50Tps": 54,
+     "p90Tps": 37.6,
+     "p50LatencyMs": 991,
+     "requests30m": 167,
+     "zdr": true
+    }
+   ]
+  },
+  "gemma4_26b": {
+   "slug": "google/gemma-4-26b-a4b-it",
+   "permaslug": "google/gemma-4-26b-a4b-it-20260403",
+   "name": "Google: Gemma 4 26B A4B ",
+   "contextLength": 262144,
+   "summary": {
+    "endpointsListed": 13,
+    "endpointsUp": 13,
+    "inMin": 0.042,
+    "inMedian": 0.1,
+    "outMin": 0.22,
+    "outMedian": 0.33,
+    "outMax": 0.6,
+    "cacheFractionMedian": 0.5,
+    "cacheEndpoints": 10,
+    "speedEndpoints": 13,
+    "p50TpsMedian": 46,
+    "p50TpsP25": 37,
+    "p50LatencyMsMedian": 730,
+    "uptime1dMedian": 99.93
+   },
+   "traffic": {
+    "days": 7,
+    "from": "2026-10-16",
+    "to": "2026-10-22",
+    "tokensPerDay": 52843043881,
+    "promptPerDay": 49585510233,
+    "completionPerDay": 3257533648,
+    "requestsPerDay": 17617142,
+    "avgTokensPerRequest": 3000,
+    "outShare": 0.0616,
+    "cacheHit": 0.2454,
+    "daily": [
+     {
+      "date": "2026-10-16",
+      "tokens": 51300764995,
+      "requests": 15114726
+     },
+     {
+      "date": "2026-10-17",
+      "tokens": 46366201996,
+      "requests": 16697175
+     },
+     {
+      "date": "2026-10-18",
+      "tokens": 45636724538,
+      "requests": 17083746
+     },
+     {
+      "date": "2026-10-19",
+      "tokens": 55305536272,
+      "requests": 17364324
+     },
+     {
+      "date": "2026-10-20",
+      "tokens": 59717456911,
+      "requests": 18060429
+     },
+     {
+      "date": "2026-10-21",
+      "tokens": 55394418586,
+      "requests": 17192799
+     },
+     {
+      "date": "2026-10-22",
+      "tokens": 56180203868,
+      "requests": 21806792
+     }
+    ]
+   },
+   "batch": null,
+   "endpoints": [
+    {
+     "provider": "Darkbloom",
+     "quantization": "unknown",
+     "inPerM": 0.042,
+     "outPerM": 0.22,
+     "cachePerM": 0.021,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 28,
+     "p90Tps": 10,
+     "p50LatencyMs": 961,
+     "requests30m": 54111,
+     "zdr": false
+    },
+    {
+     "provider": "Makora",
+     "quantization": "unknown",
+     "inPerM": 0.07,
+     "outPerM": 0.24,
+     "cachePerM": 0.046,
+     "status": 0,
+     "uptime1d": 99.93,
+     "uptime30m": 100,
+     "p50Tps": 138,
+     "p90Tps": 70,
+     "p50LatencyMs": 267,
+     "requests30m": 41203,
+     "zdr": true
+    },
+    {
+     "provider": "NextBit",
+     "quantization": "bf16",
+     "inPerM": 0.09,
+     "outPerM": 0.3,
+     "cachePerM": 0.05,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 56,
+     "p90Tps": 32,
+     "p50LatencyMs": 364,
+     "requests30m": 104922,
+     "zdr": true
+    },
+    {
+     "provider": "CoreWeave",
+     "quantization": "bf16",
+     "inPerM": 0.1,
+     "outPerM": 0.3,
+     "cachePerM": 0.05,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 53,
+     "p90Tps": 26,
+     "p50LatencyMs": 385,
+     "requests30m": 11454,
+     "zdr": true
+    },
+    {
+     "provider": "Cloudflare",
+     "quantization": "unknown",
+     "inPerM": 0.1,
+     "outPerM": 0.3,
+     "cachePerM": 0.05,
+     "status": 0,
+     "uptime1d": 99.72,
+     "uptime30m": 100,
+     "p50Tps": 46,
+     "p90Tps": 26,
+     "p50LatencyMs": 568,
+     "requests30m": 18588,
+     "zdr": true
+    },
+    {
+     "provider": "Io Net",
+     "quantization": "bf16",
+     "inPerM": 0.09,
+     "outPerM": 0.31,
+     "cachePerM": 0.041,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 77,
+     "p90Tps": 46,
+     "p50LatencyMs": 492,
+     "requests30m": 11649,
+     "zdr": true
+    },
+    {
+     "provider": "DekaLLM",
+     "quantization": "bf16",
+     "inPerM": 0.06,
+     "outPerM": 0.33,
+     "cachePerM": 0.04,
+     "status": 0,
+     "uptime1d": 99.93,
+     "uptime30m": 100,
+     "p50Tps": 48,
+     "p90Tps": 21,
+     "p50LatencyMs": 730,
+     "requests30m": 16772,
+     "zdr": true
+    },
+    {
+     "provider": "DeepInfra",
+     "quantization": "fp8",
+     "inPerM": 0.07,
+     "outPerM": 0.34,
+     "cachePerM": null,
+     "status": 0,
+     "uptime1d": 99.65,
+     "uptime30m": 100,
+     "p50Tps": 39,
+     "p90Tps": 16,
+     "p50LatencyMs": 477,
+     "requests30m": 23383,
+     "zdr": true
+    },
+    {
+     "provider": "Venice",
+     "quantization": "bf16",
+     "inPerM": 0.13,
+     "outPerM": 0.4,
+     "cachePerM": 0.05,
+     "status": 0,
+     "uptime1d": 99.86,
+     "uptime30m": 100,
+     "p50Tps": 37,
+     "p90Tps": 13,
+     "p50LatencyMs": 884,
+     "requests30m": 8468,
+     "zdr": true
+    },
+    {
+     "provider": "Parasail",
+     "quantization": "bf16",
+     "inPerM": 0.13,
+     "outPerM": 0.4,
+     "cachePerM": 0.05,
+     "status": 0,
+     "uptime1d": 98.96,
+     "uptime30m": 100,
+     "p50Tps": 39.5,
+     "p90Tps": 12,
+     "p50LatencyMs": 1101,
+     "requests30m": 9563,
+     "zdr": true
+    },
+    {
+     "provider": "Novita",
+     "quantization": "bf16",
+     "inPerM": 0.13,
+     "outPerM": 0.4,
+     "cachePerM": null,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 194,
+     "p90Tps": 76.60000000000002,
+     "p50LatencyMs": 875,
+     "requests30m": 3155,
+     "zdr": true
+    },
+    {
+     "provider": "SiliconFlow",
+     "quantization": "fp8",
+     "inPerM": 0.14,
+     "outPerM": 0.4,
+     "cachePerM": 0.05,
+     "status": 0,
+     "uptime1d": 96.81,
+     "uptime30m": 100,
+     "p50Tps": 27,
+     "p90Tps": 7,
+     "p50LatencyMs": 1196.5,
+     "requests30m": 7654,
+     "zdr": true
+    },
+    {
+     "provider": "Google",
+     "quantization": "unknown",
+     "inPerM": 0.15,
+     "outPerM": 0.6,
+     "cachePerM": null,
+     "status": 0,
+     "uptime1d": 93.54,
+     "uptime30m": 100,
+     "p50Tps": 31,
+     "p90Tps": 19,
+     "p50LatencyMs": 1364,
+     "requests30m": 6041,
+     "zdr": true
+    }
+   ]
+  },
+  "gemma4_31b": {
+   "slug": "google/gemma-4-31b-it",
+   "permaslug": "google/gemma-4-31b-it-20260402",
+   "name": "Google: Gemma 4 31B",
+   "contextLength": 262144,
+   "summary": {
+    "endpointsListed": 15,
+    "endpointsUp": 11,
+    "inMin": 0.1,
+    "inMedian": 0.15,
+    "outMin": 0.32,
+    "outMedian": 0.4,
+    "outMax": 1.15,
+    "cacheFractionMedian": 0.5,
+    "cacheEndpoints": 9,
+    "speedEndpoints": 15,
+    "p50TpsMedian": 27,
+    "p50TpsP25": 22,
+    "p50LatencyMsMedian": 1491,
+    "uptime1dMedian": 100
+   },
+   "traffic": {
+    "days": 7,
+    "from": "2026-10-16",
+    "to": "2026-10-22",
+    "tokensPerDay": 80431793178,
+    "promptPerDay": 74099409345,
+    "completionPerDay": 6332383833,
+    "requestsPerDay": 24267708,
+    "avgTokensPerRequest": 3314,
+    "outShare": 0.0787,
+    "cacheHit": 0.2653,
+    "daily": [
+     {
+      "date": "2026-10-16",
+      "tokens": 73136257496,
+      "requests": 27252490
+     },
+     {
+      "date": "2026-10-17",
+      "tokens": 89214129380,
+      "requests": 35355895
+     },
+     {
+      "date": "2026-10-18",
+      "tokens": 70853806816,
+      "requests": 24747074
+     },
+     {
+      "date": "2026-10-19",
+      "tokens": 74717860745,
+      "requests": 25967307
+     },
+     {
+      "date": "2026-10-20",
+      "tokens": 92043975408,
+      "requests": 20405102
+     },
+     {
+      "date": "2026-10-21",
+      "tokens": 84658760411,
+      "requests": 16601162
+     },
+     {
+      "date": "2026-10-22",
+      "tokens": 78397761988,
+      "requests": 19544928
+     }
+    ]
+   },
+   "batch": null,
+   "endpoints": [
+    {
+     "provider": "DeepInfra",
+     "quantization": "fp8",
+     "inPerM": 0.16,
+     "outPerM": 0.32,
+     "cachePerM": null,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 27,
+     "p90Tps": 18,
+     "p50LatencyMs": 3110.5,
+     "requests30m": 536,
+     "zdr": true
+    },
+    {
+     "provider": "CoreWeave",
+     "quantization": "fp4",
+     "inPerM": 0.1,
+     "outPerM": 0.34,
+     "cachePerM": 0.1,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 50,
+     "p90Tps": 23,
+     "p50LatencyMs": 610,
+     "requests30m": 68920,
+     "zdr": true
+    },
+    {
+     "provider": "Venice",
+     "quantization": "fp4",
+     "inPerM": 0.12,
+     "outPerM": 0.36,
+     "cachePerM": 0.09,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 34,
+     "p90Tps": 21,
+     "p50LatencyMs": 798,
+     "requests30m": 7406,
+     "zdr": true
+    },
+    {
+     "provider": "Chutes",
+     "quantization": "fp4",
+     "inPerM": 0.12,
+     "outPerM": 0.37,
+     "cachePerM": 0.012,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 15,
+     "p90Tps": 9,
+     "p50LatencyMs": 4139,
+     "requests30m": 15079,
+     "zdr": false
+    },
+    {
+     "provider": "Crusoe",
+     "quantization": "bf16",
+     "inPerM": 0.14,
+     "outPerM": 0.4,
+     "cachePerM": 0.14,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 37,
+     "p90Tps": 18,
+     "p50LatencyMs": 598,
+     "requests30m": 6227,
+     "zdr": true
+    },
+    {
+     "provider": "Friendli",
+     "quantization": "unknown",
+     "inPerM": 0.14,
+     "outPerM": 0.4,
+     "cachePerM": null,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 164,
+     "p90Tps": 77,
+     "p50LatencyMs": 408,
+     "requests30m": 28299,
+     "zdr": false
+    },
+    {
+     "provider": "Novita",
+     "quantization": "bf16",
+     "inPerM": 0.14,
+     "outPerM": 0.4,
+     "cachePerM": null,
+     "status": -5,
+     "uptime1d": 67.18,
+     "uptime30m": 0,
+     "p50Tps": 8,
+     "p90Tps": 2,
+     "p50LatencyMs": 23352,
+     "requests30m": 1084,
+     "zdr": true
+    },
+    {
+     "provider": "Parasail",
+     "quantization": "fp8",
+     "inPerM": 0.15,
+     "outPerM": 0.4,
+     "cachePerM": 0.06,
+     "status": 0,
+     "uptime1d": 99.79,
+     "uptime30m": 93.1,
+     "p50Tps": 31,
+     "p90Tps": 22,
+     "p50LatencyMs": 1232,
+     "requests30m": 3148,
+     "zdr": true
+    },
+    {
+     "provider": "DeepInfra",
+     "quantization": "fp8",
+     "inPerM": 0.2,
+     "outPerM": 0.4,
+     "cachePerM": null,
+     "status": 0,
+     "uptime1d": 99.37,
+     "uptime30m": 100,
+     "p50Tps": 27,
+     "p90Tps": 18,
+     "p50LatencyMs": 3110.5,
+     "requests30m": 536,
+     "zdr": true
+    },
+    {
+     "provider": "DeepInfra",
+     "quantization": "fp4",
+     "inPerM": 0.135,
+     "outPerM": 0.51,
+     "cachePerM": 0.075,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 27,
+     "p90Tps": 18,
+     "p50LatencyMs": 3110.5,
+     "requests30m": 536,
+     "zdr": true
+    },
+    {
+     "provider": "DeepInfra",
+     "quantization": "fp8",
+     "inPerM": 0.3,
+     "outPerM": 0.6,
+     "cachePerM": null,
+     "status": 0,
+     "uptime1d": 98.74,
+     "uptime30m": 100,
+     "p50Tps": 27,
+     "p90Tps": 18,
+     "p50LatencyMs": 3110.5,
+     "requests30m": 536,
+     "zdr": true
+    },
+    {
+     "provider": "ModelRun",
+     "quantization": "fp4",
+     "inPerM": 0.75,
+     "outPerM": 1,
+     "cachePerM": 0.2,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 191,
+     "p90Tps": 54.10000000000002,
+     "p50LatencyMs": 215,
+     "requests30m": 19343,
+     "zdr": true
+    },
+    {
+     "provider": "SiliconFlow",
+     "quantization": "fp8",
+     "inPerM": 0.75,
+     "outPerM": 1,
+     "cachePerM": 0.25,
+     "status": -5,
+     "uptime1d": 99.05,
+     "uptime30m": 95.83,
+     "p50Tps": 6,
+     "p90Tps": 1,
+     "p50LatencyMs": 1491,
+     "requests30m": 7388,
+     "zdr": true
+    },
+    {
+     "provider": "Io Net",
+     "quantization": "unknown",
+     "inPerM": 0.361,
+     "outPerM": 1.0925,
+     "cachePerM": 0.1805,
+     "status": -2,
+     "uptime1d": 99.08,
+     "uptime30m": 66.67,
+     "p50Tps": 17,
+     "p90Tps": 5,
+     "p50LatencyMs": 2362,
+     "requests30m": 207,
+     "zdr": true
+    },
+    {
+     "provider": "SambaNova",
+     "quantization": "unknown",
+     "inPerM": 0.38,
+     "outPerM": 1.15,
+     "cachePerM": null,
+     "status": -2,
+     "uptime1d": 95.01,
+     "uptime30m": 95.83,
+     "p50Tps": 164,
+     "p90Tps": 75.6,
+     "p50LatencyMs": 1439,
+     "requests30m": 437,
+     "zdr": true
+    }
+   ]
+  },
+  "gptoss_120b": {
+   "slug": "openai/gpt-oss-120b",
+   "permaslug": "openai/gpt-oss-120b",
+   "name": "OpenAI: gpt-oss-120b",
+   "contextLength": 131072,
+   "summary": {
+    "endpointsListed": 24,
+    "endpointsUp": 21,
+    "inMin": 0.03,
+    "inMedian": 0.1,
+    "outMin": 0.15,
+    "outMedian": 0.5,
+    "outMax": 0.95,
+    "cacheFractionMedian": 1,
+    "cacheEndpoints": 13,
+    "speedEndpoints": 24,
+    "p50TpsMedian": 143.5,
+    "p50TpsP25": 51.5,
+    "p50LatencyMsMedian": 490,
+    "uptime1dMedian": 99.97
+   },
+   "traffic": {
+    "days": 7,
+    "from": "2026-10-16",
+    "to": "2026-10-22",
+    "tokensPerDay": 72414557434,
+    "promptPerDay": 64322798599,
+    "completionPerDay": 8091758835,
+    "requestsPerDay": 16003659,
+    "avgTokensPerRequest": 4525,
+    "outShare": 0.1117,
+    "cacheHit": 0.4124,
+    "daily": [
+     {
+      "date": "2026-10-16",
+      "tokens": 86234339891,
+      "requests": 20767628
+     },
+     {
+      "date": "2026-10-17",
+      "tokens": 66910481225,
+      "requests": 16459093
+     },
+     {
+      "date": "2026-10-18",
+      "tokens": 45550794423,
+      "requests": 11550116
+     },
+     {
+      "date": "2026-10-19",
+      "tokens": 72834882317,
+      "requests": 15313280
+     },
+     {
+      "date": "2026-10-20",
+      "tokens": 79563510536,
+      "requests": 16847577
+     },
+     {
+      "date": "2026-10-21",
+      "tokens": 66449754384,
+      "requests": 14326041
+     },
+     {
+      "date": "2026-10-22",
+      "tokens": 89358139263,
+      "requests": 16761880
+     }
+    ]
+   },
+   "batch": {
+    "inRatio": 0.197,
+    "outRatio": 0.227
+   },
+   "endpoints": [
+    {
+     "provider": "Near AI",
+     "quantization": "fp4",
+     "inPerM": 0.03,
+     "outPerM": 0.15,
+     "cachePerM": 0.015,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 43,
+     "p90Tps": 33,
+     "p50LatencyMs": 658,
+     "requests30m": 50659,
+     "zdr": true
+    },
+    {
+     "provider": "Venice",
+     "quantization": "int4",
+     "inPerM": 0.03,
+     "outPerM": 0.15,
+     "cachePerM": 0.03,
+     "status": 0,
+     "uptime1d": 99.79,
+     "uptime30m": 100,
+     "p50Tps": 8,
+     "p90Tps": 6,
+     "p50LatencyMs": 3246,
+     "requests30m": 9491,
+     "zdr": true
+    },
+    {
+     "provider": "CoreWeave",
+     "quantization": "fp4",
+     "inPerM": 0.03,
+     "outPerM": 0.17,
+     "cachePerM": 0.03,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 40,
+     "p90Tps": 28,
+     "p50LatencyMs": 316,
+     "requests30m": 35892,
+     "zdr": true
+    },
+    {
+     "provider": "DeepInfra",
+     "quantization": "bf16",
+     "inPerM": 0.037,
+     "outPerM": 0.17,
+     "cachePerM": null,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 52,
+     "p90Tps": 36,
+     "p50LatencyMs": 329,
+     "requests30m": 22816,
+     "zdr": true
+    },
+    {
+     "provider": "DekaLLM",
+     "quantization": "bf16",
+     "inPerM": 0.03,
+     "outPerM": 0.18,
+     "cachePerM": 0.03,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 56,
+     "p90Tps": 36,
+     "p50LatencyMs": 487,
+     "requests30m": 11890,
+     "zdr": true
+    },
+    {
+     "provider": "AkashML",
+     "quantization": "bf16",
+     "inPerM": 0.03,
+     "outPerM": 0.187,
+     "cachePerM": 0.03,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 111,
+     "p90Tps": 73,
+     "p50LatencyMs": 423.5,
+     "requests30m": 14086,
+     "zdr": true
+    },
+    {
+     "provider": "Crusoe",
+     "quantization": "bf16",
+     "inPerM": 0.05,
+     "outPerM": 0.25,
+     "cachePerM": 0.05,
+     "status": 0,
+     "uptime1d": 99.93,
+     "uptime30m": 100,
+     "p50Tps": 343,
+     "p90Tps": 171,
+     "p50LatencyMs": 148,
+     "requests30m": 10862,
+     "zdr": true
+    },
+    {
+     "provider": "Mancer 2",
+     "quantization": "fp8",
+     "inPerM": 0.05,
+     "outPerM": 0.25,
+     "cachePerM": null,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 50,
+     "p90Tps": 33,
+     "p50LatencyMs": 700,
+     "requests30m": 2679,
+     "zdr": true
+    },
+    {
+     "provider": "Novita",
+     "quantization": "fp4",
+     "inPerM": 0.05,
+     "outPerM": 0.25,
+     "cachePerM": null,
+     "status": 0,
+     "uptime1d": 97.11,
+     "uptime30m": 100,
+     "p50Tps": 196,
+     "p90Tps": 135,
+     "p50LatencyMs": 667,
+     "requests30m": 1662,
+     "zdr": true
+    },
+    {
+     "provider": "Google",
+     "quantization": "unknown",
+     "inPerM": 0.09,
+     "outPerM": 0.36,
+     "cachePerM": null,
+     "status": -5,
+     "uptime1d": 18.55,
+     "uptime30m": 0,
+     "p50Tps": 24,
+     "p90Tps": 10,
+     "p50LatencyMs": 1438.5,
+     "requests30m": 12188,
+     "zdr": true
+    },
+    {
+     "provider": "DigitalOcean",
+     "quantization": "unknown",
+     "inPerM": 0.06,
+     "outPerM": 0.42,
+     "cachePerM": 0.012,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 54,
+     "p90Tps": 41,
+     "p50LatencyMs": 846,
+     "requests30m": 5273,
+     "zdr": true
+    },
+    {
+     "provider": "BaseTen",
+     "quantization": "fp4",
+     "inPerM": 0.1,
+     "outPerM": 0.5,
+     "cachePerM": 0.1,
+     "status": 0,
+     "uptime1d": 99.93,
+     "uptime30m": 100,
+     "p50Tps": 156,
+     "p90Tps": 113,
+     "p50LatencyMs": 232,
+     "requests30m": 3178,
+     "zdr": true
+    },
+    {
+     "provider": "BaseTen",
+     "quantization": "fp4",
+     "inPerM": 0.1,
+     "outPerM": 0.5,
+     "cachePerM": 0.1,
+     "status": 0,
+     "uptime1d": 99.93,
+     "uptime30m": 100,
+     "p50Tps": 156,
+     "p90Tps": 113,
+     "p50LatencyMs": 232,
+     "requests30m": 3178,
+     "zdr": true
+    },
+    {
+     "provider": "Amazon Bedrock",
+     "quantization": "unknown",
+     "inPerM": 0.15,
+     "outPerM": 0.6,
+     "cachePerM": null,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 356,
+     "p90Tps": 195,
+     "p50LatencyMs": 492,
+     "requests30m": 917,
+     "zdr": true
+    },
+    {
+     "provider": "Nebius",
+     "quantization": "fp4",
+     "inPerM": 0.15,
+     "outPerM": 0.6,
+     "cachePerM": null,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 336,
+     "p90Tps": 160.10000000000002,
+     "p50LatencyMs": 268.5,
+     "requests30m": 836,
+     "zdr": true
+    },
+    {
+     "provider": "Amazon Bedrock",
+     "quantization": "unknown",
+     "inPerM": 0.15,
+     "outPerM": 0.6,
+     "cachePerM": null,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 356,
+     "p90Tps": 195,
+     "p50LatencyMs": 492,
+     "requests30m": 917,
+     "zdr": true
+    },
+    {
+     "provider": "SiliconFlow",
+     "quantization": "fp8",
+     "inPerM": 0.15,
+     "outPerM": 0.6,
+     "cachePerM": 0.075,
+     "status": -2,
+     "uptime1d": 95.24,
+     "uptime30m": 100,
+     "p50Tps": 47,
+     "p90Tps": 23,
+     "p50LatencyMs": 1215.5,
+     "requests30m": 160,
+     "zdr": true
+    },
+    {
+     "provider": "Phala",
+     "quantization": "unknown",
+     "inPerM": 0.15,
+     "outPerM": 0.6,
+     "cachePerM": null,
+     "status": 0,
+     "uptime1d": 99.51,
+     "uptime30m": 100,
+     "p50Tps": 182,
+     "p90Tps": 111.8,
+     "p50LatencyMs": 814,
+     "requests30m": 270,
+     "zdr": true
+    },
+    {
+     "provider": "Together",
+     "quantization": "unknown",
+     "inPerM": 0.15,
+     "outPerM": 0.6,
+     "cachePerM": null,
+     "status": -2,
+     "uptime1d": 99.18,
+     "uptime30m": 64.71,
+     "p50Tps": 101,
+     "p90Tps": 49.2,
+     "p50LatencyMs": 267,
+     "requests30m": 261,
+     "zdr": true
+    },
+    {
+     "provider": "Groq",
+     "quantization": "unknown",
+     "inPerM": 0.15,
+     "outPerM": 0.6,
+     "cachePerM": 0.075,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 327,
+     "p90Tps": 180,
+     "p50LatencyMs": 252,
+     "requests30m": 42389,
+     "zdr": true
+    },
+    {
+     "provider": "Parasail",
+     "quantization": "fp4",
+     "inPerM": 0.1,
+     "outPerM": 0.75,
+     "cachePerM": 0.055,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 131,
+     "p90Tps": 106,
+     "p50LatencyMs": 479,
+     "requests30m": 3255,
+     "zdr": true
+    },
+    {
+     "provider": "Mara",
+     "quantization": "unknown",
+     "inPerM": 0.15,
+     "outPerM": 0.75,
+     "cachePerM": null,
+     "status": 0,
+     "uptime1d": 96.33,
+     "uptime30m": 100,
+     "p50Tps": 194.5,
+     "p90Tps": 69,
+     "p50LatencyMs": 1092.5,
+     "requests30m": 302,
+     "zdr": true
+    },
+    {
+     "provider": "Cerebras",
+     "quantization": "fp16",
+     "inPerM": 0.35,
+     "outPerM": 0.75,
+     "cachePerM": 0.35,
+     "status": 0,
+     "uptime1d": 99.65,
+     "uptime30m": 100,
+     "p50Tps": 884,
+     "p90Tps": 303,
+     "p50LatencyMs": 188,
+     "requests30m": 41372,
+     "zdr": true
+    },
+    {
+     "provider": "SambaNova",
+     "quantization": "unknown",
+     "inPerM": 0.14,
+     "outPerM": 0.95,
+     "cachePerM": null,
+     "status": 0,
+     "uptime1d": 99.81,
+     "uptime30m": 100,
+     "p50Tps": 338,
+     "p90Tps": 95,
+     "p50LatencyMs": 1232.5,
+     "requests30m": 552,
+     "zdr": true
+    }
+   ]
+  },
+  "gptoss_20b": {
+   "slug": "openai/gpt-oss-20b",
+   "permaslug": "openai/gpt-oss-20b",
+   "name": "OpenAI: gpt-oss-20b",
+   "contextLength": 131072,
+   "summary": {
+    "endpointsListed": 11,
+    "endpointsUp": 10,
+    "inMin": 0.018,
+    "inMedian": 0.03,
+    "outMin": 0.09,
+    "outMedian": 0.15,
+    "outMax": 0.3,
+    "cacheFractionMedian": 0.6667,
+    "cacheEndpoints": 5,
+    "speedEndpoints": 10,
+    "p50TpsMedian": 89,
+    "p50TpsP25": 46,
+    "p50LatencyMsMedian": 434,
+    "uptime1dMedian": 99.79
+   },
+   "traffic": {
+    "days": 7,
+    "from": "2026-10-16",
+    "to": "2026-10-22",
+    "tokensPerDay": 28807355608,
+    "promptPerDay": 23922349411,
+    "completionPerDay": 4885006197,
+    "requestsPerDay": 8606471,
+    "avgTokensPerRequest": 3347,
+    "outShare": 0.1696,
+    "cacheHit": 0.1547,
+    "daily": [
+     {
+      "date": "2026-10-16",
+      "tokens": 29310265005,
+      "requests": 6928930
+     },
+     {
+      "date": "2026-10-17",
+      "tokens": 31835997237,
+      "requests": 7056224
+     },
+     {
+      "date": "2026-10-18",
+      "tokens": 20079097162,
+      "requests": 5024445
+     },
+     {
+      "date": "2026-10-19",
+      "tokens": 26257139308,
+      "requests": 7240338
+     },
+     {
+      "date": "2026-10-20",
+      "tokens": 32919942217,
+      "requests": 9664324
+     },
+     {
+      "date": "2026-10-21",
+      "tokens": 29583650807,
+      "requests": 10900939
+     },
+     {
+      "date": "2026-10-22",
+      "tokens": 31665397518,
+      "requests": 13430098
+     }
+    ]
+   },
+   "batch": {
+    "inRatio": 1.333,
+    "outRatio": 1.244
+   },
+   "endpoints": [
+    {
+     "provider": "Darkbloom",
+     "quantization": "fp8",
+     "inPerM": 0.018,
+     "outPerM": 0.09,
+     "cachePerM": 0.009,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 21,
+     "p90Tps": 11,
+     "p50LatencyMs": 2283,
+     "requests30m": 20535,
+     "zdr": false
+    },
+    {
+     "provider": "AkashML",
+     "quantization": "fp4",
+     "inPerM": 0.02,
+     "outPerM": 0.1,
+     "cachePerM": null,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 68,
+     "p90Tps": 40,
+     "p50LatencyMs": 557,
+     "requests30m": 9494,
+     "zdr": true
+    },
+    {
+     "provider": "CoreWeave",
+     "quantization": "fp4",
+     "inPerM": 0.03,
+     "outPerM": 0.13,
+     "cachePerM": 0.03,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 135,
+     "p90Tps": 99,
+     "p50LatencyMs": 118,
+     "requests30m": 43337,
+     "zdr": true
+    },
+    {
+     "provider": "DekaLLM",
+     "quantization": "bf16",
+     "inPerM": 0.029,
+     "outPerM": 0.14,
+     "cachePerM": 0.029,
+     "status": 0,
+     "uptime1d": 99.65,
+     "uptime30m": 100,
+     "p50Tps": 31,
+     "p90Tps": 24,
+     "p50LatencyMs": 462,
+     "requests30m": 3451,
+     "zdr": true
+    },
+    {
+     "provider": "DeepInfra",
+     "quantization": "bf16",
+     "inPerM": 0.03,
+     "outPerM": 0.14,
+     "cachePerM": null,
+     "status": 0,
+     "uptime1d": 99.47,
+     "uptime30m": 96.67,
+     "p50Tps": 110,
+     "p90Tps": 80,
+     "p50LatencyMs": 217,
+     "requests30m": 8608,
+     "zdr": true
+    },
+    {
+     "provider": "Parasail",
+     "quantization": "fp4",
+     "inPerM": 0.03,
+     "outPerM": 0.15,
+     "cachePerM": 0.02,
+     "status": 0,
+     "uptime1d": 99.72,
+     "uptime30m": 100,
+     "p50Tps": 52,
+     "p90Tps": 16.100000000000023,
+     "p50LatencyMs": 2821.5,
+     "requests30m": 9511,
+     "zdr": true
+    },
+    {
+     "provider": "Amazon Bedrock",
+     "quantization": "unknown",
+     "inPerM": 0.07,
+     "outPerM": 0.15,
+     "cachePerM": null,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": null,
+     "p50Tps": 338,
+     "p90Tps": 217,
+     "p50LatencyMs": 405,
+     "requests30m": 16884,
+     "zdr": true
+    },
+    {
+     "provider": "Amazon Bedrock",
+     "quantization": "unknown",
+     "inPerM": 0.07,
+     "outPerM": 0.15,
+     "cachePerM": null,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 338,
+     "p90Tps": 217,
+     "p50LatencyMs": 405,
+     "requests30m": 16884,
+     "zdr": true
+    },
+    {
+     "provider": "SiliconFlow",
+     "quantization": "fp8",
+     "inPerM": 0.04,
+     "outPerM": 0.18,
+     "cachePerM": null,
+     "status": 0,
+     "uptime1d": 87.46,
+     "uptime30m": 100,
+     "p50Tps": 44,
+     "p90Tps": 10,
+     "p50LatencyMs": 1122,
+     "requests30m": 2151,
+     "zdr": true
+    },
+    {
+     "provider": "Google",
+     "quantization": "unknown",
+     "inPerM": 0.07,
+     "outPerM": 0.25,
+     "cachePerM": null,
+     "status": -5,
+     "uptime1d": 0,
+     "uptime30m": null,
+     "p50Tps": null,
+     "p90Tps": null,
+     "p50LatencyMs": null,
+     "requests30m": null,
+     "zdr": null
+    },
+    {
+     "provider": "Groq",
+     "quantization": "unknown",
+     "inPerM": 0.075,
+     "outPerM": 0.3,
+     "cachePerM": 0.0375,
+     "status": 0,
+     "uptime1d": 99.79,
+     "uptime30m": 100,
+     "p50Tps": 352,
+     "p90Tps": 125,
+     "p50LatencyMs": 315,
+     "requests30m": 19045,
+     "zdr": true
+    }
+   ]
+  },
+  "llama33_70b": {
+   "slug": "meta-llama/llama-3.3-70b-instruct",
+   "permaslug": "meta-llama/llama-3.3-70b-instruct",
+   "name": "Meta: Llama 3.3 70B Instruct",
+   "contextLength": 131072,
+   "summary": {
+    "endpointsListed": 11,
+    "endpointsUp": 11,
+    "inMin": 0.1,
+    "inMedian": 0.45,
+    "outMin": 0.32,
+    "outMedian": 0.72,
+    "outMax": 2.253,
+    "cacheFractionMedian": 0.5,
+    "cacheEndpoints": 4,
+    "speedEndpoints": 9,
+    "p50TpsMedian": 43,
+    "p50TpsP25": 35,
+    "p50LatencyMsMedian": 775,
+    "uptime1dMedian": 99.93
+   },
+   "traffic": {
+    "days": 7,
+    "from": "2026-10-16",
+    "to": "2026-10-22",
+    "tokensPerDay": 5075416932,
+    "promptPerDay": 4720032737,
+    "completionPerDay": 355384194,
+    "requestsPerDay": 2932800,
+    "avgTokensPerRequest": 1731,
+    "outShare": 0.07,
+    "cacheHit": 0.2644,
+    "daily": [
+     {
+      "date": "2026-10-16",
+      "tokens": 5298050479,
+      "requests": 3408057
+     },
+     {
+      "date": "2026-10-17",
+      "tokens": 4641120766,
+      "requests": 2575335
+     },
+     {
+      "date": "2026-10-18",
+      "tokens": 4443431880,
+      "requests": 2822031
+     },
+     {
+      "date": "2026-10-19",
+      "tokens": 4489113386,
+      "requests": 2703522
+     },
+     {
+      "date": "2026-10-20",
+      "tokens": 5306148874,
+      "requests": 3172316
+     },
+     {
+      "date": "2026-10-21",
+      "tokens": 6637437444,
+      "requests": 2778207
+     },
+     {
+      "date": "2026-10-22",
+      "tokens": 4712615693,
+      "requests": 3070129
+     }
+    ]
+   },
+   "batch": null,
+   "endpoints": [
+    {
+     "provider": "DeepInfra",
+     "quantization": "fp8",
+     "inPerM": 0.1,
+     "outPerM": 0.32,
+     "cachePerM": null,
+     "status": 0,
+     "uptime1d": 98.19,
+     "uptime30m": 100,
+     "p50Tps": 8,
+     "p90Tps": 5,
+     "p50LatencyMs": 963.5,
+     "requests30m": 11512,
+     "zdr": true
+    },
+    {
+     "provider": "Novita",
+     "quantization": "bf16",
+     "inPerM": 0.135,
+     "outPerM": 0.4,
+     "cachePerM": null,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 37,
+     "p90Tps": 26,
+     "p50LatencyMs": 464,
+     "requests30m": 4857,
+     "zdr": true
+    },
+    {
+     "provider": "Parasail",
+     "quantization": "fp8",
+     "inPerM": 0.22,
+     "outPerM": 0.5,
+     "cachePerM": 0.11,
+     "status": 0,
+     "uptime1d": 99.51,
+     "uptime30m": 100,
+     "p50Tps": 43,
+     "p90Tps": 17,
+     "p50LatencyMs": 903.5,
+     "requests30m": 5940,
+     "zdr": true
+    },
+    {
+     "provider": "AkashML",
+     "quantization": "fp8",
+     "inPerM": 0.2,
+     "outPerM": 0.52,
+     "cachePerM": 0.1,
+     "status": 0,
+     "uptime1d": 99.86,
+     "uptime30m": 100,
+     "p50Tps": 31,
+     "p90Tps": 17,
+     "p50LatencyMs": 940,
+     "requests30m": 7081,
+     "zdr": true
+    },
+    {
+     "provider": "CoreWeave",
+     "quantization": "fp16",
+     "inPerM": 0.71,
+     "outPerM": 0.71,
+     "cachePerM": 0.71,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 85,
+     "p90Tps": 71,
+     "p50LatencyMs": 130,
+     "requests30m": 3927,
+     "zdr": true
+    },
+    {
+     "provider": "Google",
+     "quantization": "unknown",
+     "inPerM": 0.72,
+     "outPerM": 0.72,
+     "cachePerM": null,
+     "status": 0,
+     "uptime1d": null,
+     "uptime30m": null,
+     "p50Tps": null,
+     "p90Tps": null,
+     "p50LatencyMs": null,
+     "requests30m": null,
+     "zdr": null
+    },
+    {
+     "provider": "Google",
+     "quantization": "unknown",
+     "inPerM": 0.72,
+     "outPerM": 0.72,
+     "cachePerM": null,
+     "status": 0,
+     "uptime1d": null,
+     "uptime30m": null,
+     "p50Tps": null,
+     "p90Tps": null,
+     "p50LatencyMs": null,
+     "requests30m": null,
+     "zdr": null
+    },
+    {
+     "provider": "Groq",
+     "quantization": "unknown",
+     "inPerM": 0.59,
+     "outPerM": 0.79,
+     "cachePerM": 0.295,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 206,
+     "p90Tps": 135,
+     "p50LatencyMs": 460,
+     "requests30m": 10588,
+     "zdr": true
+    },
+    {
+     "provider": "SambaNova",
+     "quantization": "unknown",
+     "inPerM": 0.45,
+     "outPerM": 0.9,
+     "cachePerM": null,
+     "status": 0,
+     "uptime1d": 99.93,
+     "uptime30m": 100,
+     "p50Tps": 86,
+     "p90Tps": 50.300000000000004,
+     "p50LatencyMs": 809,
+     "requests30m": 788,
+     "zdr": true
+    },
+    {
+     "provider": "Together",
+     "quantization": "unknown",
+     "inPerM": 1.04,
+     "outPerM": 1.04,
+     "cachePerM": null,
+     "status": 0,
+     "uptime1d": 95.99,
+     "uptime30m": 100,
+     "p50Tps": 54,
+     "p90Tps": 36,
+     "p50LatencyMs": 706,
+     "requests30m": 667,
+     "zdr": true
+    },
+    {
+     "provider": "Cloudflare",
+     "quantization": "fp8",
+     "inPerM": 0.293,
+     "outPerM": 2.253,
+     "cachePerM": null,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 35,
+     "p90Tps": 23,
+     "p50LatencyMs": 775,
+     "requests30m": 1045,
+     "zdr": true
+    }
+   ]
+  },
+  "mistral_nemo": {
+   "slug": "mistralai/mistral-nemo",
+   "permaslug": "mistralai/mistral-nemo",
+   "name": "Mistral: Mistral Nemo",
+   "contextLength": 131072,
+   "summary": {
+    "endpointsListed": 5,
+    "endpointsUp": 5,
+    "inMin": 0.01656,
+    "inMedian": 0.029,
+    "outMin": 0.0216,
+    "outMedian": 0.03,
+    "outMax": 0.15,
+    "cacheFractionMedian": 0.3761,
+    "cacheEndpoints": 2,
+    "speedEndpoints": 5,
+    "p50TpsMedian": 42,
+    "p50TpsP25": 26,
+    "p50LatencyMsMedian": 464,
+    "uptime1dMedian": 100
+   },
+   "traffic": {
+    "days": 7,
+    "from": "2026-10-16",
+    "to": "2026-10-22",
+    "tokensPerDay": 37849265531,
+    "promptPerDay": 36012873116,
+    "completionPerDay": 1836392415,
+    "requestsPerDay": 15380477,
+    "avgTokensPerRequest": 2461,
+    "outShare": 0.0485,
+    "cacheHit": 0.0186,
+    "daily": [
+     {
+      "date": "2026-10-16",
+      "tokens": 33132970895,
+      "requests": 12311154
+     },
+     {
+      "date": "2026-10-17",
+      "tokens": 38506916092,
+      "requests": 14762072
+     },
+     {
+      "date": "2026-10-18",
+      "tokens": 45038480611,
+      "requests": 19185842
+     },
+     {
+      "date": "2026-10-19",
+      "tokens": 40775611112,
+      "requests": 15779821
+     },
+     {
+      "date": "2026-10-20",
+      "tokens": 34522210961,
+      "requests": 14560773
+     },
+     {
+      "date": "2026-10-21",
+      "tokens": 37754173108,
+      "requests": 16549607
+     },
+     {
+      "date": "2026-10-22",
+      "tokens": 35214495939,
+      "requests": 14514072
+     }
+    ]
+   },
+   "batch": null,
+   "endpoints": [
+    {
+     "provider": "Io Net",
+     "quantization": "fp16",
+     "inPerM": 0.01656,
+     "outPerM": 0.0216,
+     "cachePerM": 0.0108,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 42,
+     "p90Tps": 29,
+     "p50LatencyMs": 354,
+     "requests30m": 14035,
+     "zdr": true
+    },
+    {
+     "provider": "DekaLLM",
+     "quantization": "fp8",
+     "inPerM": 0.018,
+     "outPerM": 0.03,
+     "cachePerM": null,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 14,
+     "p90Tps": 7,
+     "p50LatencyMs": 557,
+     "requests30m": 39859,
+     "zdr": true
+    },
+    {
+     "provider": "DeepInfra",
+     "quantization": "fp8",
+     "inPerM": 0.029,
+     "outPerM": 0.03,
+     "cachePerM": null,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 26,
+     "p90Tps": 19,
+     "p50LatencyMs": 952,
+     "requests30m": 231541,
+     "zdr": true
+    },
+    {
+     "provider": "Parasail",
+     "quantization": "fp8",
+     "inPerM": 0.03,
+     "outPerM": 0.03,
+     "cachePerM": null,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 48,
+     "p90Tps": 34,
+     "p50LatencyMs": 464,
+     "requests30m": 1928,
+     "zdr": true
+    },
+    {
+     "provider": "Mistral",
+     "quantization": "unknown",
+     "inPerM": 0.15,
+     "outPerM": 0.15,
+     "cachePerM": 0.015,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": null,
+     "p50Tps": 106,
+     "p90Tps": 66,
+     "p50LatencyMs": 455.5,
+     "requests30m": 16,
+     "zdr": true
+    }
+   ]
+  },
+  "flashnext": {
+   "slug": "qwen/qwen3.8-flash",
+   "permaslug": "qwen/qwen3.8-flash-20260826",
+   "name": "Qwen: Qwen3.8 Flash",
+   "contextLength": 1000000,
+   "summary": {
+    "endpointsListed": 2,
+    "endpointsUp": 2,
+    "inMin": 0.15,
+    "inMedian": 0.15,
+    "outMin": 0.47,
+    "outMedian": 0.47,
+    "outMax": 0.47,
+    "cacheFractionMedian": 0.1067,
+    "cacheEndpoints": 2,
+    "speedEndpoints": 2,
+    "p50TpsMedian": 45,
+    "p50TpsP25": 45,
+    "p50LatencyMsMedian": 2098,
+    "uptime1dMedian": 99.66
+   },
+   "traffic": {
+    "days": 7,
+    "from": "2026-10-16",
+    "to": "2026-10-22",
+    "tokensPerDay": 95940363451,
+    "promptPerDay": 91715605678,
+    "completionPerDay": 4224757773,
+    "requestsPerDay": 4327498,
+    "avgTokensPerRequest": 22170,
+    "outShare": 0.044,
+    "cacheHit": 0.8804,
+    "daily": [
+     {
+      "date": "2026-10-16",
+      "tokens": 81751732337,
+      "requests": 3102692
+     },
+     {
+      "date": "2026-10-17",
+      "tokens": 75453041204,
+      "requests": 2860670
+     },
+     {
+      "date": "2026-10-18",
+      "tokens": 93932314215,
+      "requests": 7270527
+     },
+     {
+      "date": "2026-10-19",
+      "tokens": 102424863137,
+      "requests": 4083841
+     },
+     {
+      "date": "2026-10-20",
+      "tokens": 99216353312,
+      "requests": 4813548
+     },
+     {
+      "date": "2026-10-21",
+      "tokens": 107630438596,
+      "requests": 4119765
+     },
+     {
+      "date": "2026-10-22",
+      "tokens": 111173801357,
+      "requests": 4041443
+     }
+    ]
+   },
+   "batch": null,
+   "endpoints": [
+    {
+     "provider": "Alibaba",
+     "quantization": "unknown",
+     "inPerM": 0.15,
+     "outPerM": 0.47,
+     "cachePerM": 0.016,
+     "status": 0,
+     "uptime1d": 99.31,
+     "uptime30m": 100,
+     "p50Tps": 45,
+     "p90Tps": 20,
+     "p50LatencyMs": 2098,
+     "requests30m": 10189,
+     "zdr": false
+    },
+    {
+     "provider": "Alibaba",
+     "quantization": "unknown",
+     "inPerM": 0.15,
+     "outPerM": 0.47,
+     "cachePerM": 0.016,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 45,
+     "p90Tps": 20,
+     "p50LatencyMs": 2098,
+     "requests30m": 10189,
+     "zdr": false
+    }
+   ]
+  },
+  "nemotron35": {
+   "slug": "nvidia/nemotron-3.5-super-vl",
+   "permaslug": "nvidia/nemotron-3.5-super-vl-20261015",
+   "name": "NVIDIA: Nemotron 3.5 Super VL",
+   "contextLength": 1048576,
+   "summary": {
+    "endpointsListed": 7,
+    "endpointsUp": 7,
+    "inMin": 0.1,
+    "inMedian": 0.15,
+    "outMin": 0.4,
+    "outMedian": 0.5,
+    "outMax": 1.25,
+    "cacheFractionMedian": 0.1333,
+    "cacheEndpoints": 7,
+    "speedEndpoints": 7,
+    "p50TpsMedian": 255,
+    "p50TpsP25": 163.5,
+    "p50LatencyMsMedian": 497,
+    "uptime1dMedian": 97.51
+   },
+   "traffic": {
+    "days": 7,
+    "from": "2026-10-16",
+    "to": "2026-10-22",
+    "tokensPerDay": 23251202156,
+    "promptPerDay": 22292156547,
+    "completionPerDay": 959045610,
+    "requestsPerDay": 641815,
+    "avgTokensPerRequest": 36227,
+    "outShare": 0.0412,
+    "cacheHit": 0.7606,
+    "daily": [
+     {
+      "date": "2026-10-16",
+      "tokens": 10094366098,
+      "requests": 375629
+     },
+     {
+      "date": "2026-10-17",
+      "tokens": 21965815999,
+      "requests": 528730
+     },
+     {
+      "date": "2026-10-18",
+      "tokens": 34116548643,
+      "requests": 670199
+     },
+     {
+      "date": "2026-10-19",
+      "tokens": 33064912272,
+      "requests": 622437
+     },
+     {
+      "date": "2026-10-20",
+      "tokens": 30233501347,
+      "requests": 916368
+     },
+     {
+      "date": "2026-10-21",
+      "tokens": 5988303807,
+      "requests": 444745
+     },
+     {
+      "date": "2026-10-22",
+      "tokens": 27294966927,
+      "requests": 934594
+     }
+    ]
+   },
+   "batch": null,
+   "endpoints": [
+    {
+     "provider": "Crusoe",
+     "quantization": "bf16",
+     "inPerM": 0.1,
+     "outPerM": 0.4,
+     "cachePerM": 0.08,
+     "status": 0,
+     "uptime1d": 96.5,
+     "uptime30m": 100,
+     "p50Tps": 282,
+     "p90Tps": 124.80000000000001,
+     "p50LatencyMs": 362,
+     "requests30m": 367,
+     "zdr": true
+    },
+    {
+     "provider": "Io Net",
+     "quantization": "nvfp4",
+     "inPerM": 0.15,
+     "outPerM": 0.5,
+     "cachePerM": 0.02,
+     "status": 0,
+     "uptime1d": 95.1,
+     "uptime30m": null,
+     "p50Tps": 111,
+     "p90Tps": 45,
+     "p50LatencyMs": 1097.5,
+     "requests30m": 20,
+     "zdr": true
+    },
+    {
+     "provider": "Together",
+     "quantization": "unknown",
+     "inPerM": 0.15,
+     "outPerM": 0.5,
+     "cachePerM": 0.02,
+     "status": 0,
+     "uptime1d": 99.93,
+     "uptime30m": 100,
+     "p50Tps": 308,
+     "p90Tps": 161,
+     "p50LatencyMs": 302,
+     "requests30m": 1337,
+     "zdr": true
+    },
+    {
+     "provider": "DeepInfra",
+     "quantization": "fp4",
+     "inPerM": 0.15,
+     "outPerM": 0.5,
+     "cachePerM": 0.02,
+     "status": 0,
+     "uptime1d": 97.51,
+     "uptime30m": 100,
+     "p50Tps": 216,
+     "p90Tps": 81,
+     "p50LatencyMs": 755.5,
+     "requests30m": 404,
+     "zdr": true
+    },
+    {
+     "provider": "CoreWeave",
+     "quantization": "nvfp4",
+     "inPerM": 0.15,
+     "outPerM": 0.5,
+     "cachePerM": 0.02,
+     "status": 0,
+     "uptime1d": 97.52,
+     "uptime30m": null,
+     "p50Tps": 255,
+     "p90Tps": 67,
+     "p50LatencyMs": 497,
+     "requests30m": 48,
+     "zdr": true
+    },
+    {
+     "provider": "BaseTen",
+     "quantization": "fp4",
+     "inPerM": 0.2,
+     "outPerM": 0.5,
+     "cachePerM": 0.04,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": null,
+     "p50Tps": 261,
+     "p90Tps": 76,
+     "p50LatencyMs": 389,
+     "requests30m": 21,
+     "zdr": true
+    },
+    {
+     "provider": "Venice",
+     "quantization": "fp4",
+     "inPerM": 0.25,
+     "outPerM": 1.25,
+     "cachePerM": 0.125,
+     "status": 0,
+     "uptime1d": 93.52,
+     "uptime30m": null,
+     "p50Tps": 12,
+     "p90Tps": 5,
+     "p50LatencyMs": 975.5,
+     "requests30m": 14,
+     "zdr": true
+    }
+   ]
+  },
+  "qwen35_122b": {
+   "slug": "qwen/qwen3.5-122b-a10b",
+   "permaslug": "qwen/qwen3.5-122b-a10b-20260224",
+   "name": "Qwen: Qwen3.5-122B-A10B",
+   "contextLength": 262144,
+   "summary": {
+    "endpointsListed": 4,
+    "endpointsUp": 4,
+    "inMin": 0.26,
+    "inMedian": 0.28,
+    "outMin": 2.08,
+    "outMedian": 2.24,
+    "outMax": 3.2,
+    "cacheFractionMedian": 1,
+    "cacheEndpoints": 1,
+    "speedEndpoints": 4,
+    "p50TpsMedian": 61.5,
+    "p50TpsP25": 49,
+    "p50LatencyMsMedian": 1464,
+    "uptime1dMedian": 99.88
+   },
+   "traffic": {
+    "days": 7,
+    "from": "2026-10-16",
+    "to": "2026-10-22",
+    "tokensPerDay": 1445039433,
+    "promptPerDay": 1264230495,
+    "completionPerDay": 180808938,
+    "requestsPerDay": 156479,
+    "avgTokensPerRequest": 9235,
+    "outShare": 0.1251,
+    "cacheHit": 0,
+    "daily": [
+     {
+      "date": "2026-10-16",
+      "tokens": 1263384356,
+      "requests": 211936
+     },
+     {
+      "date": "2026-10-17",
+      "tokens": 1247098366,
+      "requests": 146056
+     },
+     {
+      "date": "2026-10-18",
+      "tokens": 781194022,
+      "requests": 113257
+     },
+     {
+      "date": "2026-10-19",
+      "tokens": 3676871333,
+      "requests": 227332
+     },
+     {
+      "date": "2026-10-20",
+      "tokens": 1101617527,
+      "requests": 149217
+     },
+     {
+      "date": "2026-10-21",
+      "tokens": 1167269267,
+      "requests": 133470
+     },
+     {
+      "date": "2026-10-22",
+      "tokens": 877841158,
+      "requests": 114087
+     }
+    ]
+   },
+   "batch": null,
+   "endpoints": [
+    {
+     "provider": "SiliconFlow",
+     "quantization": "fp8",
+     "inPerM": 0.26,
+     "outPerM": 2.08,
+     "cachePerM": null,
+     "status": 0,
+     "uptime1d": 99.6,
+     "uptime30m": 100,
+     "p50Tps": 59,
+     "p90Tps": 48,
+     "p50LatencyMs": 1843,
+     "requests30m": 440,
+     "zdr": true
+    },
+    {
+     "provider": "Alibaba",
+     "quantization": "unknown",
+     "inPerM": 0.26,
+     "outPerM": 2.08,
+     "cachePerM": null,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 64,
+     "p90Tps": 27,
+     "p50LatencyMs": 1085,
+     "requests30m": 3119,
+     "zdr": false
+    },
+    {
+     "provider": "AtlasCloud",
+     "quantization": "fp8",
+     "inPerM": 0.3,
+     "outPerM": 2.4,
+     "cachePerM": 0.3,
+     "status": 0,
+     "uptime1d": 99.75,
+     "uptime30m": 100,
+     "p50Tps": 159.5,
+     "p90Tps": 88.9,
+     "p50LatencyMs": 922,
+     "requests30m": 197,
+     "zdr": false
+    },
+    {
+     "provider": "Novita",
+     "quantization": "bf16",
+     "inPerM": 0.4,
+     "outPerM": 3.2,
+     "cachePerM": null,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 19,
+     "p90Tps": 9,
+     "p50LatencyMs": 8505,
+     "requests30m": 717,
+     "zdr": true
+    }
+   ]
+  },
+  "mistral_small4": {
+   "slug": "mistralai/mistral-small-2603",
+   "permaslug": "mistralai/mistral-small-2603",
+   "name": "Mistral: Mistral Small 4",
+   "contextLength": 262144,
+   "summary": {
+    "endpointsListed": 4,
+    "endpointsUp": 4,
+    "inMin": 0.15,
+    "inMedian": 0.1575,
+    "outMin": 0.6,
+    "outMedian": 0.63,
+    "outMax": 0.66,
+    "cacheFractionMedian": 0.1,
+    "cacheEndpoints": 4,
+    "speedEndpoints": 4,
+    "p50TpsMedian": 145,
+    "p50TpsP25": 145,
+    "p50LatencyMsMedian": 400,
+    "uptime1dMedian": 95.72
+   },
+   "traffic": {
+    "days": 7,
+    "from": "2026-10-16",
+    "to": "2026-10-22",
+    "tokensPerDay": 660007184,
+    "promptPerDay": 605621371,
+    "completionPerDay": 54385813,
+    "requestsPerDay": 289839,
+    "avgTokensPerRequest": 2277,
+    "outShare": 0.0824,
+    "cacheHit": 0.3074,
+    "daily": [
+     {
+      "date": "2026-10-16",
+      "tokens": 677522121,
+      "requests": 291325
+     },
+     {
+      "date": "2026-10-17",
+      "tokens": 640051491,
+      "requests": 312134
+     },
+     {
+      "date": "2026-10-18",
+      "tokens": 577220126,
+      "requests": 290228
+     },
+     {
+      "date": "2026-10-19",
+      "tokens": 670027091,
+      "requests": 288230
+     },
+     {
+      "date": "2026-10-20",
+      "tokens": 749750274,
+      "requests": 326492
+     },
+     {
+      "date": "2026-10-21",
+      "tokens": 680809678,
+      "requests": 247744
+     },
+     {
+      "date": "2026-10-22",
+      "tokens": 624669506,
+      "requests": 272723
+     }
+    ]
+   },
+   "batch": {
+    "inRatio": 0.5,
+    "outRatio": 0.5
+   },
+   "endpoints": [
+    {
+     "provider": "Mistral",
+     "quantization": "unknown",
+     "inPerM": 0.15,
+     "outPerM": 0.6,
+     "cachePerM": 0.015,
+     "status": 0,
+     "uptime1d": 95.57,
+     "uptime30m": 100,
+     "p50Tps": 145,
+     "p90Tps": 108.6,
+     "p50LatencyMs": 400,
+     "requests30m": 94,
+     "zdr": true
+    },
+    {
+     "provider": "Mistral",
+     "quantization": "unknown",
+     "inPerM": 0.15,
+     "outPerM": 0.6,
+     "cachePerM": 0.015,
+     "status": 0,
+     "uptime1d": 95.86,
+     "uptime30m": 100,
+     "p50Tps": 145,
+     "p90Tps": 108.6,
+     "p50LatencyMs": 400,
+     "requests30m": 94,
+     "zdr": true
+    },
+    {
+     "provider": "Mistral",
+     "quantization": "unknown",
+     "inPerM": 0.165,
+     "outPerM": 0.66,
+     "cachePerM": 0.0165,
+     "status": 0,
+     "uptime1d": 89.73,
+     "uptime30m": 100,
+     "p50Tps": 145,
+     "p90Tps": 108.6,
+     "p50LatencyMs": 400,
+     "requests30m": 94,
+     "zdr": true
+    },
+    {
+     "provider": "Mistral",
+     "quantization": "unknown",
+     "inPerM": 0.165,
+     "outPerM": 0.66,
+     "cachePerM": 0.0165,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": null,
+     "p50Tps": 145,
+     "p90Tps": 108.6,
+     "p50LatencyMs": 400,
+     "requests30m": 94,
+     "zdr": true
+    }
+   ]
+  },
+  "devstral2": {
+   "slug": "mistralai/devstral-2512",
+   "permaslug": "mistralai/devstral-2512",
+   "name": "Mistral: Devstral 2 2512",
+   "contextLength": 262144,
+   "summary": {
+    "endpointsListed": 1,
+    "endpointsUp": 1,
+    "inMin": 0.4,
+    "inMedian": 0.4,
+    "outMin": 2,
+    "outMedian": 2,
+    "outMax": 2,
+    "cacheFractionMedian": 0.1,
+    "cacheEndpoints": 1,
+    "speedEndpoints": 1,
+    "p50TpsMedian": 81,
+    "p50TpsP25": 81,
+    "p50LatencyMsMedian": 279,
+    "uptime1dMedian": 100
+   },
+   "traffic": {
+    "days": 7,
+    "from": "2026-10-16",
+    "to": "2026-10-22",
+    "tokensPerDay": 196511896,
+    "promptPerDay": 193521497,
+    "completionPerDay": 2990399,
+    "requestsPerDay": 9638,
+    "avgTokensPerRequest": 20390,
+    "outShare": 0.0152,
+    "cacheHit": 0.8487,
+    "daily": [
+     {
+      "date": "2026-10-16",
+      "tokens": 94551144,
+      "requests": 10162
+     },
+     {
+      "date": "2026-10-17",
+      "tokens": 255669499,
+      "requests": 7654
+     },
+     {
+      "date": "2026-10-18",
+      "tokens": 174620813,
+      "requests": 8243
+     },
+     {
+      "date": "2026-10-19",
+      "tokens": 207856029,
+      "requests": 10379
+     },
+     {
+      "date": "2026-10-20",
+      "tokens": 235137344,
+      "requests": 10341
+     },
+     {
+      "date": "2026-10-21",
+      "tokens": 145644009,
+      "requests": 11104
+     },
+     {
+      "date": "2026-10-22",
+      "tokens": 262104435,
+      "requests": 9582
+     }
+    ]
+   },
+   "batch": null,
+   "endpoints": [
+    {
+     "provider": "Mistral",
+     "quantization": "unknown",
+     "inPerM": 0.4,
+     "outPerM": 2,
+     "cachePerM": 0.04,
+     "status": 0,
+     "uptime1d": 100,
+     "uptime30m": 100,
+     "p50Tps": 81,
+     "p90Tps": 29,
+     "p50LatencyMs": 278.5,
+     "requests30m": 42,
+     "zdr": true
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,5602 @@
+{
+ "source": "vast.ai",
+ "generatedAt": "2026-10-23T11:31:30.447Z",
+ "query": {
+  "type": "on-demand",
+  "verifiedForViews": true,
+  "minDiskGb": 100,
+  "allocatedStorageGb": 16,
+  "offersPerSearch": 200
+ },
+ "views": {
+  "r90": "Verified, reliability at least 0.90",
+  "r98": "Verified, reliability at least 0.98",
+  "dc99": "Data-centre host, reliability at least 0.99",
+  "any": "Any offer, no filter"
+ },
+ "gpus": {
+  "pro6000": {
+   "vastNames": [
+    "RTX PRO 6000 WS",
+    "RTX PRO 6000 S",
+    "RTX PRO 6000"
+   ],
+   "note": "Workstation, Server and unlabelled editions; Max-Q is excluded because it is a slower 300 W card",
+   "nodes": {
+    "1": {
+     "views": {
+      "r90": {
+       "count": 22,
+       "minPerGpu": 1.0859,
+       "p25PerGpu": 1.4737,
+       "medianPerGpu": 1.5966,
+       "cheapest": [
+        {
+         "id": 56426233,
+         "machineId": 153655,
+         "gpuName": "RTX PRO 6000 WS",
+         "numGpus": 1,
+         "dph": 1.0859,
+         "perGpu": 1.0859,
+         "reliability": 0.9663,
+         "verified": true,
+         "datacenter": false,
+         "geo": "United States, US",
+         "inetDown": 405,
+         "inetUp": 448,
+         "vramGb": 95.6,
+         "cpuRamGb": 126,
+         "diskGb": 604,
+         "pcieBw": 26.5,
+         "cudaMax": 13
+        },
+        {
+         "id": 40420024,
+         "machineId": 139244,
+         "gpuName": "RTX PRO 6000 WS",
+         "numGpus": 1,
+         "dph": 1.1378,
+         "perGpu": 1.1378,
+         "reliability": 0.93,
+         "verified": true,
+         "datacenter": false,
+         "geo": "South Korea, KR",
+         "inetDown": 1087,
+         "inetUp": 438,
+         "vramGb": 95.6,
+         "cpuRamGb": 124,
+         "diskGb": 2295,
+         "pcieBw": 23.1,
+         "cudaMax": 13.2
+        },
+        {
+         "id": 56359771,
+         "machineId": 123456,
+         "gpuName": "RTX PRO 6000 WS",
+         "numGpus": 1,
+         "dph": 1.3943,
+         "perGpu": 1.3943,
+         "reliability": 0.9976,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Taiwan, TW",
+         "inetDown": 905,
+         "inetUp": 589,
+         "vramGb": 95.6,
+         "cpuRamGb": 93,
+         "diskGb": 1393,
+         "pcieBw": 27.5,
+         "cudaMax": 13.4
+        }
+       ]
+      },
+      "r98": {
+       "count": 16,
+       "minPerGpu": 1.3943,
+       "p25PerGpu": 1.4789,
+       "medianPerGpu": 1.5966,
+       "cheapest": [
+        {
+         "id": 56359771,
+         "machineId": 123456,
+         "gpuName": "RTX PRO 6000 WS",
+         "numGpus": 1,
+         "dph": 1.3943,
+         "perGpu": 1.3943,
+         "reliability": 0.9976,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Taiwan, TW",
+         "inetDown": 905,
+         "inetUp": 589,
+         "vramGb": 95.6,
+         "cpuRamGb": 93,
+         "diskGb": 1393,
+         "pcieBw": 27.5,
+         "cudaMax": 13.4
+        },
+        {
+         "id": 55977095,
+         "machineId": 146922,
+         "gpuName": "RTX PRO 6000 S",
+         "numGpus": 1,
+         "dph": 1.4711,
+         "perGpu": 1.4711,
+         "reliability": 0.9979,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Utah, US",
+         "inetDown": 9095,
+         "inetUp": 7676,
+         "vramGb": 95.6,
+         "cpuRamGb": 126,
+         "diskGb": 113,
+         "pcieBw": 52.9,
+         "cudaMax": 13
+        },
+        {
+         "id": 56228578,
+         "machineId": 149175,
+         "gpuName": "RTX PRO 6000 S",
+         "numGpus": 1,
+         "dph": 1.4711,
+         "perGpu": 1.4711,
+         "reliability": 0.9907,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Utah, US",
+         "inetDown": 3837,
+         "inetUp": 4469,
+         "vramGb": 95.6,
+         "cpuRamGb": 126,
+         "diskGb": 840,
+         "pcieBw": 53,
+         "cudaMax": 13
+        }
+       ]
+      },
+      "dc99": {
+       "count": 1,
+       "minPerGpu": 2.6652,
+       "p25PerGpu": 2.6652,
+       "medianPerGpu": 2.6652,
+       "cheapest": [
+        {
+         "id": 44623538,
+         "machineId": 143946,
+         "gpuName": "RTX PRO 6000 S",
+         "numGpus": 1,
+         "dph": 2.6652,
+         "perGpu": 2.6652,
+         "reliability": 0.9986,
+         "verified": true,
+         "datacenter": true,
+         "geo": "Czechia, CZ",
+         "inetDown": 8991,
+         "inetUp": 8416,
+         "vramGb": 95.6,
+         "cpuRamGb": 126,
+         "diskGb": 1048,
+         "pcieBw": 53.6,
+         "cudaMax": 13.3
+        }
+       ]
+      },
+      "any": {
+       "count": 39,
+       "minPerGpu": 1.0044,
+       "p25PerGpu": 1.3378,
+       "medianPerGpu": 1.4711,
+       "cheapest": [
+        {
+         "id": 39242114,
+         "machineId": 137596,
+         "gpuName": "RTX PRO 6000 WS",
+         "numGpus": 1,
+         "dph": 1.0044,
+         "perGpu": 1.0044,
+         "reliability": 0.9836,
+         "verified": false,
+         "datacenter": false,
+         "geo": ", CN",
+         "inetDown": 0,
+         "inetUp": 0,
+         "vramGb": 95.6,
+         "cpuRamGb": 118,
+         "diskGb": 214,
+         "pcieBw": null,
+         "cudaMax": 13
+        },
+        {
+         "id": 56426233,
+         "machineId": 153655,
+         "gpuName": "RTX PRO 6000 WS",
+         "numGpus": 1,
+         "dph": 1.0859,
+         "perGpu": 1.0859,
+         "reliability": 0.9663,
+         "verified": true,
+         "datacenter": false,
+         "geo": "United States, US",
+         "inetDown": 405,
+         "inetUp": 448,
+         "vramGb": 95.6,
+         "cpuRamGb": 126,
+         "diskGb": 604,
+         "pcieBw": 26.5,
+         "cudaMax": 13
+        },
+        {
+         "id": 40420024,
+         "machineId": 139244,
+         "gpuName": "RTX PRO 6000 WS",
+         "numGpus": 1,
+         "dph": 1.1378,
+         "perGpu": 1.1378,
+         "reliability": 0.93,
+         "verified": true,
+         "datacenter": false,
+         "geo": "South Korea, KR",
+         "inetDown": 1087,
+         "inetUp": 438,
+         "vramGb": 95.6,
+         "cpuRamGb": 124,
+         "diskGb": 2295,
+         "pcieBw": 23.1,
+         "cudaMax": 13.2
+        }
+       ]
+      }
+     },
+     "interruptible": {
+      "count": 16,
+      "minPerGpu": 0.3467,
+      "medianPerGpu": 0.7867
+     }
+    },
+    "2": {
+     "views": {
+      "r90": {
+       "count": 8,
+       "minPerGpu": 1.5856,
+       "p25PerGpu": 1.602,
+       "medianPerGpu": 1.6048,
+       "cheapest": [
+        {
+         "id": 49799370,
+         "machineId": 141678,
+         "gpuName": "RTX PRO 6000 WS",
+         "numGpus": 2,
+         "dph": 3.1713,
+         "perGpu": 1.5856,
+         "reliability": 0.992,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Colorado, US",
+         "inetDown": 599,
+         "inetUp": 324,
+         "vramGb": 95.6,
+         "cpuRamGb": 251,
+         "diskGb": 924,
+         "pcieBw": 27.3,
+         "cudaMax": 13.2
+        },
+        {
+         "id": 56347268,
+         "machineId": 124192,
+         "gpuName": "RTX PRO 6000 WS",
+         "numGpus": 2,
+         "dph": 3.203,
+         "perGpu": 1.6015,
+         "reliability": 0.9868,
+         "verified": true,
+         "datacenter": false,
+         "geo": "New Jersey, US",
+         "inetDown": 880,
+         "inetUp": 772,
+         "vramGb": 95.6,
+         "cpuRamGb": 251,
+         "diskGb": 3070,
+         "pcieBw": 54.3,
+         "cudaMax": 13
+        },
+        {
+         "id": 54633832,
+         "machineId": 150636,
+         "gpuName": "RTX PRO 6000 WS",
+         "numGpus": 2,
+         "dph": 3.2044,
+         "perGpu": 1.6022,
+         "reliability": 0.9942,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Germany, DE",
+         "inetDown": 791,
+         "inetUp": 869,
+         "vramGb": 95.6,
+         "cpuRamGb": 189,
+         "diskGb": 308,
+         "pcieBw": 54.2,
+         "cudaMax": 13.2
+        }
+       ]
+      },
+      "r98": {
+       "count": 7,
+       "minPerGpu": 1.5856,
+       "p25PerGpu": 1.6019,
+       "medianPerGpu": 1.6022,
+       "cheapest": [
+        {
+         "id": 49799370,
+         "machineId": 141678,
+         "gpuName": "RTX PRO 6000 WS",
+         "numGpus": 2,
+         "dph": 3.1713,
+         "perGpu": 1.5856,
+         "reliability": 0.992,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Colorado, US",
+         "inetDown": 599,
+         "inetUp": 324,
+         "vramGb": 95.6,
+         "cpuRamGb": 251,
+         "diskGb": 924,
+         "pcieBw": 27.3,
+         "cudaMax": 13.2
+        },
+        {
+         "id": 56347268,
+         "machineId": 124192,
+         "gpuName": "RTX PRO 6000 WS",
+         "numGpus": 2,
+         "dph": 3.203,
+         "perGpu": 1.6015,
+         "reliability": 0.9868,
+         "verified": true,
+         "datacenter": false,
+         "geo": "New Jersey, US",
+         "inetDown": 880,
+         "inetUp": 772,
+         "vramGb": 95.6,
+         "cpuRamGb": 251,
+         "diskGb": 3070,
+         "pcieBw": 54.3,
+         "cudaMax": 13
+        },
+        {
+         "id": 54633832,
+         "machineId": 150636,
+         "gpuName": "RTX PRO 6000 WS",
+         "numGpus": 2,
+         "dph": 3.2044,
+         "perGpu": 1.6022,
+         "reliability": 0.9942,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Germany, DE",
+         "inetDown": 791,
+         "inetUp": 869,
+         "vramGb": 95.6,
+         "cpuRamGb": 189,
+         "diskGb": 308,
+         "pcieBw": 54.2,
+         "cudaMax": 13.2
+        }
+       ]
+      },
+      "dc99": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "any": {
+       "count": 15,
+       "minPerGpu": 1.2437,
+       "p25PerGpu": 1.3356,
+       "medianPerGpu": 1.5856,
+       "cheapest": [
+        {
+         "id": 57305219,
+         "machineId": 154946,
+         "gpuName": "RTX PRO 6000 S",
+         "numGpus": 2,
+         "dph": 2.4874,
+         "perGpu": 1.2437,
+         "reliability": 0.7406,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Quebec, CA",
+         "inetDown": 6121,
+         "inetUp": 5678,
+         "vramGb": 95.6,
+         "cpuRamGb": 756,
+         "diskGb": 6345,
+         "pcieBw": 54.3,
+         "cudaMax": 13.4
+        },
+        {
+         "id": 57150851,
+         "machineId": 152423,
+         "gpuName": "RTX PRO 6000 WS",
+         "numGpus": 2,
+         "dph": 2.5111,
+         "perGpu": 1.2556,
+         "reliability": 0.9306,
+         "verified": false,
+         "datacenter": false,
+         "geo": "New Jersey, US",
+         "inetDown": 345,
+         "inetUp": 423,
+         "vramGb": 95.6,
+         "cpuRamGb": 186,
+         "diskGb": 3353,
+         "pcieBw": 27.5,
+         "cudaMax": 13.2
+        },
+        {
+         "id": 55215487,
+         "machineId": 148552,
+         "gpuName": "RTX PRO 6000 WS",
+         "numGpus": 2,
+         "dph": 2.6444,
+         "perGpu": 1.3222,
+         "reliability": 0.9093,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Mississippi, US",
+         "inetDown": 938,
+         "inetUp": 634,
+         "vramGb": 95.6,
+         "cpuRamGb": 126,
+         "diskGb": 830,
+         "pcieBw": 53.8,
+         "cudaMax": 13.2
+        }
+       ]
+      }
+     }
+    },
+    "4": {
+     "views": {
+      "r90": {
+       "count": 1,
+       "minPerGpu": 3.1359,
+       "p25PerGpu": 3.1359,
+       "medianPerGpu": 3.1359,
+       "cheapest": [
+        {
+         "id": 56159876,
+         "machineId": 109672,
+         "gpuName": "RTX PRO 6000 WS",
+         "numGpus": 4,
+         "dph": 12.5437,
+         "perGpu": 3.1359,
+         "reliability": 0.9901,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Texas, US",
+         "inetDown": 4704,
+         "inetUp": 4386,
+         "vramGb": 95.6,
+         "cpuRamGb": 755,
+         "diskGb": 4282,
+         "pcieBw": 54.2,
+         "cudaMax": 13.4
+        }
+       ]
+      },
+      "r98": {
+       "count": 1,
+       "minPerGpu": 3.1359,
+       "p25PerGpu": 3.1359,
+       "medianPerGpu": 3.1359,
+       "cheapest": [
+        {
+         "id": 56159876,
+         "machineId": 109672,
+         "gpuName": "RTX PRO 6000 WS",
+         "numGpus": 4,
+         "dph": 12.5437,
+         "perGpu": 3.1359,
+         "reliability": 0.9901,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Texas, US",
+         "inetDown": 4704,
+         "inetUp": 4386,
+         "vramGb": 95.6,
+         "cpuRamGb": 755,
+         "diskGb": 4282,
+         "pcieBw": 54.2,
+         "cudaMax": 13.4
+        }
+       ]
+      },
+      "dc99": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "any": {
+       "count": 7,
+       "minPerGpu": 1.2683,
+       "p25PerGpu": 1.3278,
+       "medianPerGpu": 1.3344,
+       "cheapest": [
+        {
+         "id": 56049690,
+         "machineId": 153437,
+         "gpuName": "RTX PRO 6000 S",
+         "numGpus": 4,
+         "dph": 5.0732,
+         "perGpu": 1.2683,
+         "reliability": 0.9784,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Romania, RO",
+         "inetDown": 359,
+         "inetUp": 305,
+         "vramGb": 95.6,
+         "cpuRamGb": 252,
+         "diskGb": 3130,
+         "pcieBw": 53,
+         "cudaMax": 13.2
+        },
+        {
+         "id": 55215489,
+         "machineId": 148552,
+         "gpuName": "RTX PRO 6000 WS",
+         "numGpus": 4,
+         "dph": 5.2844,
+         "perGpu": 1.3211,
+         "reliability": 0.9093,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Mississippi, US",
+         "inetDown": 938,
+         "inetUp": 634,
+         "vramGb": 95.6,
+         "cpuRamGb": 251,
+         "diskGb": 1660,
+         "pcieBw": 53.8,
+         "cudaMax": 13.2
+        },
+        {
+         "id": 54176085,
+         "machineId": 152662,
+         "gpuName": "RTX PRO 6000 S",
+         "numGpus": 4,
+         "dph": 5.3378,
+         "perGpu": 1.3344,
+         "reliability": 0.9389,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Japan, JP",
+         "inetDown": 524,
+         "inetUp": 496,
+         "vramGb": 95.6,
+         "cpuRamGb": 756,
+         "diskGb": 4091,
+         "pcieBw": 53.4,
+         "cudaMax": 13.2
+        }
+       ]
+      }
+     }
+    },
+    "8": {
+     "views": {
+      "r90": {
+       "count": 2,
+       "minPerGpu": 2.0006,
+       "p25PerGpu": 2.1673,
+       "medianPerGpu": 2.3339,
+       "cheapest": [
+        {
+         "id": 53204266,
+         "machineId": 152449,
+         "gpuName": "RTX PRO 6000 WS",
+         "numGpus": 8,
+         "dph": 16.0044,
+         "perGpu": 2.0006,
+         "reliability": 0.9905,
+         "verified": true,
+         "datacenter": true,
+         "geo": "Czechia, CZ",
+         "inetDown": 7208,
+         "inetUp": 4017,
+         "vramGb": 95.6,
+         "cpuRamGb": 756,
+         "diskGb": 6505,
+         "pcieBw": 54.1,
+         "cudaMax": 13.2
+        },
+        {
+         "id": 57079994,
+         "machineId": 5150,
+         "gpuName": "RTX PRO 6000 WS",
+         "numGpus": 8,
+         "dph": 21.3378,
+         "perGpu": 2.6672,
+         "reliability": 0.9968,
+         "verified": true,
+         "datacenter": true,
+         "geo": "Alberta, CA",
+         "inetDown": 3428,
+         "inetUp": 3072,
+         "vramGb": 95.6,
+         "cpuRamGb": 756,
+         "diskGb": 2946,
+         "pcieBw": 54.1,
+         "cudaMax": 13
+        }
+       ]
+      },
+      "r98": {
+       "count": 2,
+       "minPerGpu": 2.0006,
+       "p25PerGpu": 2.1673,
+       "medianPerGpu": 2.3339,
+       "cheapest": [
+        {
+         "id": 53204266,
+         "machineId": 152449,
+         "gpuName": "RTX PRO 6000 WS",
+         "numGpus": 8,
+         "dph": 16.0044,
+         "perGpu": 2.0006,
+         "reliability": 0.9905,
+         "verified": true,
+         "datacenter": true,
+         "geo": "Czechia, CZ",
+         "inetDown": 7208,
+         "inetUp": 4017,
+         "vramGb": 95.6,
+         "cpuRamGb": 756,
+         "diskGb": 6505,
+         "pcieBw": 54.1,
+         "cudaMax": 13.2
+        },
+        {
+         "id": 57079994,
+         "machineId": 5150,
+         "gpuName": "RTX PRO 6000 WS",
+         "numGpus": 8,
+         "dph": 21.3378,
+         "perGpu": 2.6672,
+         "reliability": 0.9968,
+         "verified": true,
+         "datacenter": true,
+         "geo": "Alberta, CA",
+         "inetDown": 3428,
+         "inetUp": 3072,
+         "vramGb": 95.6,
+         "cpuRamGb": 756,
+         "diskGb": 2946,
+         "pcieBw": 54.1,
+         "cudaMax": 13
+        }
+       ]
+      },
+      "dc99": {
+       "count": 2,
+       "minPerGpu": 2.0006,
+       "p25PerGpu": 2.1673,
+       "medianPerGpu": 2.3339,
+       "cheapest": [
+        {
+         "id": 53204266,
+         "machineId": 152449,
+         "gpuName": "RTX PRO 6000 WS",
+         "numGpus": 8,
+         "dph": 16.0044,
+         "perGpu": 2.0006,
+         "reliability": 0.9905,
+         "verified": true,
+         "datacenter": true,
+         "geo": "Czechia, CZ",
+         "inetDown": 7208,
+         "inetUp": 4017,
+         "vramGb": 95.6,
+         "cpuRamGb": 756,
+         "diskGb": 6505,
+         "pcieBw": 54.1,
+         "cudaMax": 13.2
+        },
+        {
+         "id": 57079994,
+         "machineId": 5150,
+         "gpuName": "RTX PRO 6000 WS",
+         "numGpus": 8,
+         "dph": 21.3378,
+         "perGpu": 2.6672,
+         "reliability": 0.9968,
+         "verified": true,
+         "datacenter": true,
+         "geo": "Alberta, CA",
+         "inetDown": 3428,
+         "inetUp": 3072,
+         "vramGb": 95.6,
+         "cpuRamGb": 756,
+         "diskGb": 2946,
+         "pcieBw": 54.1,
+         "cudaMax": 13
+        }
+       ]
+      },
+      "any": {
+       "count": 7,
+       "minPerGpu": 1.2675,
+       "p25PerGpu": 1.3339,
+       "medianPerGpu": 1.3339,
+       "cheapest": [
+        {
+         "id": 56049695,
+         "machineId": 153437,
+         "gpuName": "RTX PRO 6000 S",
+         "numGpus": 8,
+         "dph": 10.1399,
+         "perGpu": 1.2675,
+         "reliability": 0.9784,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Romania, RO",
+         "inetDown": 359,
+         "inetUp": 305,
+         "vramGb": 95.6,
+         "cpuRamGb": 503,
+         "diskGb": 6261,
+         "pcieBw": 52.9,
+         "cudaMax": 13.2
+        },
+        {
+         "id": 53626172,
+         "machineId": 152673,
+         "gpuName": "RTX PRO 6000 S",
+         "numGpus": 8,
+         "dph": 10.6711,
+         "perGpu": 1.3339,
+         "reliability": 0.9817,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Japan, JP",
+         "inetDown": 914,
+         "inetUp": 493,
+         "vramGb": 95.6,
+         "cpuRamGb": 1511,
+         "diskGb": 133,
+         "pcieBw": 53.5,
+         "cudaMax": 13.2
+        },
+        {
+         "id": 54584149,
+         "machineId": 152660,
+         "gpuName": "RTX PRO 6000 S",
+         "numGpus": 8,
+         "dph": 10.6711,
+         "perGpu": 1.3339,
+         "reliability": 0.9074,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Japan, JP",
+         "inetDown": 1050,
+         "inetUp": 838,
+         "vramGb": 95.6,
+         "cpuRamGb": 1511,
+         "diskGb": 9580,
+         "pcieBw": 54.1,
+         "cudaMax": 13.2
+        }
+       ]
+      }
+     }
+    }
+   }
+  },
+  "ada6000": {
+   "vastNames": [
+    "RTX 6000Ada"
+   ],
+   "note": null,
+   "nodes": {
+    "1": {
+     "views": {
+      "r90": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "r98": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "dc99": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "any": {
+       "count": 3,
+       "minPerGpu": 0.5452,
+       "p25PerGpu": 0.6415,
+       "medianPerGpu": 0.7378,
+       "cheapest": [
+        {
+         "id": 50163305,
+         "machineId": 137575,
+         "gpuName": "RTX 6000Ada",
+         "numGpus": 1,
+         "dph": 0.5452,
+         "perGpu": 0.5452,
+         "reliability": 0.9982,
+         "verified": false,
+         "datacenter": false,
+         "geo": "California, US",
+         "inetDown": 7473,
+         "inetUp": 5351,
+         "vramGb": 48,
+         "cpuRamGb": 118,
+         "diskGb": 320,
+         "pcieBw": 12.7,
+         "cudaMax": 13
+        },
+        {
+         "id": 38463338,
+         "machineId": 136759,
+         "gpuName": "RTX 6000Ada",
+         "numGpus": 1,
+         "dph": 0.7378,
+         "perGpu": 0.7378,
+         "reliability": 0.9981,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Wisconsin, US",
+         "inetDown": 985,
+         "inetUp": 909,
+         "vramGb": 48,
+         "cpuRamGb": 252,
+         "diskGb": 552,
+         "pcieBw": 23,
+         "cudaMax": 12.4
+        },
+        {
+         "id": 43709901,
+         "machineId": 142572,
+         "gpuName": "RTX 6000Ada",
+         "numGpus": 1,
+         "dph": 0.7378,
+         "perGpu": 0.7378,
+         "reliability": 0.997,
+         "verified": false,
+         "datacenter": false,
+         "geo": "New York, US",
+         "inetDown": 938,
+         "inetUp": 38,
+         "vramGb": 48,
+         "cpuRamGb": 63,
+         "diskGb": 623,
+         "pcieBw": 24.9,
+         "cudaMax": 13
+        }
+       ]
+      }
+     },
+     "interruptible": {
+      "count": 0,
+      "minPerGpu": null,
+      "medianPerGpu": null
+     }
+    },
+    "2": {
+     "views": {
+      "r90": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "r98": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "dc99": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "any": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      }
+     }
+    },
+    "4": {
+     "views": {
+      "r90": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "r98": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "dc99": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "any": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      }
+     }
+    },
+    "8": {
+     "views": {
+      "r90": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "r98": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "dc99": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "any": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      }
+     }
+    }
+   }
+  },
+  "rtx5090": {
+   "vastNames": [
+    "RTX 5090"
+   ],
+   "note": "5090 D and Ti excluded",
+   "nodes": {
+    "1": {
+     "views": {
+      "r90": {
+       "count": 39,
+       "minPerGpu": 0.6844,
+       "p25PerGpu": 0.8559,
+       "medianPerGpu": 1.0119,
+       "cheapest": [
+        {
+         "id": 56593057,
+         "machineId": 141399,
+         "gpuName": "RTX 5090",
+         "numGpus": 1,
+         "dph": 0.6844,
+         "perGpu": 0.6844,
+         "reliability": 0.9839,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Romania, RO",
+         "inetDown": 876,
+         "inetUp": 544,
+         "vramGb": 31.8,
+         "cpuRamGb": 47,
+         "diskGb": 134,
+         "pcieBw": 26.5,
+         "cudaMax": 13.3
+        },
+        {
+         "id": 47387335,
+         "machineId": 120226,
+         "gpuName": "RTX 5090",
+         "numGpus": 1,
+         "dph": 0.7244,
+         "perGpu": 0.7244,
+         "reliability": 0.9966,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Sweden, SE",
+         "inetDown": 2278,
+         "inetUp": 860,
+         "vramGb": 31.8,
+         "cpuRamGb": 60,
+         "diskGb": 1761,
+         "pcieBw": 13.7,
+         "cudaMax": 13
+        },
+        {
+         "id": 51888123,
+         "machineId": 148036,
+         "gpuName": "RTX 5090",
+         "numGpus": 1,
+         "dph": 0.7644,
+         "perGpu": 0.7644,
+         "reliability": 0.997,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Slovakia, SK",
+         "inetDown": 1308,
+         "inetUp": 779,
+         "vramGb": 31.8,
+         "cpuRamGb": 62,
+         "diskGb": 1484,
+         "pcieBw": 55.2,
+         "cudaMax": 13.2
+        }
+       ]
+      },
+      "r98": {
+       "count": 34,
+       "minPerGpu": 0.6844,
+       "p25PerGpu": 0.8542,
+       "medianPerGpu": 1.0467,
+       "cheapest": [
+        {
+         "id": 56593057,
+         "machineId": 141399,
+         "gpuName": "RTX 5090",
+         "numGpus": 1,
+         "dph": 0.6844,
+         "perGpu": 0.6844,
+         "reliability": 0.9839,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Romania, RO",
+         "inetDown": 876,
+         "inetUp": 544,
+         "vramGb": 31.8,
+         "cpuRamGb": 47,
+         "diskGb": 134,
+         "pcieBw": 26.5,
+         "cudaMax": 13.3
+        },
+        {
+         "id": 47387335,
+         "machineId": 120226,
+         "gpuName": "RTX 5090",
+         "numGpus": 1,
+         "dph": 0.7244,
+         "perGpu": 0.7244,
+         "reliability": 0.9966,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Sweden, SE",
+         "inetDown": 2278,
+         "inetUp": 860,
+         "vramGb": 31.8,
+         "cpuRamGb": 60,
+         "diskGb": 1761,
+         "pcieBw": 13.7,
+         "cudaMax": 13
+        },
+        {
+         "id": 51888123,
+         "machineId": 148036,
+         "gpuName": "RTX 5090",
+         "numGpus": 1,
+         "dph": 0.7644,
+         "perGpu": 0.7644,
+         "reliability": 0.997,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Slovakia, SK",
+         "inetDown": 1308,
+         "inetUp": 779,
+         "vramGb": 31.8,
+         "cpuRamGb": 62,
+         "diskGb": 1484,
+         "pcieBw": 55.2,
+         "cudaMax": 13.2
+        }
+       ]
+      },
+      "dc99": {
+       "count": 1,
+       "minPerGpu": 2.0133,
+       "p25PerGpu": 2.0133,
+       "medianPerGpu": 2.0133,
+       "cheapest": [
+        {
+         "id": 49900243,
+         "machineId": 149896,
+         "gpuName": "RTX 5090",
+         "numGpus": 1,
+         "dph": 2.0133,
+         "perGpu": 2.0133,
+         "reliability": 0.9962,
+         "verified": true,
+         "datacenter": true,
+         "geo": "Czechia, CZ",
+         "inetDown": 8775,
+         "inetUp": 8548,
+         "vramGb": 31.8,
+         "cpuRamGb": 94,
+         "diskGb": 597,
+         "pcieBw": 54.1,
+         "cudaMax": 13.3
+        }
+       ]
+      },
+      "any": {
+       "count": 76,
+       "minPerGpu": 0.4444,
+       "p25PerGpu": 0.6945,
+       "medianPerGpu": 0.8559,
+       "cheapest": [
+        {
+         "id": 56805445,
+         "machineId": 35701,
+         "gpuName": "RTX 5090",
+         "numGpus": 1,
+         "dph": 0.4444,
+         "perGpu": 0.4444,
+         "reliability": 0.9781,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Japan, JP",
+         "inetDown": 488,
+         "inetUp": 79,
+         "vramGb": 31.8,
+         "cpuRamGb": 47,
+         "diskGb": 165,
+         "pcieBw": 15.8,
+         "cudaMax": 12.8
+        },
+        {
+         "id": 50131964,
+         "machineId": 56378,
+         "gpuName": "RTX 5090",
+         "numGpus": 1,
+         "dph": 0.4444,
+         "perGpu": 0.4444,
+         "reliability": 0.9892,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Slovakia, SK",
+         "inetDown": 792,
+         "inetUp": 280,
+         "vramGb": 31.8,
+         "cpuRamGb": 39,
+         "diskGb": 1220,
+         "pcieBw": 2.9,
+         "cudaMax": 13.2
+        },
+        {
+         "id": 53395400,
+         "machineId": 58482,
+         "gpuName": "RTX 5090",
+         "numGpus": 1,
+         "dph": 0.4578,
+         "perGpu": 0.4578,
+         "reliability": 0.993,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Slovakia, SK",
+         "inetDown": 741,
+         "inetUp": 281,
+         "vramGb": 31.8,
+         "cpuRamGb": 10,
+         "diskGb": 998,
+         "pcieBw": 35.2,
+         "cudaMax": 13.1
+        }
+       ]
+      }
+     },
+     "interruptible": {
+      "count": 26,
+      "minPerGpu": 0.4667,
+      "medianPerGpu": 0.6933
+     }
+    },
+    "2": {
+     "views": {
+      "r90": {
+       "count": 18,
+       "minPerGpu": 0.6015,
+       "p25PerGpu": 0.837,
+       "medianPerGpu": 1.2348,
+       "cheapest": [
+        {
+         "id": 25673352,
+         "machineId": 20955,
+         "gpuName": "RTX 5090",
+         "numGpus": 2,
+         "dph": 1.203,
+         "perGpu": 0.6015,
+         "reliability": 0.9867,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Taiwan, TW",
+         "inetDown": 726,
+         "inetUp": 536,
+         "vramGb": 31.8,
+         "cpuRamGb": 126,
+         "diskGb": 1577,
+         "pcieBw": 13.4,
+         "cudaMax": 12.9
+        },
+        {
+         "id": 47606647,
+         "machineId": 141234,
+         "gpuName": "RTX 5090",
+         "numGpus": 2,
+         "dph": 1.4711,
+         "perGpu": 0.7356,
+         "reliability": 0.9987,
+         "verified": true,
+         "datacenter": false,
+         "geo": ", CN",
+         "inetDown": 206,
+         "inetUp": 130,
+         "vramGb": 31.8,
+         "cpuRamGb": 63,
+         "diskGb": 537,
+         "pcieBw": 52.9,
+         "cudaMax": 13.2
+        },
+        {
+         "id": 57338365,
+         "machineId": 153041,
+         "gpuName": "RTX 5090",
+         "numGpus": 2,
+         "dph": 1.6563,
+         "perGpu": 0.8281,
+         "reliability": 0.9891,
+         "verified": true,
+         "datacenter": false,
+         "geo": "California, US",
+         "inetDown": 1549,
+         "inetUp": 774,
+         "vramGb": 31.8,
+         "cpuRamGb": 126,
+         "diskGb": 536,
+         "pcieBw": 53.1,
+         "cudaMax": 13
+        }
+       ]
+      },
+      "r98": {
+       "count": 15,
+       "minPerGpu": 0.6015,
+       "p25PerGpu": 0.8281,
+       "medianPerGpu": 1.4637,
+       "cheapest": [
+        {
+         "id": 25673352,
+         "machineId": 20955,
+         "gpuName": "RTX 5090",
+         "numGpus": 2,
+         "dph": 1.203,
+         "perGpu": 0.6015,
+         "reliability": 0.9867,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Taiwan, TW",
+         "inetDown": 726,
+         "inetUp": 536,
+         "vramGb": 31.8,
+         "cpuRamGb": 126,
+         "diskGb": 1577,
+         "pcieBw": 13.4,
+         "cudaMax": 12.9
+        },
+        {
+         "id": 47606647,
+         "machineId": 141234,
+         "gpuName": "RTX 5090",
+         "numGpus": 2,
+         "dph": 1.4711,
+         "perGpu": 0.7356,
+         "reliability": 0.9987,
+         "verified": true,
+         "datacenter": false,
+         "geo": ", CN",
+         "inetDown": 206,
+         "inetUp": 130,
+         "vramGb": 31.8,
+         "cpuRamGb": 63,
+         "diskGb": 537,
+         "pcieBw": 52.9,
+         "cudaMax": 13.2
+        },
+        {
+         "id": 57338365,
+         "machineId": 153041,
+         "gpuName": "RTX 5090",
+         "numGpus": 2,
+         "dph": 1.6563,
+         "perGpu": 0.8281,
+         "reliability": 0.9891,
+         "verified": true,
+         "datacenter": false,
+         "geo": "California, US",
+         "inetDown": 1549,
+         "inetUp": 774,
+         "vramGb": 31.8,
+         "cpuRamGb": 126,
+         "diskGb": 536,
+         "pcieBw": 53.1,
+         "cudaMax": 13
+        }
+       ]
+      },
+      "dc99": {
+       "count": 1,
+       "minPerGpu": 2.2214,
+       "p25PerGpu": 2.2214,
+       "medianPerGpu": 2.2214,
+       "cheapest": [
+        {
+         "id": 55590269,
+         "machineId": 44230,
+         "gpuName": "RTX 5090",
+         "numGpus": 2,
+         "dph": 4.4428,
+         "perGpu": 2.2214,
+         "reliability": 0.9958,
+         "verified": true,
+         "datacenter": true,
+         "geo": "Hungary, HU",
+         "inetDown": 7089,
+         "inetUp": 5417,
+         "vramGb": 31.8,
+         "cpuRamGb": 220,
+         "diskGb": 694,
+         "pcieBw": 22.5,
+         "cudaMax": 13.4
+        }
+       ]
+      },
+      "any": {
+       "count": 42,
+       "minPerGpu": 0.4422,
+       "p25PerGpu": 0.6689,
+       "medianPerGpu": 0.7885,
+       "cheapest": [
+        {
+         "id": 56805440,
+         "machineId": 35701,
+         "gpuName": "RTX 5090",
+         "numGpus": 2,
+         "dph": 0.8844,
+         "perGpu": 0.4422,
+         "reliability": 0.9781,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Japan, JP",
+         "inetDown": 488,
+         "inetUp": 79,
+         "vramGb": 31.8,
+         "cpuRamGb": 94,
+         "diskGb": 329,
+         "pcieBw": 15.8,
+         "cudaMax": 12.8
+        },
+        {
+         "id": 57025922,
+         "machineId": 139896,
+         "gpuName": "RTX 5090",
+         "numGpus": 2,
+         "dph": 0.9111,
+         "perGpu": 0.4556,
+         "reliability": 0.9701,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Slovakia, SK",
+         "inetDown": 771,
+         "inetUp": 279,
+         "vramGb": 31.8,
+         "cpuRamGb": 31,
+         "diskGb": 1981,
+         "pcieBw": 54.3,
+         "cudaMax": 13.1
+        },
+        {
+         "id": 32984232,
+         "machineId": 38389,
+         "gpuName": "RTX 5090",
+         "numGpus": 2,
+         "dph": 1.0444,
+         "perGpu": 0.5222,
+         "reliability": 0.9982,
+         "verified": false,
+         "datacenter": false,
+         "geo": "British Columbia, CA",
+         "inetDown": 939,
+         "inetUp": 839,
+         "vramGb": 31.8,
+         "cpuRamGb": 63,
+         "diskGb": 721,
+         "pcieBw": 27,
+         "cudaMax": 12.8
+        }
+       ]
+      }
+     }
+    },
+    "4": {
+     "views": {
+      "r90": {
+       "count": 9,
+       "minPerGpu": 0.8624,
+       "p25PerGpu": 1.0819,
+       "medianPerGpu": 1.4039,
+       "cheapest": [
+        {
+         "id": 35673878,
+         "machineId": 53714,
+         "gpuName": "RTX 5090",
+         "numGpus": 4,
+         "dph": 3.4498,
+         "perGpu": 0.8624,
+         "reliability": 0.9757,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Taiwan, TW",
+         "inetDown": 815,
+         "inetUp": 859,
+         "vramGb": 31.8,
+         "cpuRamGb": 252,
+         "diskGb": 348,
+         "pcieBw": 27,
+         "cudaMax": 13.2
+        },
+        {
+         "id": 57275290,
+         "machineId": 53527,
+         "gpuName": "RTX 5090",
+         "numGpus": 4,
+         "dph": 3.9511,
+         "perGpu": 0.9878,
+         "reliability": 0.9469,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Tennessee, US",
+         "inetDown": 861,
+         "inetUp": 735,
+         "vramGb": 31.8,
+         "cpuRamGb": 123,
+         "diskGb": 813,
+         "pcieBw": 54.9,
+         "cudaMax": 13.2
+        },
+        {
+         "id": 57198152,
+         "machineId": 140156,
+         "gpuName": "RTX 5090",
+         "numGpus": 4,
+         "dph": 4.3274,
+         "perGpu": 1.0819,
+         "reliability": 0.957,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Denmark, DK",
+         "inetDown": 2942,
+         "inetUp": 1363,
+         "vramGb": 31.8,
+         "cpuRamGb": 126,
+         "diskGb": 6082,
+         "pcieBw": 54.1,
+         "cudaMax": 13.2
+        }
+       ]
+      },
+      "r98": {
+       "count": 6,
+       "minPerGpu": 1.1928,
+       "p25PerGpu": 1.454,
+       "medianPerGpu": 1.8889,
+       "cheapest": [
+        {
+         "id": 55052609,
+         "machineId": 46302,
+         "gpuName": "RTX 5090",
+         "numGpus": 4,
+         "dph": 4.7713,
+         "perGpu": 1.1928,
+         "reliability": 0.98,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Texas, US",
+         "inetDown": 910,
+         "inetUp": 924,
+         "vramGb": 31.8,
+         "cpuRamGb": 189,
+         "diskGb": 2777,
+         "pcieBw": 13.4,
+         "cudaMax": 13
+        },
+        {
+         "id": 57010796,
+         "machineId": 8990,
+         "gpuName": "RTX 5090",
+         "numGpus": 4,
+         "dph": 5.6157,
+         "perGpu": 1.4039,
+         "reliability": 0.9924,
+         "verified": true,
+         "datacenter": false,
+         "geo": "New York, US",
+         "inetDown": 6756,
+         "inetUp": 6978,
+         "vramGb": 31.8,
+         "cpuRamGb": 503,
+         "diskGb": 5651,
+         "pcieBw": 54.2,
+         "cudaMax": 13.4
+        },
+        {
+         "id": 56464012,
+         "machineId": 140022,
+         "gpuName": "RTX 5090",
+         "numGpus": 4,
+         "dph": 6.4178,
+         "perGpu": 1.6044,
+         "reliability": 0.9986,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Norway, NO",
+         "inetDown": 941,
+         "inetUp": 939,
+         "vramGb": 31.8,
+         "cpuRamGb": 991,
+         "diskGb": 1239,
+         "pcieBw": 27,
+         "cudaMax": 13.4
+        }
+       ]
+      },
+      "dc99": {
+       "count": 2,
+       "minPerGpu": 2.1734,
+       "p25PerGpu": 2.185,
+       "medianPerGpu": 2.1967,
+       "cheapest": [
+        {
+         "id": 55590150,
+         "machineId": 40199,
+         "gpuName": "RTX 5090",
+         "numGpus": 4,
+         "dph": 8.6935,
+         "perGpu": 2.1734,
+         "reliability": 0.9914,
+         "verified": true,
+         "datacenter": true,
+         "geo": "Hungary, HU",
+         "inetDown": 5136,
+         "inetUp": 4143,
+         "vramGb": 31.8,
+         "cpuRamGb": 378,
+         "diskGb": 5328,
+         "pcieBw": 55,
+         "cudaMax": 13.4
+        },
+        {
+         "id": 55590272,
+         "machineId": 44230,
+         "gpuName": "RTX 5090",
+         "numGpus": 4,
+         "dph": 8.8797,
+         "perGpu": 2.2199,
+         "reliability": 0.9958,
+         "verified": true,
+         "datacenter": true,
+         "geo": "Hungary, HU",
+         "inetDown": 7089,
+         "inetUp": 5417,
+         "vramGb": 31.8,
+         "cpuRamGb": 441,
+         "diskGb": 1388,
+         "pcieBw": 26.6,
+         "cudaMax": 13.4
+        }
+       ]
+      },
+      "any": {
+       "count": 24,
+       "minPerGpu": 0.4411,
+       "p25PerGpu": 0.6578,
+       "medianPerGpu": 0.8651,
+       "cheapest": [
+        {
+         "id": 56805442,
+         "machineId": 35701,
+         "gpuName": "RTX 5090",
+         "numGpus": 4,
+         "dph": 1.7644,
+         "perGpu": 0.4411,
+         "reliability": 0.9781,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Japan, JP",
+         "inetDown": 488,
+         "inetUp": 79,
+         "vramGb": 31.8,
+         "cpuRamGb": 189,
+         "diskGb": 658,
+         "pcieBw": 15.8,
+         "cudaMax": 12.8
+        },
+        {
+         "id": 25614497,
+         "machineId": 24630,
+         "gpuName": "RTX 5090",
+         "numGpus": 4,
+         "dph": 2.403,
+         "perGpu": 0.6007,
+         "reliability": 0.9943,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Taiwan, TW",
+         "inetDown": 904,
+         "inetUp": 614,
+         "vramGb": 31.8,
+         "cpuRamGb": 252,
+         "diskGb": 3202,
+         "pcieBw": 27,
+         "cudaMax": 12.9
+        },
+        {
+         "id": 50423551,
+         "machineId": 137095,
+         "gpuName": "RTX 5090",
+         "numGpus": 4,
+         "dph": 2.403,
+         "perGpu": 0.6007,
+         "reliability": 0.978,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Taiwan, TW",
+         "inetDown": 866,
+         "inetUp": 594,
+         "vramGb": 31.8,
+         "cpuRamGb": 252,
+         "diskGb": 2401,
+         "pcieBw": 13.2,
+         "cudaMax": 12.9
+        }
+       ]
+      }
+     }
+    },
+    "8": {
+     "views": {
+      "r90": {
+       "count": 6,
+       "minPerGpu": 0.7739,
+       "p25PerGpu": 1.0075,
+       "medianPerGpu": 1.1134,
+       "cheapest": [
+        {
+         "id": 47049521,
+         "machineId": 49099,
+         "gpuName": "RTX 5090",
+         "numGpus": 8,
+         "dph": 6.1911,
+         "perGpu": 0.7739,
+         "reliability": 0.9922,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Ontario, CA",
+         "inetDown": 2241,
+         "inetUp": 1861,
+         "vramGb": 31.8,
+         "cpuRamGb": 283,
+         "diskGb": 5482,
+         "pcieBw": 53.8,
+         "cudaMax": 13
+        },
+        {
+         "id": 57275289,
+         "machineId": 53527,
+         "gpuName": "RTX 5090",
+         "numGpus": 8,
+         "dph": 7.8978,
+         "perGpu": 0.9872,
+         "reliability": 0.9469,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Tennessee, US",
+         "inetDown": 861,
+         "inetUp": 735,
+         "vramGb": 31.8,
+         "cpuRamGb": 247,
+         "diskGb": 1625,
+         "pcieBw": 54.9,
+         "cudaMax": 13.2
+        },
+        {
+         "id": 57146618,
+         "machineId": 49556,
+         "gpuName": "RTX 5090",
+         "numGpus": 8,
+         "dph": 8.5481,
+         "perGpu": 1.0685,
+         "reliability": 0.9951,
+         "verified": true,
+         "datacenter": false,
+         "geo": "China, CN",
+         "inetDown": 6576,
+         "inetUp": 5705,
+         "vramGb": 31.8,
+         "cpuRamGb": 293,
+         "diskGb": 4996,
+         "pcieBw": 54.2,
+         "cudaMax": 13.2
+        }
+       ]
+      },
+      "r98": {
+       "count": 4,
+       "minPerGpu": 0.7739,
+       "p25PerGpu": 0.9949,
+       "medianPerGpu": 1.1134,
+       "cheapest": [
+        {
+         "id": 47049521,
+         "machineId": 49099,
+         "gpuName": "RTX 5090",
+         "numGpus": 8,
+         "dph": 6.1911,
+         "perGpu": 0.7739,
+         "reliability": 0.9922,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Ontario, CA",
+         "inetDown": 2241,
+         "inetUp": 1861,
+         "vramGb": 31.8,
+         "cpuRamGb": 283,
+         "diskGb": 5482,
+         "pcieBw": 53.8,
+         "cudaMax": 13
+        },
+        {
+         "id": 57146618,
+         "machineId": 49556,
+         "gpuName": "RTX 5090",
+         "numGpus": 8,
+         "dph": 8.5481,
+         "perGpu": 1.0685,
+         "reliability": 0.9951,
+         "verified": true,
+         "datacenter": false,
+         "geo": "China, CN",
+         "inetDown": 6576,
+         "inetUp": 5705,
+         "vramGb": 31.8,
+         "cpuRamGb": 293,
+         "diskGb": 4996,
+         "pcieBw": 54.2,
+         "cudaMax": 13.2
+        },
+        {
+         "id": 57363244,
+         "machineId": 29909,
+         "gpuName": "RTX 5090",
+         "numGpus": 8,
+         "dph": 9.2661,
+         "perGpu": 1.1583,
+         "reliability": 0.9954,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Vietnam, VN",
+         "inetDown": 884,
+         "inetUp": 918,
+         "vramGb": 31.8,
+         "cpuRamGb": 378,
+         "diskGb": 5090,
+         "pcieBw": 27,
+         "cudaMax": 13.2
+        }
+       ]
+      },
+      "dc99": {
+       "count": 1,
+       "minPerGpu": 1.3348,
+       "p25PerGpu": 1.3348,
+       "medianPerGpu": 1.3348,
+       "cheapest": [
+        {
+         "id": 57026577,
+         "machineId": 44272,
+         "gpuName": "RTX 5090",
+         "numGpus": 8,
+         "dph": 10.6781,
+         "perGpu": 1.3348,
+         "reliability": 0.9988,
+         "verified": true,
+         "datacenter": true,
+         "geo": "India, IN",
+         "inetDown": 2045,
+         "inetUp": 1489,
+         "vramGb": 31.8,
+         "cpuRamGb": 1007,
+         "diskGb": 4311,
+         "pcieBw": 54.1,
+         "cudaMax": 13.4
+        }
+       ]
+      },
+      "any": {
+       "count": 16,
+       "minPerGpu": 0.6004,
+       "p25PerGpu": 0.7492,
+       "medianPerGpu": 0.7739,
+       "cheapest": [
+        {
+         "id": 50423548,
+         "machineId": 137095,
+         "gpuName": "RTX 5090",
+         "numGpus": 8,
+         "dph": 4.803,
+         "perGpu": 0.6004,
+         "reliability": 0.978,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Taiwan, TW",
+         "inetDown": 866,
+         "inetUp": 594,
+         "vramGb": 31.8,
+         "cpuRamGb": 504,
+         "diskGb": 4802,
+         "pcieBw": 13.2,
+         "cudaMax": 12.9
+        },
+        {
+         "id": 25614495,
+         "machineId": 24630,
+         "gpuName": "RTX 5090",
+         "numGpus": 8,
+         "dph": 4.803,
+         "perGpu": 0.6004,
+         "reliability": 0.9943,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Taiwan, TW",
+         "inetDown": 904,
+         "inetUp": 614,
+         "vramGb": 31.8,
+         "cpuRamGb": 504,
+         "diskGb": 6405,
+         "pcieBw": 26,
+         "cudaMax": 12.9
+        },
+        {
+         "id": 50461151,
+         "machineId": 34186,
+         "gpuName": "RTX 5090",
+         "numGpus": 8,
+         "dph": 4.8044,
+         "perGpu": 0.6006,
+         "reliability": 0.9919,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Taiwan, TW",
+         "inetDown": 838,
+         "inetUp": 488,
+         "vramGb": 31.8,
+         "cpuRamGb": 504,
+         "diskGb": 6437,
+         "pcieBw": 24.8,
+         "cudaMax": 13.2
+        }
+       ]
+      }
+     }
+    }
+   }
+  },
+  "rtx4090": {
+   "vastNames": [
+    "RTX 4090"
+   ],
+   "note": null,
+   "nodes": {
+    "1": {
+     "views": {
+      "r90": {
+       "count": 43,
+       "minPerGpu": 0.4044,
+       "p25PerGpu": 0.6719,
+       "medianPerGpu": 0.8148,
+       "cheapest": [
+        {
+         "id": 55136083,
+         "machineId": 43843,
+         "gpuName": "RTX 4090",
+         "numGpus": 1,
+         "dph": 0.4044,
+         "perGpu": 0.4044,
+         "reliability": 0.9988,
+         "verified": true,
+         "datacenter": true,
+         "geo": "Texas, US",
+         "inetDown": 35161,
+         "inetUp": 32994,
+         "vramGb": 24,
+         "cpuRamGb": 126,
+         "diskGb": 259,
+         "pcieBw": 21.3,
+         "cudaMax": 13
+        },
+        {
+         "id": 56375133,
+         "machineId": 19642,
+         "gpuName": "RTX 4090",
+         "numGpus": 1,
+         "dph": 0.4444,
+         "perGpu": 0.4444,
+         "reliability": 0.9948,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Spain, ES",
+         "inetDown": 2195,
+         "inetUp": 2301,
+         "vramGb": 24,
+         "cpuRamGb": 63,
+         "diskGb": 937,
+         "pcieBw": 23.5,
+         "cudaMax": 13.3
+        },
+        {
+         "id": 36332794,
+         "machineId": 103782,
+         "gpuName": "RTX 4090",
+         "numGpus": 1,
+         "dph": 0.4548,
+         "perGpu": 0.4548,
+         "reliability": 0.9742,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Japan, JP",
+         "inetDown": 1058,
+         "inetUp": 862,
+         "vramGb": 24,
+         "cpuRamGb": 47,
+         "diskGb": 573,
+         "pcieBw": 19.4,
+         "cudaMax": 13.2
+        }
+       ]
+      },
+      "r98": {
+       "count": 31,
+       "minPerGpu": 0.4044,
+       "p25PerGpu": 0.6559,
+       "medianPerGpu": 0.8148,
+       "cheapest": [
+        {
+         "id": 55136083,
+         "machineId": 43843,
+         "gpuName": "RTX 4090",
+         "numGpus": 1,
+         "dph": 0.4044,
+         "perGpu": 0.4044,
+         "reliability": 0.9988,
+         "verified": true,
+         "datacenter": true,
+         "geo": "Texas, US",
+         "inetDown": 35161,
+         "inetUp": 32994,
+         "vramGb": 24,
+         "cpuRamGb": 126,
+         "diskGb": 259,
+         "pcieBw": 21.3,
+         "cudaMax": 13
+        },
+        {
+         "id": 56375133,
+         "machineId": 19642,
+         "gpuName": "RTX 4090",
+         "numGpus": 1,
+         "dph": 0.4444,
+         "perGpu": 0.4444,
+         "reliability": 0.9948,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Spain, ES",
+         "inetDown": 2195,
+         "inetUp": 2301,
+         "vramGb": 24,
+         "cpuRamGb": 63,
+         "diskGb": 937,
+         "pcieBw": 23.5,
+         "cudaMax": 13.3
+        },
+        {
+         "id": 53774721,
+         "machineId": 17334,
+         "gpuName": "RTX 4090",
+         "numGpus": 1,
+         "dph": 0.4978,
+         "perGpu": 0.4978,
+         "reliability": 0.9947,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Australia, AU",
+         "inetDown": 1941,
+         "inetUp": 479,
+         "vramGb": 24,
+         "cpuRamGb": 26,
+         "diskGb": 181,
+         "pcieBw": 21.5,
+         "cudaMax": 13.2
+        }
+       ]
+      },
+      "dc99": {
+       "count": 2,
+       "minPerGpu": 0.4044,
+       "p25PerGpu": 0.6719,
+       "medianPerGpu": 0.9395,
+       "cheapest": [
+        {
+         "id": 55136083,
+         "machineId": 43843,
+         "gpuName": "RTX 4090",
+         "numGpus": 1,
+         "dph": 0.4044,
+         "perGpu": 0.4044,
+         "reliability": 0.9988,
+         "verified": true,
+         "datacenter": true,
+         "geo": "Texas, US",
+         "inetDown": 35161,
+         "inetUp": 32994,
+         "vramGb": 24,
+         "cpuRamGb": 126,
+         "diskGb": 259,
+         "pcieBw": 21.3,
+         "cudaMax": 13
+        },
+        {
+         "id": 53828124,
+         "machineId": 12592,
+         "gpuName": "RTX 4090",
+         "numGpus": 1,
+         "dph": 1.4746,
+         "perGpu": 1.4746,
+         "reliability": 0.9943,
+         "verified": true,
+         "datacenter": true,
+         "geo": "Hungary, HU",
+         "inetDown": 6894,
+         "inetUp": 7510,
+         "vramGb": 24,
+         "cpuRamGb": 126,
+         "diskGb": 639,
+         "pcieBw": 23.6,
+         "cudaMax": 13.2
+        }
+       ]
+      },
+      "any": {
+       "count": 87,
+       "minPerGpu": 0.1634,
+       "p25PerGpu": 0.4978,
+       "medianPerGpu": 0.6356,
+       "cheapest": [
+        {
+         "id": 55934612,
+         "machineId": 146307,
+         "gpuName": "RTX 4090",
+         "numGpus": 1,
+         "dph": 0.1634,
+         "perGpu": 0.1634,
+         "reliability": 0.8285,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Texas, US",
+         "inetDown": 0,
+         "inetUp": 0,
+         "vramGb": 24,
+         "cpuRamGb": 7,
+         "diskGb": 1441,
+         "pcieBw": 224.2,
+         "cudaMax": 13.2
+        },
+        {
+         "id": 55934658,
+         "machineId": 146313,
+         "gpuName": "RTX 4090",
+         "numGpus": 1,
+         "dph": 0.2132,
+         "perGpu": 0.2132,
+         "reliability": 0.7458,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Texas, US",
+         "inetDown": 661,
+         "inetUp": 18,
+         "vramGb": 24,
+         "cpuRamGb": 7,
+         "diskGb": 1433,
+         "pcieBw": 224.2,
+         "cudaMax": 13.2
+        },
+        {
+         "id": 56663550,
+         "machineId": 28421,
+         "gpuName": "RTX 4090",
+         "numGpus": 1,
+         "dph": 0.3511,
+         "perGpu": 0.3511,
+         "reliability": 0.9953,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Australia, AU",
+         "inetDown": 880,
+         "inetUp": 105,
+         "vramGb": 24,
+         "cpuRamGb": 126,
+         "diskGb": 317,
+         "pcieBw": 25,
+         "cudaMax": 13.1
+        }
+       ]
+      }
+     },
+     "interruptible": {
+      "count": 24,
+      "minPerGpu": 0.314,
+      "medianPerGpu": 0.5258
+     }
+    },
+    "2": {
+     "views": {
+      "r90": {
+       "count": 29,
+       "minPerGpu": 0.6037,
+       "p25PerGpu": 0.8074,
+       "medianPerGpu": 0.895,
+       "cheapest": [
+        {
+         "id": 49038899,
+         "machineId": 29567,
+         "gpuName": "RTX 4090",
+         "numGpus": 2,
+         "dph": 1.2074,
+         "perGpu": 0.6037,
+         "reliability": 0.9941,
+         "verified": true,
+         "datacenter": false,
+         "geo": "North Macedonia, MK",
+         "inetDown": 862,
+         "inetUp": 845,
+         "vramGb": 24,
+         "cpuRamGb": 50,
+         "diskGb": 1195,
+         "pcieBw": 25.6,
+         "cudaMax": 13
+        },
+        {
+         "id": 57354088,
+         "machineId": 153528,
+         "gpuName": "RTX 4090",
+         "numGpus": 2,
+         "dph": 1.3393,
+         "perGpu": 0.6696,
+         "reliability": 0.9597,
+         "verified": true,
+         "datacenter": false,
+         "geo": "South Korea, KR",
+         "inetDown": 714,
+         "inetUp": 533,
+         "vramGb": 24,
+         "cpuRamGb": 61,
+         "diskGb": 489,
+         "pcieBw": 12.7,
+         "cudaMax": 13.4
+        },
+        {
+         "id": 55097261,
+         "machineId": 153628,
+         "gpuName": "RTX 4090",
+         "numGpus": 2,
+         "dph": 1.3407,
+         "perGpu": 0.6704,
+         "reliability": 0.9837,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Texas, US",
+         "inetDown": 275,
+         "inetUp": 145,
+         "vramGb": 48,
+         "cpuRamGb": 126,
+         "diskGb": 592,
+         "pcieBw": 24.2,
+         "cudaMax": 13.4
+        }
+       ]
+      },
+      "r98": {
+       "count": 24,
+       "minPerGpu": 0.6037,
+       "p25PerGpu": 0.8446,
+       "medianPerGpu": 0.895,
+       "cheapest": [
+        {
+         "id": 49038899,
+         "machineId": 29567,
+         "gpuName": "RTX 4090",
+         "numGpus": 2,
+         "dph": 1.2074,
+         "perGpu": 0.6037,
+         "reliability": 0.9941,
+         "verified": true,
+         "datacenter": false,
+         "geo": "North Macedonia, MK",
+         "inetDown": 862,
+         "inetUp": 845,
+         "vramGb": 24,
+         "cpuRamGb": 50,
+         "diskGb": 1195,
+         "pcieBw": 25.6,
+         "cudaMax": 13
+        },
+        {
+         "id": 55097261,
+         "machineId": 153628,
+         "gpuName": "RTX 4090",
+         "numGpus": 2,
+         "dph": 1.3407,
+         "perGpu": 0.6704,
+         "reliability": 0.9837,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Texas, US",
+         "inetDown": 275,
+         "inetUp": 145,
+         "vramGb": 48,
+         "cpuRamGb": 126,
+         "diskGb": 592,
+         "pcieBw": 24.2,
+         "cudaMax": 13.4
+        },
+        {
+         "id": 57147194,
+         "machineId": 139047,
+         "gpuName": "RTX 4090",
+         "numGpus": 2,
+         "dph": 1.6148,
+         "perGpu": 0.8074,
+         "reliability": 0.9923,
+         "verified": true,
+         "datacenter": false,
+         "geo": "China, CN",
+         "inetDown": 8203,
+         "inetUp": 6311,
+         "vramGb": 48,
+         "cpuRamGb": 112,
+         "diskGb": 2326,
+         "pcieBw": 12.7,
+         "cudaMax": 13.2
+        }
+       ]
+      },
+      "dc99": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "any": {
+       "count": 53,
+       "minPerGpu": 0.3356,
+       "p25PerGpu": 0.5126,
+       "medianPerGpu": 0.8074,
+       "cheapest": [
+        {
+         "id": 57270861,
+         "machineId": 154200,
+         "gpuName": "RTX 4090",
+         "numGpus": 2,
+         "dph": 0.6711,
+         "perGpu": 0.3356,
+         "reliability": 0.5588,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Romania, RO",
+         "inetDown": 581,
+         "inetUp": 611,
+         "vramGb": 24,
+         "cpuRamGb": 101,
+         "diskGb": 625,
+         "pcieBw": 24,
+         "cudaMax": 13
+        },
+        {
+         "id": 25814726,
+         "machineId": 14626,
+         "gpuName": "RTX 4090",
+         "numGpus": 2,
+         "dph": 0.8044,
+         "perGpu": 0.4022,
+         "reliability": 0.9967,
+         "verified": false,
+         "datacenter": true,
+         "geo": "Iceland, IS",
+         "inetDown": 611,
+         "inetUp": 489,
+         "vramGb": 24,
+         "cpuRamGb": 201,
+         "diskGb": 470,
+         "pcieBw": 25.5,
+         "cudaMax": 12.2
+        },
+        {
+         "id": 45473514,
+         "machineId": 38442,
+         "gpuName": "RTX 4090",
+         "numGpus": 2,
+         "dph": 0.8573,
+         "perGpu": 0.4286,
+         "reliability": 0.9975,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Japan, JP",
+         "inetDown": 315,
+         "inetUp": 293,
+         "vramGb": 48,
+         "cpuRamGb": 189,
+         "diskGb": 1366,
+         "pcieBw": 22.9,
+         "cudaMax": 12.8
+        }
+       ]
+      }
+     }
+    },
+    "4": {
+     "views": {
+      "r90": {
+       "count": 14,
+       "minPerGpu": 0.8037,
+       "p25PerGpu": 0.8166,
+       "medianPerGpu": 0.8935,
+       "cheapest": [
+        {
+         "id": 56436609,
+         "machineId": 57250,
+         "gpuName": "RTX 4090",
+         "numGpus": 4,
+         "dph": 3.2148,
+         "perGpu": 0.8037,
+         "reliability": 0.9803,
+         "verified": true,
+         "datacenter": false,
+         "geo": "China, CN",
+         "inetDown": 9079,
+         "inetUp": 6903,
+         "vramGb": 48,
+         "cpuRamGb": 199,
+         "diskGb": 2002,
+         "pcieBw": 18.8,
+         "cudaMax": 13.2
+        },
+        {
+         "id": 57147101,
+         "machineId": 61353,
+         "gpuName": "RTX 4090",
+         "numGpus": 4,
+         "dph": 3.2148,
+         "perGpu": 0.8037,
+         "reliability": 0.9662,
+         "verified": true,
+         "datacenter": false,
+         "geo": "China, CN",
+         "inetDown": 5836,
+         "inetUp": 3774,
+         "vramGb": 48,
+         "cpuRamGb": 252,
+         "diskGb": 2377,
+         "pcieBw": 12.7,
+         "cudaMax": 13.2
+        },
+        {
+         "id": 57147190,
+         "machineId": 139047,
+         "gpuName": "RTX 4090",
+         "numGpus": 4,
+         "dph": 3.2148,
+         "perGpu": 0.8037,
+         "reliability": 0.9923,
+         "verified": true,
+         "datacenter": false,
+         "geo": "China, CN",
+         "inetDown": 8203,
+         "inetUp": 6311,
+         "vramGb": 48,
+         "cpuRamGb": 225,
+         "diskGb": 4653,
+         "pcieBw": 12.5,
+         "cudaMax": 13.2
+        }
+       ]
+      },
+      "r98": {
+       "count": 11,
+       "minPerGpu": 0.8037,
+       "p25PerGpu": 0.8744,
+       "medianPerGpu": 0.8935,
+       "cheapest": [
+        {
+         "id": 56436609,
+         "machineId": 57250,
+         "gpuName": "RTX 4090",
+         "numGpus": 4,
+         "dph": 3.2148,
+         "perGpu": 0.8037,
+         "reliability": 0.9803,
+         "verified": true,
+         "datacenter": false,
+         "geo": "China, CN",
+         "inetDown": 9079,
+         "inetUp": 6903,
+         "vramGb": 48,
+         "cpuRamGb": 199,
+         "diskGb": 2002,
+         "pcieBw": 18.8,
+         "cudaMax": 13.2
+        },
+        {
+         "id": 57147190,
+         "machineId": 139047,
+         "gpuName": "RTX 4090",
+         "numGpus": 4,
+         "dph": 3.2148,
+         "perGpu": 0.8037,
+         "reliability": 0.9923,
+         "verified": true,
+         "datacenter": false,
+         "geo": "China, CN",
+         "inetDown": 8203,
+         "inetUp": 6311,
+         "vramGb": 48,
+         "cpuRamGb": 225,
+         "diskGb": 4653,
+         "pcieBw": 12.5,
+         "cudaMax": 13.2
+        },
+        {
+         "id": 41528116,
+         "machineId": 16403,
+         "gpuName": "RTX 4090",
+         "numGpus": 4,
+         "dph": 3.4207,
+         "perGpu": 0.8552,
+         "reliability": 0.9959,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Hungary, HU",
+         "inetDown": 7553,
+         "inetUp": 3897,
+         "vramGb": 24,
+         "cpuRamGb": 252,
+         "diskGb": 1124,
+         "pcieBw": 12.7,
+         "cudaMax": 13
+        }
+       ]
+      },
+      "dc99": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "any": {
+       "count": 30,
+       "minPerGpu": 0.3344,
+       "p25PerGpu": 0.5144,
+       "medianPerGpu": 0.803,
+       "cheapest": [
+        {
+         "id": 57270859,
+         "machineId": 154200,
+         "gpuName": "RTX 4090",
+         "numGpus": 4,
+         "dph": 1.3378,
+         "perGpu": 0.3344,
+         "reliability": 0.5588,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Romania, RO",
+         "inetDown": 581,
+         "inetUp": 611,
+         "vramGb": 24,
+         "cpuRamGb": 201,
+         "diskGb": 1250,
+         "pcieBw": 24,
+         "cudaMax": 13
+        },
+        {
+         "id": 25814728,
+         "machineId": 14626,
+         "gpuName": "RTX 4090",
+         "numGpus": 4,
+         "dph": 1.6044,
+         "perGpu": 0.4011,
+         "reliability": 0.9967,
+         "verified": false,
+         "datacenter": true,
+         "geo": "Iceland, IS",
+         "inetDown": 611,
+         "inetUp": 489,
+         "vramGb": 24,
+         "cpuRamGb": 403,
+         "diskGb": 940,
+         "pcieBw": 25.5,
+         "cudaMax": 12.2
+        },
+        {
+         "id": 55515330,
+         "machineId": 139782,
+         "gpuName": "RTX 4090",
+         "numGpus": 4,
+         "dph": 1.7644,
+         "perGpu": 0.4411,
+         "reliability": 0.9961,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Taiwan, TW",
+         "inetDown": 809,
+         "inetUp": 610,
+         "vramGb": 24,
+         "cpuRamGb": 280,
+         "diskGb": 1346,
+         "pcieBw": 12.4,
+         "cudaMax": 13
+        }
+       ]
+      }
+     }
+    },
+    "8": {
+     "views": {
+      "r90": {
+       "count": 2,
+       "minPerGpu": 0.8927,
+       "p25PerGpu": 1.3365,
+       "medianPerGpu": 1.7804,
+       "cheapest": [
+        {
+         "id": 55530380,
+         "machineId": 838,
+         "gpuName": "RTX 4090",
+         "numGpus": 8,
+         "dph": 7.1419,
+         "perGpu": 0.8927,
+         "reliability": 0.9977,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Norway, NO",
+         "inetDown": 736,
+         "inetUp": 770,
+         "vramGb": 24,
+         "cpuRamGb": 251,
+         "diskGb": 1487,
+         "pcieBw": 23.3,
+         "cudaMax": 13
+        },
+        {
+         "id": 51996805,
+         "machineId": 147859,
+         "gpuName": "RTX 4090",
+         "numGpus": 8,
+         "dph": 21.3452,
+         "perGpu": 2.6681,
+         "reliability": 0.9937,
+         "verified": true,
+         "datacenter": false,
+         "geo": "California, US",
+         "inetDown": 793,
+         "inetUp": 782,
+         "vramGb": 24,
+         "cpuRamGb": 378,
+         "diskGb": 1433,
+         "pcieBw": 19.1,
+         "cudaMax": 13
+        }
+       ]
+      },
+      "r98": {
+       "count": 2,
+       "minPerGpu": 0.8927,
+       "p25PerGpu": 1.3365,
+       "medianPerGpu": 1.7804,
+       "cheapest": [
+        {
+         "id": 55530380,
+         "machineId": 838,
+         "gpuName": "RTX 4090",
+         "numGpus": 8,
+         "dph": 7.1419,
+         "perGpu": 0.8927,
+         "reliability": 0.9977,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Norway, NO",
+         "inetDown": 736,
+         "inetUp": 770,
+         "vramGb": 24,
+         "cpuRamGb": 251,
+         "diskGb": 1487,
+         "pcieBw": 23.3,
+         "cudaMax": 13
+        },
+        {
+         "id": 51996805,
+         "machineId": 147859,
+         "gpuName": "RTX 4090",
+         "numGpus": 8,
+         "dph": 21.3452,
+         "perGpu": 2.6681,
+         "reliability": 0.9937,
+         "verified": true,
+         "datacenter": false,
+         "geo": "California, US",
+         "inetDown": 793,
+         "inetUp": 782,
+         "vramGb": 24,
+         "cpuRamGb": 378,
+         "diskGb": 1433,
+         "pcieBw": 19.1,
+         "cudaMax": 13
+        }
+       ]
+      },
+      "dc99": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "any": {
+       "count": 9,
+       "minPerGpu": 0.4015,
+       "p25PerGpu": 0.4406,
+       "medianPerGpu": 0.8007,
+       "cheapest": [
+        {
+         "id": 57306300,
+         "machineId": 144219,
+         "gpuName": "RTX 4090",
+         "numGpus": 8,
+         "dph": 3.2119,
+         "perGpu": 0.4015,
+         "reliability": 0.9809,
+         "verified": false,
+         "datacenter": false,
+         "geo": "California, US",
+         "inetDown": 738,
+         "inetUp": 599,
+         "vramGb": 24,
+         "cpuRamGb": 504,
+         "diskGb": 2211,
+         "pcieBw": 18.9,
+         "cudaMax": 13
+        },
+        {
+         "id": 55515331,
+         "machineId": 139782,
+         "gpuName": "RTX 4090",
+         "numGpus": 8,
+         "dph": 3.5244,
+         "perGpu": 0.4406,
+         "reliability": 0.9961,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Taiwan, TW",
+         "inetDown": 809,
+         "inetUp": 610,
+         "vramGb": 24,
+         "cpuRamGb": 560,
+         "diskGb": 2692,
+         "pcieBw": 12.4,
+         "cudaMax": 13
+        },
+        {
+         "id": 47385410,
+         "machineId": 28369,
+         "gpuName": "RTX 4090",
+         "numGpus": 8,
+         "dph": 3.5244,
+         "perGpu": 0.4406,
+         "reliability": 0.9355,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Germany, DE",
+         "inetDown": 574,
+         "inetUp": 564,
+         "vramGb": 24,
+         "cpuRamGb": 448,
+         "diskGb": 2134,
+         "pcieBw": 21.6,
+         "cudaMax": 13.1
+        }
+       ]
+      }
+     }
+    }
+   }
+  },
+  "l40s": {
+   "vastNames": [
+    "L40S"
+   ],
+   "note": null,
+   "nodes": {
+    "1": {
+     "views": {
+      "r90": {
+       "count": 5,
+       "minPerGpu": 0.803,
+       "p25PerGpu": 0.8044,
+       "medianPerGpu": 0.8074,
+       "cheapest": [
+        {
+         "id": 38575015,
+         "machineId": 39563,
+         "gpuName": "L40S",
+         "numGpus": 1,
+         "dph": 0.803,
+         "perGpu": 0.803,
+         "reliability": 0.9927,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Taiwan, TW",
+         "inetDown": 728,
+         "inetUp": 565,
+         "vramGb": 45,
+         "cpuRamGb": 252,
+         "diskGb": 234,
+         "pcieBw": 25.7,
+         "cudaMax": 12.8
+        },
+        {
+         "id": 29679183,
+         "machineId": 35172,
+         "gpuName": "L40S",
+         "numGpus": 1,
+         "dph": 0.8044,
+         "perGpu": 0.8044,
+         "reliability": 0.9986,
+         "verified": true,
+         "datacenter": true,
+         "geo": "Slovenia, SI",
+         "inetDown": 4251,
+         "inetUp": 4313,
+         "vramGb": 45,
+         "cpuRamGb": 189,
+         "diskGb": 3008,
+         "pcieBw": 25.6,
+         "cudaMax": 12.7
+        },
+        {
+         "id": 57357261,
+         "machineId": 27442,
+         "gpuName": "L40S",
+         "numGpus": 1,
+         "dph": 0.8074,
+         "perGpu": 0.8074,
+         "reliability": 0.9944,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Finland, FI",
+         "inetDown": 941,
+         "inetUp": 940,
+         "vramGb": 45,
+         "cpuRamGb": 126,
+         "diskGb": 1391,
+         "pcieBw": 25.6,
+         "cudaMax": 12.6
+        }
+       ]
+      },
+      "r98": {
+       "count": 5,
+       "minPerGpu": 0.803,
+       "p25PerGpu": 0.8044,
+       "medianPerGpu": 0.8074,
+       "cheapest": [
+        {
+         "id": 38575015,
+         "machineId": 39563,
+         "gpuName": "L40S",
+         "numGpus": 1,
+         "dph": 0.803,
+         "perGpu": 0.803,
+         "reliability": 0.9927,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Taiwan, TW",
+         "inetDown": 728,
+         "inetUp": 565,
+         "vramGb": 45,
+         "cpuRamGb": 252,
+         "diskGb": 234,
+         "pcieBw": 25.7,
+         "cudaMax": 12.8
+        },
+        {
+         "id": 29679183,
+         "machineId": 35172,
+         "gpuName": "L40S",
+         "numGpus": 1,
+         "dph": 0.8044,
+         "perGpu": 0.8044,
+         "reliability": 0.9986,
+         "verified": true,
+         "datacenter": true,
+         "geo": "Slovenia, SI",
+         "inetDown": 4251,
+         "inetUp": 4313,
+         "vramGb": 45,
+         "cpuRamGb": 189,
+         "diskGb": 3008,
+         "pcieBw": 25.6,
+         "cudaMax": 12.7
+        },
+        {
+         "id": 57357261,
+         "machineId": 27442,
+         "gpuName": "L40S",
+         "numGpus": 1,
+         "dph": 0.8074,
+         "perGpu": 0.8074,
+         "reliability": 0.9944,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Finland, FI",
+         "inetDown": 941,
+         "inetUp": 940,
+         "vramGb": 45,
+         "cpuRamGb": 126,
+         "diskGb": 1391,
+         "pcieBw": 25.6,
+         "cudaMax": 12.6
+        }
+       ]
+      },
+      "dc99": {
+       "count": 1,
+       "minPerGpu": 0.8044,
+       "p25PerGpu": 0.8044,
+       "medianPerGpu": 0.8044,
+       "cheapest": [
+        {
+         "id": 29679183,
+         "machineId": 35172,
+         "gpuName": "L40S",
+         "numGpus": 1,
+         "dph": 0.8044,
+         "perGpu": 0.8044,
+         "reliability": 0.9986,
+         "verified": true,
+         "datacenter": true,
+         "geo": "Slovenia, SI",
+         "inetDown": 4251,
+         "inetUp": 4313,
+         "vramGb": 45,
+         "cpuRamGb": 189,
+         "diskGb": 3008,
+         "pcieBw": 25.6,
+         "cudaMax": 12.7
+        }
+       ]
+      },
+      "any": {
+       "count": 10,
+       "minPerGpu": 0.4207,
+       "p25PerGpu": 0.4841,
+       "medianPerGpu": 0.7371,
+       "cheapest": [
+        {
+         "id": 57316443,
+         "machineId": 154935,
+         "gpuName": "L40S",
+         "numGpus": 1,
+         "dph": 0.4207,
+         "perGpu": 0.4207,
+         "reliability": 0.7724,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Quebec, CA",
+         "inetDown": 704,
+         "inetUp": 695,
+         "vramGb": 45,
+         "cpuRamGb": 378,
+         "diskGb": 735,
+         "pcieBw": 25.2,
+         "cudaMax": 13.2
+        },
+        {
+         "id": 56765281,
+         "machineId": 154486,
+         "gpuName": "L40S",
+         "numGpus": 1,
+         "dph": 0.4244,
+         "perGpu": 0.4244,
+         "reliability": 0.96,
+         "verified": false,
+         "datacenter": false,
+         "geo": "District of Columbia, US",
+         "inetDown": 464,
+         "inetUp": 152,
+         "vramGb": 45,
+         "cpuRamGb": 118,
+         "diskGb": 347,
+         "pcieBw": 23.9,
+         "cudaMax": 13.2
+        },
+        {
+         "id": 57268008,
+         "machineId": 154930,
+         "gpuName": "L40S",
+         "numGpus": 1,
+         "dph": 0.4311,
+         "perGpu": 0.4311,
+         "reliability": 0.828,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Texas, US",
+         "inetDown": 2977,
+         "inetUp": 213,
+         "vramGb": 45,
+         "cpuRamGb": 118,
+         "diskGb": 921,
+         "pcieBw": 23.8,
+         "cudaMax": 13.2
+        }
+       ]
+      }
+     },
+     "interruptible": {
+      "count": 3,
+      "minPerGpu": 0.4667,
+      "medianPerGpu": 0.6
+     }
+    },
+    "2": {
+     "views": {
+      "r90": {
+       "count": 4,
+       "minPerGpu": 0.8015,
+       "p25PerGpu": 0.8015,
+       "medianPerGpu": 0.8015,
+       "cheapest": [
+        {
+         "id": 29421720,
+         "machineId": 39564,
+         "gpuName": "L40S",
+         "numGpus": 2,
+         "dph": 1.603,
+         "perGpu": 0.8015,
+         "reliability": 0.9669,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Taiwan, TW",
+         "inetDown": 804,
+         "inetUp": 517,
+         "vramGb": 45,
+         "cpuRamGb": 504,
+         "diskGb": 235,
+         "pcieBw": 25.5,
+         "cudaMax": 12.8
+        },
+        {
+         "id": 25918209,
+         "machineId": 39568,
+         "gpuName": "L40S",
+         "numGpus": 2,
+         "dph": 1.603,
+         "perGpu": 0.8015,
+         "reliability": 0.9915,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Taiwan, TW",
+         "inetDown": 793,
+         "inetUp": 613,
+         "vramGb": 45,
+         "cpuRamGb": 504,
+         "diskGb": 384,
+         "pcieBw": 25.4,
+         "cudaMax": 12.8
+        },
+        {
+         "id": 29421718,
+         "machineId": 39564,
+         "gpuName": "L40S",
+         "numGpus": 2,
+         "dph": 1.603,
+         "perGpu": 0.8015,
+         "reliability": 0.9669,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Taiwan, TW",
+         "inetDown": 804,
+         "inetUp": 517,
+         "vramGb": 45,
+         "cpuRamGb": 504,
+         "diskGb": 235,
+         "pcieBw": 25.6,
+         "cudaMax": 12.8
+        }
+       ]
+      },
+      "r98": {
+       "count": 2,
+       "minPerGpu": 0.8015,
+       "p25PerGpu": 0.802,
+       "medianPerGpu": 0.8026,
+       "cheapest": [
+        {
+         "id": 25918209,
+         "machineId": 39568,
+         "gpuName": "L40S",
+         "numGpus": 2,
+         "dph": 1.603,
+         "perGpu": 0.8015,
+         "reliability": 0.9915,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Taiwan, TW",
+         "inetDown": 793,
+         "inetUp": 613,
+         "vramGb": 45,
+         "cpuRamGb": 504,
+         "diskGb": 384,
+         "pcieBw": 25.4,
+         "cudaMax": 12.8
+        },
+        {
+         "id": 57357266,
+         "machineId": 27442,
+         "gpuName": "L40S",
+         "numGpus": 2,
+         "dph": 1.6074,
+         "perGpu": 0.8037,
+         "reliability": 0.9944,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Finland, FI",
+         "inetDown": 941,
+         "inetUp": 940,
+         "vramGb": 45,
+         "cpuRamGb": 252,
+         "diskGb": 2782,
+         "pcieBw": 25.6,
+         "cudaMax": 12.6
+        }
+       ]
+      },
+      "dc99": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "any": {
+       "count": 8,
+       "minPerGpu": 0.4222,
+       "p25PerGpu": 0.4589,
+       "medianPerGpu": 0.7215,
+       "cheapest": [
+        {
+         "id": 56765280,
+         "machineId": 154486,
+         "gpuName": "L40S",
+         "numGpus": 2,
+         "dph": 0.8444,
+         "perGpu": 0.4222,
+         "reliability": 0.96,
+         "verified": false,
+         "datacenter": false,
+         "geo": "District of Columbia, US",
+         "inetDown": 464,
+         "inetUp": 152,
+         "vramGb": 45,
+         "cpuRamGb": 236,
+         "diskGb": 694,
+         "pcieBw": 23.8,
+         "cudaMax": 13.2
+        },
+        {
+         "id": 57268007,
+         "machineId": 154930,
+         "gpuName": "L40S",
+         "numGpus": 2,
+         "dph": 0.8578,
+         "perGpu": 0.4289,
+         "reliability": 0.828,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Texas, US",
+         "inetDown": 2977,
+         "inetUp": 213,
+         "vramGb": 45,
+         "cpuRamGb": 236,
+         "diskGb": 1842,
+         "pcieBw": 23.7,
+         "cudaMax": 13.2
+        },
+        {
+         "id": 57312356,
+         "machineId": 154812,
+         "gpuName": "L40S",
+         "numGpus": 2,
+         "dph": 0.9378,
+         "perGpu": 0.4689,
+         "reliability": 0.9231,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Taiwan, TW",
+         "inetDown": 250,
+         "inetUp": 246,
+         "vramGb": 45,
+         "cpuRamGb": 503,
+         "diskGb": 614,
+         "pcieBw": 23.8,
+         "cudaMax": 13.2
+        }
+       ]
+      }
+     }
+    },
+    "4": {
+     "views": {
+      "r90": {
+       "count": 2,
+       "minPerGpu": 0.8007,
+       "p25PerGpu": 0.8007,
+       "medianPerGpu": 0.8007,
+       "cheapest": [
+        {
+         "id": 29421719,
+         "machineId": 39564,
+         "gpuName": "L40S",
+         "numGpus": 4,
+         "dph": 3.203,
+         "perGpu": 0.8007,
+         "reliability": 0.9669,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Taiwan, TW",
+         "inetDown": 804,
+         "inetUp": 517,
+         "vramGb": 45,
+         "cpuRamGb": 1008,
+         "diskGb": 469,
+         "pcieBw": 25.5,
+         "cudaMax": 12.8
+        },
+        {
+         "id": 35897695,
+         "machineId": 91594,
+         "gpuName": "L40S",
+         "numGpus": 4,
+         "dph": 3.203,
+         "perGpu": 0.8007,
+         "reliability": 0.9976,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Taiwan, TW",
+         "inetDown": 699,
+         "inetUp": 519,
+         "vramGb": 45,
+         "cpuRamGb": 1008,
+         "diskGb": 820,
+         "pcieBw": 25.6,
+         "cudaMax": 13
+        }
+       ]
+      },
+      "r98": {
+       "count": 1,
+       "minPerGpu": 0.8007,
+       "p25PerGpu": 0.8007,
+       "medianPerGpu": 0.8007,
+       "cheapest": [
+        {
+         "id": 35897695,
+         "machineId": 91594,
+         "gpuName": "L40S",
+         "numGpus": 4,
+         "dph": 3.203,
+         "perGpu": 0.8007,
+         "reliability": 0.9976,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Taiwan, TW",
+         "inetDown": 699,
+         "inetUp": 519,
+         "vramGb": 45,
+         "cpuRamGb": 1008,
+         "diskGb": 820,
+         "pcieBw": 25.6,
+         "cudaMax": 13
+        }
+       ]
+      },
+      "dc99": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "any": {
+       "count": 5,
+       "minPerGpu": 0.4674,
+       "p25PerGpu": 0.4674,
+       "medianPerGpu": 0.6407,
+       "cheapest": [
+        {
+         "id": 38549111,
+         "machineId": 136653,
+         "gpuName": "L40S",
+         "numGpus": 4,
+         "dph": 1.8696,
+         "perGpu": 0.4674,
+         "reliability": 0.9947,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Japan, JP",
+         "inetDown": 350,
+         "inetUp": 452,
+         "vramGb": 45,
+         "cpuRamGb": 503,
+         "diskGb": 3098,
+         "pcieBw": 25.7,
+         "cudaMax": 13.3
+        },
+        {
+         "id": 37895891,
+         "machineId": 119377,
+         "gpuName": "L40S",
+         "numGpus": 4,
+         "dph": 1.8696,
+         "perGpu": 0.4674,
+         "reliability": 0.993,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Japan, JP",
+         "inetDown": 226,
+         "inetUp": 366,
+         "vramGb": 45,
+         "cpuRamGb": 252,
+         "diskGb": 1528,
+         "pcieBw": 25.7,
+         "cudaMax": 13.2
+        },
+        {
+         "id": 55476134,
+         "machineId": 153488,
+         "gpuName": "L40S",
+         "numGpus": 4,
+         "dph": 2.563,
+         "perGpu": 0.6407,
+         "reliability": 0.967,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Taiwan, TW",
+         "inetDown": 710,
+         "inetUp": 604,
+         "vramGb": 45,
+         "cpuRamGb": 1008,
+         "diskGb": 1563,
+         "pcieBw": 25.1,
+         "cudaMax": 13
+        }
+       ]
+      }
+     }
+    },
+    "8": {
+     "views": {
+      "r90": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "r98": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "dc99": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "any": {
+       "count": 1,
+       "minPerGpu": 0.6404,
+       "p25PerGpu": 0.6404,
+       "medianPerGpu": 0.6404,
+       "cheapest": [
+        {
+         "id": 55476140,
+         "machineId": 153488,
+         "gpuName": "L40S",
+         "numGpus": 8,
+         "dph": 5.123,
+         "perGpu": 0.6404,
+         "reliability": 0.967,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Taiwan, TW",
+         "inetDown": 710,
+         "inetUp": 604,
+         "vramGb": 45,
+         "cpuRamGb": 2015,
+         "diskGb": 3127,
+         "pcieBw": 25.7,
+         "cudaMax": 13
+        }
+       ]
+      }
+     }
+    }
+   }
+  },
+  "h100": {
+   "vastNames": [
+    "H100 SXM"
+   ],
+   "note": "SXM only; PCIe and NVL excluded",
+   "nodes": {
+    "1": {
+     "views": {
+      "r90": {
+       "count": 2,
+       "minPerGpu": 3.8774,
+       "p25PerGpu": 4.5108,
+       "medianPerGpu": 5.1443,
+       "cheapest": [
+        {
+         "id": 54871494,
+         "machineId": 149805,
+         "gpuName": "H100 SXM",
+         "numGpus": 1,
+         "dph": 3.8774,
+         "perGpu": 3.8774,
+         "reliability": 0.9926,
+         "verified": true,
+         "datacenter": true,
+         "geo": "Czechia, CZ",
+         "inetDown": 7915,
+         "inetUp": 5463,
+         "vramGb": 79.6,
+         "cpuRamGb": 126,
+         "diskGb": 1147,
+         "pcieBw": 52.8,
+         "cudaMax": 13.3
+        },
+        {
+         "id": 36346704,
+         "machineId": 57753,
+         "gpuName": "H100 SXM",
+         "numGpus": 1,
+         "dph": 6.4111,
+         "perGpu": 6.4111,
+         "reliability": 0.9985,
+         "verified": true,
+         "datacenter": false,
+         "geo": ", US",
+         "inetDown": 3554,
+         "inetUp": 2029,
+         "vramGb": 79.6,
+         "cpuRamGb": 221,
+         "diskGb": 2186,
+         "pcieBw": 52.8,
+         "cudaMax": 13
+        }
+       ]
+      },
+      "r98": {
+       "count": 2,
+       "minPerGpu": 3.8774,
+       "p25PerGpu": 4.5108,
+       "medianPerGpu": 5.1443,
+       "cheapest": [
+        {
+         "id": 54871494,
+         "machineId": 149805,
+         "gpuName": "H100 SXM",
+         "numGpus": 1,
+         "dph": 3.8774,
+         "perGpu": 3.8774,
+         "reliability": 0.9926,
+         "verified": true,
+         "datacenter": true,
+         "geo": "Czechia, CZ",
+         "inetDown": 7915,
+         "inetUp": 5463,
+         "vramGb": 79.6,
+         "cpuRamGb": 126,
+         "diskGb": 1147,
+         "pcieBw": 52.8,
+         "cudaMax": 13.3
+        },
+        {
+         "id": 36346704,
+         "machineId": 57753,
+         "gpuName": "H100 SXM",
+         "numGpus": 1,
+         "dph": 6.4111,
+         "perGpu": 6.4111,
+         "reliability": 0.9985,
+         "verified": true,
+         "datacenter": false,
+         "geo": ", US",
+         "inetDown": 3554,
+         "inetUp": 2029,
+         "vramGb": 79.6,
+         "cpuRamGb": 221,
+         "diskGb": 2186,
+         "pcieBw": 52.8,
+         "cudaMax": 13
+        }
+       ]
+      },
+      "dc99": {
+       "count": 1,
+       "minPerGpu": 3.8774,
+       "p25PerGpu": 3.8774,
+       "medianPerGpu": 3.8774,
+       "cheapest": [
+        {
+         "id": 54871494,
+         "machineId": 149805,
+         "gpuName": "H100 SXM",
+         "numGpus": 1,
+         "dph": 3.8774,
+         "perGpu": 3.8774,
+         "reliability": 0.9926,
+         "verified": true,
+         "datacenter": true,
+         "geo": "Czechia, CZ",
+         "inetDown": 7915,
+         "inetUp": 5463,
+         "vramGb": 79.6,
+         "cpuRamGb": 126,
+         "diskGb": 1147,
+         "pcieBw": 52.8,
+         "cudaMax": 13.3
+        }
+       ]
+      },
+      "any": {
+       "count": 3,
+       "minPerGpu": 2.403,
+       "p25PerGpu": 3.1402,
+       "medianPerGpu": 3.8774,
+       "cheapest": [
+        {
+         "id": 57299550,
+         "machineId": 154066,
+         "gpuName": "H100 SXM",
+         "numGpus": 1,
+         "dph": 2.403,
+         "perGpu": 2.403,
+         "reliability": 0.9717,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Japan, JP",
+         "inetDown": 637,
+         "inetUp": 61,
+         "vramGb": 79.6,
+         "cpuRamGb": 252,
+         "diskGb": 558,
+         "pcieBw": 52.9,
+         "cudaMax": 13.4
+        },
+        {
+         "id": 54871494,
+         "machineId": 149805,
+         "gpuName": "H100 SXM",
+         "numGpus": 1,
+         "dph": 3.8774,
+         "perGpu": 3.8774,
+         "reliability": 0.9926,
+         "verified": true,
+         "datacenter": true,
+         "geo": "Czechia, CZ",
+         "inetDown": 7915,
+         "inetUp": 5463,
+         "vramGb": 79.6,
+         "cpuRamGb": 126,
+         "diskGb": 1147,
+         "pcieBw": 52.8,
+         "cudaMax": 13.3
+        },
+        {
+         "id": 36346704,
+         "machineId": 57753,
+         "gpuName": "H100 SXM",
+         "numGpus": 1,
+         "dph": 6.4111,
+         "perGpu": 6.4111,
+         "reliability": 0.9985,
+         "verified": true,
+         "datacenter": false,
+         "geo": ", US",
+         "inetDown": 3554,
+         "inetUp": 2029,
+         "vramGb": 79.6,
+         "cpuRamGb": 221,
+         "diskGb": 2186,
+         "pcieBw": 52.8,
+         "cudaMax": 13
+        }
+       ]
+      }
+     },
+     "interruptible": {
+      "count": 2,
+      "minPerGpu": 1.255,
+      "medianPerGpu": 1.9608
+     }
+    },
+    "2": {
+     "views": {
+      "r90": {
+       "count": 1,
+       "minPerGpu": 6.4089,
+       "p25PerGpu": 6.4089,
+       "medianPerGpu": 6.4089,
+       "cheapest": [
+        {
+         "id": 36346701,
+         "machineId": 57753,
+         "gpuName": "H100 SXM",
+         "numGpus": 2,
+         "dph": 12.8178,
+         "perGpu": 6.4089,
+         "reliability": 0.9985,
+         "verified": true,
+         "datacenter": false,
+         "geo": ", US",
+         "inetDown": 3554,
+         "inetUp": 2029,
+         "vramGb": 79.6,
+         "cpuRamGb": 443,
+         "diskGb": 4373,
+         "pcieBw": 52.8,
+         "cudaMax": 13
+        }
+       ]
+      },
+      "r98": {
+       "count": 1,
+       "minPerGpu": 6.4089,
+       "p25PerGpu": 6.4089,
+       "medianPerGpu": 6.4089,
+       "cheapest": [
+        {
+         "id": 36346701,
+         "machineId": 57753,
+         "gpuName": "H100 SXM",
+         "numGpus": 2,
+         "dph": 12.8178,
+         "perGpu": 6.4089,
+         "reliability": 0.9985,
+         "verified": true,
+         "datacenter": false,
+         "geo": ", US",
+         "inetDown": 3554,
+         "inetUp": 2029,
+         "vramGb": 79.6,
+         "cpuRamGb": 443,
+         "diskGb": 4373,
+         "pcieBw": 52.8,
+         "cudaMax": 13
+        }
+       ]
+      },
+      "dc99": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "any": {
+       "count": 1,
+       "minPerGpu": 6.4089,
+       "p25PerGpu": 6.4089,
+       "medianPerGpu": 6.4089,
+       "cheapest": [
+        {
+         "id": 36346701,
+         "machineId": 57753,
+         "gpuName": "H100 SXM",
+         "numGpus": 2,
+         "dph": 12.8178,
+         "perGpu": 6.4089,
+         "reliability": 0.9985,
+         "verified": true,
+         "datacenter": false,
+         "geo": ", US",
+         "inetDown": 3554,
+         "inetUp": 2029,
+         "vramGb": 79.6,
+         "cpuRamGb": 443,
+         "diskGb": 4373,
+         "pcieBw": 52.8,
+         "cudaMax": 13
+        }
+       ]
+      }
+     }
+    },
+    "4": {
+     "views": {
+      "r90": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "r98": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "dc99": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "any": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      }
+     }
+    },
+    "8": {
+     "views": {
+      "r90": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "r98": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "dc99": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "any": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      }
+     }
+    }
+   }
+  },
+  "h200": {
+   "vastNames": [
+    "H200"
+   ],
+   "note": null,
+   "nodes": {
+    "1": {
+     "views": {
+      "r90": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "r98": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "dc99": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "any": {
+       "count": 3,
+       "minPerGpu": 3.9503,
+       "p25PerGpu": 3.9503,
+       "medianPerGpu": 3.9503,
+       "cheapest": [
+        {
+         "id": 57305480,
+         "machineId": 154093,
+         "gpuName": "H200",
+         "numGpus": 1,
+         "dph": 3.9503,
+         "perGpu": 3.9503,
+         "reliability": 0.9645,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Japan, JP",
+         "inetDown": 3103,
+         "inetUp": 136,
+         "vramGb": 140.4,
+         "cpuRamGb": 252,
+         "diskGb": 1047,
+         "pcieBw": 52.7,
+         "cudaMax": 13.4
+        },
+        {
+         "id": 57306108,
+         "machineId": 154095,
+         "gpuName": "H200",
+         "numGpus": 1,
+         "dph": 3.9503,
+         "perGpu": 3.9503,
+         "reliability": 0.9645,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Japan, JP",
+         "inetDown": 635,
+         "inetUp": 58,
+         "vramGb": 140.4,
+         "cpuRamGb": 252,
+         "diskGb": 1047,
+         "pcieBw": 52.7,
+         "cudaMax": 13.4
+        },
+        {
+         "id": 57307682,
+         "machineId": 154096,
+         "gpuName": "H200",
+         "numGpus": 1,
+         "dph": 3.9503,
+         "perGpu": 3.9503,
+         "reliability": 0.9645,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Japan, JP",
+         "inetDown": 5173,
+         "inetUp": 1000,
+         "vramGb": 140.4,
+         "cpuRamGb": 252,
+         "diskGb": 1047,
+         "pcieBw": 52.7,
+         "cudaMax": 13.4
+        }
+       ]
+      }
+     },
+     "interruptible": {
+      "count": 0,
+      "minPerGpu": null,
+      "medianPerGpu": null
+     }
+    },
+    "2": {
+     "views": {
+      "r90": {
+       "count": 2,
+       "minPerGpu": 4.212,
+       "p25PerGpu": 4.3767,
+       "medianPerGpu": 4.5413,
+       "cheapest": [
+        {
+         "id": 48063999,
+         "machineId": 137442,
+         "gpuName": "H200",
+         "numGpus": 2,
+         "dph": 8.424,
+         "perGpu": 4.212,
+         "reliability": 0.9636,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Japan, JP",
+         "inetDown": 2310,
+         "inetUp": 972,
+         "vramGb": 140.4,
+         "cpuRamGb": 504,
+         "diskGb": 5424,
+         "pcieBw": 48.6,
+         "cudaMax": 13.2
+        },
+        {
+         "id": 46911242,
+         "machineId": 146553,
+         "gpuName": "H200",
+         "numGpus": 2,
+         "dph": 9.7412,
+         "perGpu": 4.8706,
+         "reliability": 0.998,
+         "verified": true,
+         "datacenter": false,
+         "geo": ", CA",
+         "inetDown": 14855,
+         "inetUp": 5654,
+         "vramGb": 140.4,
+         "cpuRamGb": 504,
+         "diskGb": 3420,
+         "pcieBw": 52.8,
+         "cudaMax": 13.1
+        }
+       ]
+      },
+      "r98": {
+       "count": 1,
+       "minPerGpu": 4.8706,
+       "p25PerGpu": 4.8706,
+       "medianPerGpu": 4.8706,
+       "cheapest": [
+        {
+         "id": 46911242,
+         "machineId": 146553,
+         "gpuName": "H200",
+         "numGpus": 2,
+         "dph": 9.7412,
+         "perGpu": 4.8706,
+         "reliability": 0.998,
+         "verified": true,
+         "datacenter": false,
+         "geo": ", CA",
+         "inetDown": 14855,
+         "inetUp": 5654,
+         "vramGb": 140.4,
+         "cpuRamGb": 504,
+         "diskGb": 3420,
+         "pcieBw": 52.8,
+         "cudaMax": 13.1
+        }
+       ]
+      },
+      "dc99": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "any": {
+       "count": 5,
+       "minPerGpu": 3.9488,
+       "p25PerGpu": 3.9488,
+       "medianPerGpu": 3.9488,
+       "cheapest": [
+        {
+         "id": 57305481,
+         "machineId": 154093,
+         "gpuName": "H200",
+         "numGpus": 2,
+         "dph": 7.8977,
+         "perGpu": 3.9488,
+         "reliability": 0.9645,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Japan, JP",
+         "inetDown": 3103,
+         "inetUp": 136,
+         "vramGb": 140.4,
+         "cpuRamGb": 504,
+         "diskGb": 2095,
+         "pcieBw": 52.8,
+         "cudaMax": 13.4
+        },
+        {
+         "id": 57307683,
+         "machineId": 154092,
+         "gpuName": "H200",
+         "numGpus": 2,
+         "dph": 7.8977,
+         "perGpu": 3.9488,
+         "reliability": 0.9638,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Japan, JP",
+         "inetDown": 4682,
+         "inetUp": 419,
+         "vramGb": 140.4,
+         "cpuRamGb": 504,
+         "diskGb": 1845,
+         "pcieBw": 52.7,
+         "cudaMax": 13.4
+        },
+        {
+         "id": 57307658,
+         "machineId": 154096,
+         "gpuName": "H200",
+         "numGpus": 2,
+         "dph": 7.8977,
+         "perGpu": 3.9488,
+         "reliability": 0.9645,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Japan, JP",
+         "inetDown": 5173,
+         "inetUp": 1000,
+         "vramGb": 140.4,
+         "cpuRamGb": 504,
+         "diskGb": 2095,
+         "pcieBw": 52.7,
+         "cudaMax": 13.4
+        }
+       ]
+      }
+     }
+    },
+    "4": {
+     "views": {
+      "r90": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "r98": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "dc99": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "any": {
+       "count": 4,
+       "minPerGpu": 3.9481,
+       "p25PerGpu": 3.9481,
+       "medianPerGpu": 3.9481,
+       "cheapest": [
+        {
+         "id": 57306106,
+         "machineId": 154095,
+         "gpuName": "H200",
+         "numGpus": 4,
+         "dph": 15.7924,
+         "perGpu": 3.9481,
+         "reliability": 0.9645,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Japan, JP",
+         "inetDown": 635,
+         "inetUp": 58,
+         "vramGb": 140.4,
+         "cpuRamGb": 1008,
+         "diskGb": 4190,
+         "pcieBw": 52.7,
+         "cudaMax": 13.4
+        },
+        {
+         "id": 57307669,
+         "machineId": 154092,
+         "gpuName": "H200",
+         "numGpus": 4,
+         "dph": 15.7924,
+         "perGpu": 3.9481,
+         "reliability": 0.9638,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Japan, JP",
+         "inetDown": 4682,
+         "inetUp": 419,
+         "vramGb": 140.4,
+         "cpuRamGb": 1008,
+         "diskGb": 3690,
+         "pcieBw": 52.7,
+         "cudaMax": 13.4
+        },
+        {
+         "id": 57307661,
+         "machineId": 154096,
+         "gpuName": "H200",
+         "numGpus": 4,
+         "dph": 15.7924,
+         "perGpu": 3.9481,
+         "reliability": 0.9645,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Japan, JP",
+         "inetDown": 5173,
+         "inetUp": 1000,
+         "vramGb": 140.4,
+         "cpuRamGb": 1008,
+         "diskGb": 4190,
+         "pcieBw": 52.7,
+         "cudaMax": 13.4
+        }
+       ]
+      }
+     }
+    },
+    "8": {
+     "views": {
+      "r90": {
+       "count": 2,
+       "minPerGpu": 5.0462,
+       "p25PerGpu": 5.1998,
+       "medianPerGpu": 5.3534,
+       "cheapest": [
+        {
+         "id": 52465561,
+         "machineId": 149683,
+         "gpuName": "H200",
+         "numGpus": 8,
+         "dph": 40.3696,
+         "perGpu": 5.0462,
+         "reliability": 0.9735,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Qatar, QA",
+         "inetDown": 5557,
+         "inetUp": 1818,
+         "vramGb": 140.4,
+         "cpuRamGb": 2015,
+         "diskGb": 1530,
+         "pcieBw": 52.7,
+         "cudaMax": 12.4
+        },
+        {
+         "id": 57364895,
+         "machineId": 38592,
+         "gpuName": "H200",
+         "numGpus": 8,
+         "dph": 45.2851,
+         "perGpu": 5.6606,
+         "reliability": 0.9996,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Italy, IT",
+         "inetDown": 7878,
+         "inetUp": 6375,
+         "vramGb": 140.4,
+         "cpuRamGb": 2015,
+         "diskGb": 8686,
+         "pcieBw": 52.8,
+         "cudaMax": 13
+        }
+       ]
+      },
+      "r98": {
+       "count": 1,
+       "minPerGpu": 5.6606,
+       "p25PerGpu": 5.6606,
+       "medianPerGpu": 5.6606,
+       "cheapest": [
+        {
+         "id": 57364895,
+         "machineId": 38592,
+         "gpuName": "H200",
+         "numGpus": 8,
+         "dph": 45.2851,
+         "perGpu": 5.6606,
+         "reliability": 0.9996,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Italy, IT",
+         "inetDown": 7878,
+         "inetUp": 6375,
+         "vramGb": 140.4,
+         "cpuRamGb": 2015,
+         "diskGb": 8686,
+         "pcieBw": 52.8,
+         "cudaMax": 13
+        }
+       ]
+      },
+      "dc99": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "any": {
+       "count": 5,
+       "minPerGpu": 3.9477,
+       "p25PerGpu": 3.9477,
+       "medianPerGpu": 4.8058,
+       "cheapest": [
+        {
+         "id": 57306107,
+         "machineId": 154095,
+         "gpuName": "H200",
+         "numGpus": 8,
+         "dph": 31.5819,
+         "perGpu": 3.9477,
+         "reliability": 0.9645,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Japan, JP",
+         "inetDown": 635,
+         "inetUp": 58,
+         "vramGb": 140.4,
+         "cpuRamGb": 2015,
+         "diskGb": 8380,
+         "pcieBw": 52.7,
+         "cudaMax": 13.4
+        },
+        {
+         "id": 57307680,
+         "machineId": 154096,
+         "gpuName": "H200",
+         "numGpus": 8,
+         "dph": 31.5819,
+         "perGpu": 3.9477,
+         "reliability": 0.9645,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Japan, JP",
+         "inetDown": 5173,
+         "inetUp": 1000,
+         "vramGb": 140.4,
+         "cpuRamGb": 2015,
+         "diskGb": 8380,
+         "pcieBw": 52.7,
+         "cudaMax": 13.4
+        },
+        {
+         "id": 56919023,
+         "machineId": 154061,
+         "gpuName": "H200",
+         "numGpus": 8,
+         "dph": 38.4465,
+         "perGpu": 4.8058,
+         "reliability": 0.9715,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Qatar, QA",
+         "inetDown": 5676,
+         "inetUp": 947,
+         "vramGb": 140.4,
+         "cpuRamGb": 2015,
+         "diskGb": 5528,
+         "pcieBw": 52.3,
+         "cudaMax": 12.4
+        }
+       ]
+      }
+     }
+    }
+   }
+  },
+  "b200": {
+   "vastNames": [
+    "B200"
+   ],
+   "note": null,
+   "nodes": {
+    "1": {
+     "views": {
+      "r90": {
+       "count": 4,
+       "minPerGpu": 7.5042,
+       "p25PerGpu": 7.5042,
+       "medianPerGpu": 7.5042,
+       "cheapest": [
+        {
+         "id": 51575925,
+         "machineId": 56219,
+         "gpuName": "B200",
+         "numGpus": 1,
+         "dph": 7.5042,
+         "perGpu": 7.5042,
+         "reliability": 0.9976,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Oregon, US",
+         "inetDown": 57679,
+         "inetUp": 5112,
+         "vramGb": 179.1,
+         "cpuRamGb": 250,
+         "diskGb": 1883,
+         "pcieBw": 53,
+         "cudaMax": 13
+        },
+        {
+         "id": 50255931,
+         "machineId": 96942,
+         "gpuName": "B200",
+         "numGpus": 1,
+         "dph": 7.5042,
+         "perGpu": 7.5042,
+         "reliability": 0.9979,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Oregon, US",
+         "inetDown": 13983,
+         "inetUp": 3571,
+         "vramGb": 179.1,
+         "cpuRamGb": 250,
+         "diskGb": 2610,
+         "pcieBw": 53,
+         "cudaMax": 13
+        },
+        {
+         "id": 51592620,
+         "machineId": 56167,
+         "gpuName": "B200",
+         "numGpus": 1,
+         "dph": 7.5042,
+         "perGpu": 7.5042,
+         "reliability": 0.9965,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Oregon, US",
+         "inetDown": 18917,
+         "inetUp": 3135,
+         "vramGb": 179.1,
+         "cpuRamGb": 250,
+         "diskGb": 2038,
+         "pcieBw": 53,
+         "cudaMax": 13
+        }
+       ]
+      },
+      "r98": {
+       "count": 4,
+       "minPerGpu": 7.5042,
+       "p25PerGpu": 7.5042,
+       "medianPerGpu": 7.5042,
+       "cheapest": [
+        {
+         "id": 51575925,
+         "machineId": 56219,
+         "gpuName": "B200",
+         "numGpus": 1,
+         "dph": 7.5042,
+         "perGpu": 7.5042,
+         "reliability": 0.9976,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Oregon, US",
+         "inetDown": 57679,
+         "inetUp": 5112,
+         "vramGb": 179.1,
+         "cpuRamGb": 250,
+         "diskGb": 1883,
+         "pcieBw": 53,
+         "cudaMax": 13
+        },
+        {
+         "id": 50255931,
+         "machineId": 96942,
+         "gpuName": "B200",
+         "numGpus": 1,
+         "dph": 7.5042,
+         "perGpu": 7.5042,
+         "reliability": 0.9979,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Oregon, US",
+         "inetDown": 13983,
+         "inetUp": 3571,
+         "vramGb": 179.1,
+         "cpuRamGb": 250,
+         "diskGb": 2610,
+         "pcieBw": 53,
+         "cudaMax": 13
+        },
+        {
+         "id": 51592620,
+         "machineId": 56167,
+         "gpuName": "B200",
+         "numGpus": 1,
+         "dph": 7.5042,
+         "perGpu": 7.5042,
+         "reliability": 0.9965,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Oregon, US",
+         "inetDown": 18917,
+         "inetUp": 3135,
+         "vramGb": 179.1,
+         "cpuRamGb": 250,
+         "diskGb": 2038,
+         "pcieBw": 53,
+         "cudaMax": 13
+        }
+       ]
+      },
+      "dc99": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "any": {
+       "count": 4,
+       "minPerGpu": 7.5042,
+       "p25PerGpu": 7.5042,
+       "medianPerGpu": 7.5042,
+       "cheapest": [
+        {
+         "id": 51575925,
+         "machineId": 56219,
+         "gpuName": "B200",
+         "numGpus": 1,
+         "dph": 7.5042,
+         "perGpu": 7.5042,
+         "reliability": 0.9976,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Oregon, US",
+         "inetDown": 57679,
+         "inetUp": 5112,
+         "vramGb": 179.1,
+         "cpuRamGb": 250,
+         "diskGb": 1883,
+         "pcieBw": 53,
+         "cudaMax": 13
+        },
+        {
+         "id": 50255931,
+         "machineId": 96942,
+         "gpuName": "B200",
+         "numGpus": 1,
+         "dph": 7.5042,
+         "perGpu": 7.5042,
+         "reliability": 0.9979,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Oregon, US",
+         "inetDown": 13983,
+         "inetUp": 3571,
+         "vramGb": 179.1,
+         "cpuRamGb": 250,
+         "diskGb": 2610,
+         "pcieBw": 53,
+         "cudaMax": 13
+        },
+        {
+         "id": 51592620,
+         "machineId": 56167,
+         "gpuName": "B200",
+         "numGpus": 1,
+         "dph": 7.5042,
+         "perGpu": 7.5042,
+         "reliability": 0.9965,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Oregon, US",
+         "inetDown": 18917,
+         "inetUp": 3135,
+         "vramGb": 179.1,
+         "cpuRamGb": 250,
+         "diskGb": 2038,
+         "pcieBw": 53,
+         "cudaMax": 13
+        }
+       ]
+      }
+     },
+     "interruptible": {
+      "count": 3,
+      "minPerGpu": 5.9375,
+      "medianPerGpu": 5.9375
+     }
+    },
+    "2": {
+     "views": {
+      "r90": {
+       "count": 4,
+       "minPerGpu": 7.5021,
+       "p25PerGpu": 7.5021,
+       "medianPerGpu": 7.5021,
+       "cheapest": [
+        {
+         "id": 51592579,
+         "machineId": 56166,
+         "gpuName": "B200",
+         "numGpus": 2,
+         "dph": 15.0042,
+         "perGpu": 7.5021,
+         "reliability": 0.9946,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Oregon, US",
+         "inetDown": 8457,
+         "inetUp": 3368,
+         "vramGb": 179.1,
+         "cpuRamGb": 499,
+         "diskGb": 4943,
+         "pcieBw": 53,
+         "cudaMax": 13
+        },
+        {
+         "id": 51575922,
+         "machineId": 56219,
+         "gpuName": "B200",
+         "numGpus": 2,
+         "dph": 15.0042,
+         "perGpu": 7.5021,
+         "reliability": 0.9976,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Oregon, US",
+         "inetDown": 57679,
+         "inetUp": 5112,
+         "vramGb": 179.1,
+         "cpuRamGb": 499,
+         "diskGb": 3766,
+         "pcieBw": 53,
+         "cudaMax": 13
+        },
+        {
+         "id": 51592610,
+         "machineId": 56167,
+         "gpuName": "B200",
+         "numGpus": 2,
+         "dph": 15.0042,
+         "perGpu": 7.5021,
+         "reliability": 0.9965,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Oregon, US",
+         "inetDown": 18917,
+         "inetUp": 3135,
+         "vramGb": 179.1,
+         "cpuRamGb": 499,
+         "diskGb": 4075,
+         "pcieBw": 53,
+         "cudaMax": 13
+        }
+       ]
+      },
+      "r98": {
+       "count": 4,
+       "minPerGpu": 7.5021,
+       "p25PerGpu": 7.5021,
+       "medianPerGpu": 7.5021,
+       "cheapest": [
+        {
+         "id": 51592579,
+         "machineId": 56166,
+         "gpuName": "B200",
+         "numGpus": 2,
+         "dph": 15.0042,
+         "perGpu": 7.5021,
+         "reliability": 0.9946,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Oregon, US",
+         "inetDown": 8457,
+         "inetUp": 3368,
+         "vramGb": 179.1,
+         "cpuRamGb": 499,
+         "diskGb": 4943,
+         "pcieBw": 53,
+         "cudaMax": 13
+        },
+        {
+         "id": 51575922,
+         "machineId": 56219,
+         "gpuName": "B200",
+         "numGpus": 2,
+         "dph": 15.0042,
+         "perGpu": 7.5021,
+         "reliability": 0.9976,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Oregon, US",
+         "inetDown": 57679,
+         "inetUp": 5112,
+         "vramGb": 179.1,
+         "cpuRamGb": 499,
+         "diskGb": 3766,
+         "pcieBw": 53,
+         "cudaMax": 13
+        },
+        {
+         "id": 51592610,
+         "machineId": 56167,
+         "gpuName": "B200",
+         "numGpus": 2,
+         "dph": 15.0042,
+         "perGpu": 7.5021,
+         "reliability": 0.9965,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Oregon, US",
+         "inetDown": 18917,
+         "inetUp": 3135,
+         "vramGb": 179.1,
+         "cpuRamGb": 499,
+         "diskGb": 4075,
+         "pcieBw": 53,
+         "cudaMax": 13
+        }
+       ]
+      },
+      "dc99": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "any": {
+       "count": 5,
+       "minPerGpu": 7.5021,
+       "p25PerGpu": 7.5021,
+       "medianPerGpu": 7.5021,
+       "cheapest": [
+        {
+         "id": 51592579,
+         "machineId": 56166,
+         "gpuName": "B200",
+         "numGpus": 2,
+         "dph": 15.0042,
+         "perGpu": 7.5021,
+         "reliability": 0.9946,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Oregon, US",
+         "inetDown": 8457,
+         "inetUp": 3368,
+         "vramGb": 179.1,
+         "cpuRamGb": 499,
+         "diskGb": 4943,
+         "pcieBw": 53,
+         "cudaMax": 13
+        },
+        {
+         "id": 51575922,
+         "machineId": 56219,
+         "gpuName": "B200",
+         "numGpus": 2,
+         "dph": 15.0042,
+         "perGpu": 7.5021,
+         "reliability": 0.9976,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Oregon, US",
+         "inetDown": 57679,
+         "inetUp": 5112,
+         "vramGb": 179.1,
+         "cpuRamGb": 499,
+         "diskGb": 3766,
+         "pcieBw": 53,
+         "cudaMax": 13
+        },
+        {
+         "id": 51592610,
+         "machineId": 56167,
+         "gpuName": "B200",
+         "numGpus": 2,
+         "dph": 15.0042,
+         "perGpu": 7.5021,
+         "reliability": 0.9965,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Oregon, US",
+         "inetDown": 18917,
+         "inetUp": 3135,
+         "vramGb": 179.1,
+         "cpuRamGb": 499,
+         "diskGb": 4075,
+         "pcieBw": 53,
+         "cudaMax": 13
+        }
+       ]
+      }
+     }
+    },
+    "4": {
+     "views": {
+      "r90": {
+       "count": 4,
+       "minPerGpu": 7.501,
+       "p25PerGpu": 9.5666,
+       "medianPerGpu": 10.2552,
+       "cheapest": [
+        {
+         "id": 51600760,
+         "machineId": 56220,
+         "gpuName": "B200",
+         "numGpus": 4,
+         "dph": 30.0042,
+         "perGpu": 7.501,
+         "reliability": 0.9974,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Oregon, US",
+         "inetDown": 61138,
+         "inetUp": 5463,
+         "vramGb": 179.1,
+         "cpuRamGb": 998,
+         "diskGb": 11030,
+         "pcieBw": 53,
+         "cudaMax": 13
+        },
+        {
+         "id": 52277986,
+         "machineId": 137783,
+         "gpuName": "B200",
+         "numGpus": 4,
+         "dph": 41.0208,
+         "perGpu": 10.2552,
+         "reliability": 0.9986,
+         "verified": true,
+         "datacenter": true,
+         "geo": ", US",
+         "inetDown": 13542,
+         "inetUp": 2224,
+         "vramGb": 179.1,
+         "cpuRamGb": 998,
+         "diskGb": 11747,
+         "pcieBw": 53,
+         "cudaMax": 13.2
+        },
+        {
+         "id": 51061479,
+         "machineId": 67795,
+         "gpuName": "B200",
+         "numGpus": 4,
+         "dph": 41.0208,
+         "perGpu": 10.2552,
+         "reliability": 0.9799,
+         "verified": true,
+         "datacenter": true,
+         "geo": ", US",
+         "inetDown": 5749,
+         "inetUp": 1278,
+         "vramGb": 179.1,
+         "cpuRamGb": 998,
+         "diskGb": 12327,
+         "pcieBw": 53,
+         "cudaMax": 13.2
+        }
+       ]
+      },
+      "r98": {
+       "count": 3,
+       "minPerGpu": 7.501,
+       "p25PerGpu": 8.8781,
+       "medianPerGpu": 10.2552,
+       "cheapest": [
+        {
+         "id": 51600760,
+         "machineId": 56220,
+         "gpuName": "B200",
+         "numGpus": 4,
+         "dph": 30.0042,
+         "perGpu": 7.501,
+         "reliability": 0.9974,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Oregon, US",
+         "inetDown": 61138,
+         "inetUp": 5463,
+         "vramGb": 179.1,
+         "cpuRamGb": 998,
+         "diskGb": 11030,
+         "pcieBw": 53,
+         "cudaMax": 13
+        },
+        {
+         "id": 52277986,
+         "machineId": 137783,
+         "gpuName": "B200",
+         "numGpus": 4,
+         "dph": 41.0208,
+         "perGpu": 10.2552,
+         "reliability": 0.9986,
+         "verified": true,
+         "datacenter": true,
+         "geo": ", US",
+         "inetDown": 13542,
+         "inetUp": 2224,
+         "vramGb": 179.1,
+         "cpuRamGb": 998,
+         "diskGb": 11747,
+         "pcieBw": 53,
+         "cudaMax": 13.2
+        },
+        {
+         "id": 54776236,
+         "machineId": 71029,
+         "gpuName": "B200",
+         "numGpus": 4,
+         "dph": 42.5208,
+         "perGpu": 10.6302,
+         "reliability": 0.9857,
+         "verified": true,
+         "datacenter": false,
+         "geo": ", US",
+         "inetDown": 4466,
+         "inetUp": 1796,
+         "vramGb": 179.1,
+         "cpuRamGb": 998,
+         "diskGb": 11996,
+         "pcieBw": 53,
+         "cudaMax": 13.2
+        }
+       ]
+      },
+      "dc99": {
+       "count": 1,
+       "minPerGpu": 10.2552,
+       "p25PerGpu": 10.2552,
+       "medianPerGpu": 10.2552,
+       "cheapest": [
+        {
+         "id": 52277986,
+         "machineId": 137783,
+         "gpuName": "B200",
+         "numGpus": 4,
+         "dph": 41.0208,
+         "perGpu": 10.2552,
+         "reliability": 0.9986,
+         "verified": true,
+         "datacenter": true,
+         "geo": ", US",
+         "inetDown": 13542,
+         "inetUp": 2224,
+         "vramGb": 179.1,
+         "cpuRamGb": 998,
+         "diskGb": 11747,
+         "pcieBw": 53,
+         "cudaMax": 13.2
+        }
+       ]
+      },
+      "any": {
+       "count": 6,
+       "minPerGpu": 7.501,
+       "p25PerGpu": 9.5958,
+       "medianPerGpu": 10.2552,
+       "cheapest": [
+        {
+         "id": 51600760,
+         "machineId": 56220,
+         "gpuName": "B200",
+         "numGpus": 4,
+         "dph": 30.0042,
+         "perGpu": 7.501,
+         "reliability": 0.9974,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Oregon, US",
+         "inetDown": 61138,
+         "inetUp": 5463,
+         "vramGb": 179.1,
+         "cpuRamGb": 998,
+         "diskGb": 11030,
+         "pcieBw": 53,
+         "cudaMax": 13
+        },
+        {
+         "id": 57220315,
+         "machineId": 144749,
+         "gpuName": "B200",
+         "numGpus": 4,
+         "dph": 37.5042,
+         "perGpu": 9.376,
+         "reliability": 0.9921,
+         "verified": false,
+         "datacenter": false,
+         "geo": ", US",
+         "inetDown": 9621,
+         "inetUp": 7998,
+         "vramGb": 179.1,
+         "cpuRamGb": 882,
+         "diskGb": 578,
+         "pcieBw": 53,
+         "cudaMax": 13.2
+        },
+        {
+         "id": 52277986,
+         "machineId": 137783,
+         "gpuName": "B200",
+         "numGpus": 4,
+         "dph": 41.0208,
+         "perGpu": 10.2552,
+         "reliability": 0.9986,
+         "verified": true,
+         "datacenter": true,
+         "geo": ", US",
+         "inetDown": 13542,
+         "inetUp": 2224,
+         "vramGb": 179.1,
+         "cpuRamGb": 998,
+         "diskGb": 11747,
+         "pcieBw": 53,
+         "cudaMax": 13.2
+        }
+       ]
+      }
+     }
+    },
+    "8": {
+     "views": {
+      "r90": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "r98": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "dc99": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "any": {
+       "count": 1,
+       "minPerGpu": 9.3755,
+       "p25PerGpu": 9.3755,
+       "medianPerGpu": 9.3755,
+       "cheapest": [
+        {
+         "id": 57220320,
+         "machineId": 144749,
+         "gpuName": "B200",
+         "numGpus": 8,
+         "dph": 75.0042,
+         "perGpu": 9.3755,
+         "reliability": 0.9921,
+         "verified": false,
+         "datacenter": false,
+         "geo": ", US",
+         "inetDown": 9621,
+         "inetUp": 7998,
+         "vramGb": 179.1,
+         "cpuRamGb": 1764,
+         "diskGb": 1155,
+         "pcieBw": 53,
+         "cudaMax": 13.2
+        }
+       ]
+      }
+     }
+    }
+   }
+  },
+  "v100": {
+   "vastNames": [
+    "Tesla V100",
+    "Tesla V100S"
+   ],
+   "note": "32 GB cards only",
+   "nodes": {
+    "1": {
+     "views": {
+      "r90": {
+       "count": 9,
+       "minPerGpu": 0.1111,
+       "p25PerGpu": 0.1659,
+       "medianPerGpu": 0.2151,
+       "cheapest": [
+        {
+         "id": 49022082,
+         "machineId": 148896,
+         "gpuName": "Tesla V100",
+         "numGpus": 1,
+         "dph": 0.1111,
+         "perGpu": 0.1111,
+         "reliability": 0.9544,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Washington, US",
+         "inetDown": 382,
+         "inetUp": 405,
+         "vramGb": 32,
+         "cpuRamGb": 47,
+         "diskGb": 150,
+         "pcieBw": 11.8,
+         "cudaMax": 13
+        },
+        {
+         "id": 49022080,
+         "machineId": 148896,
+         "gpuName": "Tesla V100",
+         "numGpus": 1,
+         "dph": 0.1111,
+         "perGpu": 0.1111,
+         "reliability": 0.9544,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Washington, US",
+         "inetDown": 382,
+         "inetUp": 405,
+         "vramGb": 32,
+         "cpuRamGb": 47,
+         "diskGb": 150,
+         "pcieBw": 11.8,
+         "cudaMax": 13
+        },
+        {
+         "id": 55364316,
+         "machineId": 153838,
+         "gpuName": "Tesla V100S",
+         "numGpus": 1,
+         "dph": 0.1659,
+         "perGpu": 0.1659,
+         "reliability": 0.9828,
+         "verified": true,
+         "datacenter": false,
+         "geo": "California, US",
+         "inetDown": 3989,
+         "inetUp": 3793,
+         "vramGb": 32,
+         "cpuRamGb": 79,
+         "diskGb": 322,
+         "pcieBw": 11.6,
+         "cudaMax": 13
+        }
+       ]
+      },
+      "r98": {
+       "count": 4,
+       "minPerGpu": 0.1659,
+       "p25PerGpu": 0.2028,
+       "medianPerGpu": 0.2151,
+       "cheapest": [
+        {
+         "id": 55364316,
+         "machineId": 153838,
+         "gpuName": "Tesla V100S",
+         "numGpus": 1,
+         "dph": 0.1659,
+         "perGpu": 0.1659,
+         "reliability": 0.9828,
+         "verified": true,
+         "datacenter": false,
+         "geo": "California, US",
+         "inetDown": 3989,
+         "inetUp": 3793,
+         "vramGb": 32,
+         "cpuRamGb": 79,
+         "diskGb": 322,
+         "pcieBw": 11.6,
+         "cudaMax": 13
+        },
+        {
+         "id": 32302949,
+         "machineId": 33311,
+         "gpuName": "Tesla V100",
+         "numGpus": 1,
+         "dph": 0.2151,
+         "perGpu": 0.2151,
+         "reliability": 0.9995,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Minnesota, US",
+         "inetDown": 1093,
+         "inetUp": 1779,
+         "vramGb": 32,
+         "cpuRamGb": 94,
+         "diskGb": 558,
+         "pcieBw": 11.8,
+         "cudaMax": 13
+        },
+        {
+         "id": 50611286,
+         "machineId": 33283,
+         "gpuName": "Tesla V100",
+         "numGpus": 1,
+         "dph": 0.2151,
+         "perGpu": 0.2151,
+         "reliability": 0.9979,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Minnesota, US",
+         "inetDown": 845,
+         "inetUp": 935,
+         "vramGb": 32,
+         "cpuRamGb": 94,
+         "diskGb": 1086,
+         "pcieBw": 7.3,
+         "cudaMax": 13
+        }
+       ]
+      },
+      "dc99": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "any": {
+       "count": 11,
+       "minPerGpu": 0.0993,
+       "p25PerGpu": 0.1379,
+       "medianPerGpu": 0.2089,
+       "cheapest": [
+        {
+         "id": 55003034,
+         "machineId": 153666,
+         "gpuName": "Tesla V100",
+         "numGpus": 1,
+         "dph": 0.0993,
+         "perGpu": 0.0993,
+         "reliability": 0.9835,
+         "verified": false,
+         "datacenter": false,
+         "geo": "California, US",
+         "inetDown": 1440,
+         "inetUp": 444,
+         "vramGb": 32,
+         "cpuRamGb": 47,
+         "diskGb": 688,
+         "pcieBw": 11,
+         "cudaMax": 13
+        },
+        {
+         "id": 49022082,
+         "machineId": 148896,
+         "gpuName": "Tesla V100",
+         "numGpus": 1,
+         "dph": 0.1111,
+         "perGpu": 0.1111,
+         "reliability": 0.9544,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Washington, US",
+         "inetDown": 382,
+         "inetUp": 405,
+         "vramGb": 32,
+         "cpuRamGb": 47,
+         "diskGb": 150,
+         "pcieBw": 11.8,
+         "cudaMax": 13
+        },
+        {
+         "id": 49022080,
+         "machineId": 148896,
+         "gpuName": "Tesla V100",
+         "numGpus": 1,
+         "dph": 0.1111,
+         "perGpu": 0.1111,
+         "reliability": 0.9544,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Washington, US",
+         "inetDown": 382,
+         "inetUp": 405,
+         "vramGb": 32,
+         "cpuRamGb": 47,
+         "diskGb": 150,
+         "pcieBw": 11.8,
+         "cudaMax": 13
+        }
+       ]
+      }
+     },
+     "interruptible": {
+      "count": 4,
+      "minPerGpu": 0.0933,
+      "medianPerGpu": 0.1507
+     }
+    },
+    "2": {
+     "views": {
+      "r90": {
+       "count": 5,
+       "minPerGpu": 0.1089,
+       "p25PerGpu": 0.1089,
+       "medianPerGpu": 0.163,
+       "cheapest": [
+        {
+         "id": 49022077,
+         "machineId": 148896,
+         "gpuName": "Tesla V100",
+         "numGpus": 2,
+         "dph": 0.2178,
+         "perGpu": 0.1089,
+         "reliability": 0.9544,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Washington, US",
+         "inetDown": 382,
+         "inetUp": 405,
+         "vramGb": 32,
+         "cpuRamGb": 94,
+         "diskGb": 299,
+         "pcieBw": 11.8,
+         "cudaMax": 13
+        },
+        {
+         "id": 49022081,
+         "machineId": 148896,
+         "gpuName": "Tesla V100",
+         "numGpus": 2,
+         "dph": 0.2178,
+         "perGpu": 0.1089,
+         "reliability": 0.9544,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Washington, US",
+         "inetDown": 382,
+         "inetUp": 405,
+         "vramGb": 32,
+         "cpuRamGb": 94,
+         "diskGb": 299,
+         "pcieBw": 11.8,
+         "cudaMax": 13
+        },
+        {
+         "id": 55364313,
+         "machineId": 153838,
+         "gpuName": "Tesla V100S",
+         "numGpus": 2,
+         "dph": 0.3259,
+         "perGpu": 0.163,
+         "reliability": 0.9828,
+         "verified": true,
+         "datacenter": false,
+         "geo": "California, US",
+         "inetDown": 3989,
+         "inetUp": 3793,
+         "vramGb": 32,
+         "cpuRamGb": 157,
+         "diskGb": 645,
+         "pcieBw": 11.1,
+         "cudaMax": 13
+        }
+       ]
+      },
+      "r98": {
+       "count": 2,
+       "minPerGpu": 0.163,
+       "p25PerGpu": 0.163,
+       "medianPerGpu": 0.163,
+       "cheapest": [
+        {
+         "id": 55364313,
+         "machineId": 153838,
+         "gpuName": "Tesla V100S",
+         "numGpus": 2,
+         "dph": 0.3259,
+         "perGpu": 0.163,
+         "reliability": 0.9828,
+         "verified": true,
+         "datacenter": false,
+         "geo": "California, US",
+         "inetDown": 3989,
+         "inetUp": 3793,
+         "vramGb": 32,
+         "cpuRamGb": 157,
+         "diskGb": 645,
+         "pcieBw": 11.1,
+         "cudaMax": 13
+        },
+        {
+         "id": 55364309,
+         "machineId": 153838,
+         "gpuName": "Tesla V100S",
+         "numGpus": 2,
+         "dph": 0.3259,
+         "perGpu": 0.163,
+         "reliability": 0.9828,
+         "verified": true,
+         "datacenter": false,
+         "geo": "California, US",
+         "inetDown": 3989,
+         "inetUp": 3793,
+         "vramGb": 32,
+         "cpuRamGb": 157,
+         "diskGb": 645,
+         "pcieBw": 10.2,
+         "cudaMax": 13
+        }
+       ]
+      },
+      "dc99": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "any": {
+       "count": 6,
+       "minPerGpu": 0.1089,
+       "p25PerGpu": 0.1223,
+       "medianPerGpu": 0.1627,
+       "cheapest": [
+        {
+         "id": 49022077,
+         "machineId": 148896,
+         "gpuName": "Tesla V100",
+         "numGpus": 2,
+         "dph": 0.2178,
+         "perGpu": 0.1089,
+         "reliability": 0.9544,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Washington, US",
+         "inetDown": 382,
+         "inetUp": 405,
+         "vramGb": 32,
+         "cpuRamGb": 94,
+         "diskGb": 299,
+         "pcieBw": 11.8,
+         "cudaMax": 13
+        },
+        {
+         "id": 49022081,
+         "machineId": 148896,
+         "gpuName": "Tesla V100",
+         "numGpus": 2,
+         "dph": 0.2178,
+         "perGpu": 0.1089,
+         "reliability": 0.9544,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Washington, US",
+         "inetDown": 382,
+         "inetUp": 405,
+         "vramGb": 32,
+         "cpuRamGb": 94,
+         "diskGb": 299,
+         "pcieBw": 11.8,
+         "cudaMax": 13
+        },
+        {
+         "id": 54938323,
+         "machineId": 142429,
+         "gpuName": "Tesla V100",
+         "numGpus": 2,
+         "dph": 0.3247,
+         "perGpu": 0.1624,
+         "reliability": 0.9903,
+         "verified": false,
+         "datacenter": false,
+         "geo": "Colorado, US",
+         "inetDown": 1568,
+         "inetUp": 220,
+         "vramGb": 32,
+         "cpuRamGb": 63,
+         "diskGb": 302,
+         "pcieBw": 7.2,
+         "cudaMax": 13
+        }
+       ]
+      }
+     }
+    },
+    "4": {
+     "views": {
+      "r90": {
+       "count": 2,
+       "minPerGpu": 0.1078,
+       "p25PerGpu": 0.1212,
+       "medianPerGpu": 0.1347,
+       "cheapest": [
+        {
+         "id": 49022074,
+         "machineId": 148896,
+         "gpuName": "Tesla V100",
+         "numGpus": 4,
+         "dph": 0.4311,
+         "perGpu": 0.1078,
+         "reliability": 0.9544,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Washington, US",
+         "inetDown": 382,
+         "inetUp": 405,
+         "vramGb": 32,
+         "cpuRamGb": 188,
+         "diskGb": 598,
+         "pcieBw": 11.8,
+         "cudaMax": 13
+        },
+        {
+         "id": 55364311,
+         "machineId": 153838,
+         "gpuName": "Tesla V100S",
+         "numGpus": 4,
+         "dph": 0.6459,
+         "perGpu": 0.1615,
+         "reliability": 0.9828,
+         "verified": true,
+         "datacenter": false,
+         "geo": "California, US",
+         "inetDown": 3989,
+         "inetUp": 3793,
+         "vramGb": 32,
+         "cpuRamGb": 315,
+         "diskGb": 1290,
+         "pcieBw": 11.1,
+         "cudaMax": 13
+        }
+       ]
+      },
+      "r98": {
+       "count": 1,
+       "minPerGpu": 0.1615,
+       "p25PerGpu": 0.1615,
+       "medianPerGpu": 0.1615,
+       "cheapest": [
+        {
+         "id": 55364311,
+         "machineId": 153838,
+         "gpuName": "Tesla V100S",
+         "numGpus": 4,
+         "dph": 0.6459,
+         "perGpu": 0.1615,
+         "reliability": 0.9828,
+         "verified": true,
+         "datacenter": false,
+         "geo": "California, US",
+         "inetDown": 3989,
+         "inetUp": 3793,
+         "vramGb": 32,
+         "cpuRamGb": 315,
+         "diskGb": 1290,
+         "pcieBw": 11.1,
+         "cudaMax": 13
+        }
+       ]
+      },
+      "dc99": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "any": {
+       "count": 3,
+       "minPerGpu": 0.1078,
+       "p25PerGpu": 0.1147,
+       "medianPerGpu": 0.1215,
+       "cheapest": [
+        {
+         "id": 49022074,
+         "machineId": 148896,
+         "gpuName": "Tesla V100",
+         "numGpus": 4,
+         "dph": 0.4311,
+         "perGpu": 0.1078,
+         "reliability": 0.9544,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Washington, US",
+         "inetDown": 382,
+         "inetUp": 405,
+         "vramGb": 32,
+         "cpuRamGb": 188,
+         "diskGb": 598,
+         "pcieBw": 11.8,
+         "cudaMax": 13
+        },
+        {
+         "id": 55366811,
+         "machineId": 153746,
+         "gpuName": "Tesla V100",
+         "numGpus": 4,
+         "dph": 0.4859,
+         "perGpu": 0.1215,
+         "reliability": 0.9611,
+         "verified": false,
+         "datacenter": false,
+         "geo": "California, US",
+         "inetDown": 4884,
+         "inetUp": 1264,
+         "vramGb": 32,
+         "cpuRamGb": 126,
+         "diskGb": 726,
+         "pcieBw": 9.4,
+         "cudaMax": 13
+        },
+        {
+         "id": 55364311,
+         "machineId": 153838,
+         "gpuName": "Tesla V100S",
+         "numGpus": 4,
+         "dph": 0.6459,
+         "perGpu": 0.1615,
+         "reliability": 0.9828,
+         "verified": true,
+         "datacenter": false,
+         "geo": "California, US",
+         "inetDown": 3989,
+         "inetUp": 3793,
+         "vramGb": 32,
+         "cpuRamGb": 315,
+         "diskGb": 1290,
+         "pcieBw": 11.1,
+         "cudaMax": 13
+        }
+       ]
+      }
+     }
+    },
+    "8": {
+     "views": {
+      "r90": {
+       "count": 1,
+       "minPerGpu": 0.2676,
+       "p25PerGpu": 0.2676,
+       "medianPerGpu": 0.2676,
+       "cheapest": [
+        {
+         "id": 57246304,
+         "machineId": 8565,
+         "gpuName": "Tesla V100",
+         "numGpus": 8,
+         "dph": 2.1407,
+         "perGpu": 0.2676,
+         "reliability": 0.9995,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Minnesota, US",
+         "inetDown": 8159,
+         "inetUp": 3450,
+         "vramGb": 32,
+         "cpuRamGb": 755,
+         "diskGb": 9901,
+         "pcieBw": 11.8,
+         "cudaMax": 13
+        }
+       ]
+      },
+      "r98": {
+       "count": 1,
+       "minPerGpu": 0.2676,
+       "p25PerGpu": 0.2676,
+       "medianPerGpu": 0.2676,
+       "cheapest": [
+        {
+         "id": 57246304,
+         "machineId": 8565,
+         "gpuName": "Tesla V100",
+         "numGpus": 8,
+         "dph": 2.1407,
+         "perGpu": 0.2676,
+         "reliability": 0.9995,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Minnesota, US",
+         "inetDown": 8159,
+         "inetUp": 3450,
+         "vramGb": 32,
+         "cpuRamGb": 755,
+         "diskGb": 9901,
+         "pcieBw": 11.8,
+         "cudaMax": 13
+        }
+       ]
+      },
+      "dc99": {
+       "count": 0,
+       "minPerGpu": null,
+       "p25PerGpu": null,
+       "medianPerGpu": null,
+       "cheapest": []
+      },
+      "any": {
+       "count": 1,
+       "minPerGpu": 0.2676,
+       "p25PerGpu": 0.2676,
+       "medianPerGpu": 0.2676,
+       "cheapest": [
+        {
+         "id": 57246304,
+         "machineId": 8565,
+         "gpuName": "Tesla V100",
+         "numGpus": 8,
+         "dph": 2.1407,
+         "perGpu": 0.2676,
+         "reliability": 0.9995,
+         "verified": true,
+         "datacenter": false,
+         "geo": "Minnesota, US",
+         "inetDown": 8159,
+         "inetUp": 3450,
+         "vramGb": 32,
+         "cpuRamGb": 755,
+         "diskGb": 9901,
+         "pcieBw": 11.8,
+         "cudaMax": 13
+        }
+       ]
+      }
+     }
+    }
+   }
+  }
+ }
+}

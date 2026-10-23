@@ -1,4 +1,5 @@
 import type { Quant } from '../data/gpus';
+import type { RentStat, RentView } from '../data/live';
 import type { CaseId, CostLevel } from '../data/scenarios';
 
 export type Currency = 'INR' | 'USD';
@@ -79,7 +80,13 @@ export interface Settings {
   afterTax: boolean;
   route: Route;
   costLevel: CostLevel;
-  qos: { mode: 'report' | 'floor'; floorTps: number };
+  qos: { mode: 'report' | 'floor' | 'router'; floorTps: number };
+  /** Where market token prices, traffic and request shape come from. */
+  marketSource: 'live' | 'report';
+  /** Where GPU rent comes from. */
+  rentSource: 'live' | 'report';
+  rentView: RentView;
+  rentStat: RentStat;
   proEdition: 'workstation' | 'maxq';
   summerDerate: boolean;
   zdr: boolean;

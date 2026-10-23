@@ -8,5 +8,5 @@ export default defineConfig({
   base: './',
   plugins: [preact(), ...(single ? [viteSingleFile()] : [])],
   build: { target: 'es2022', sourcemap: false },
-  test: { include: ['src/**/*.test.ts'], environment: 'node' },
+  test: { include: ['src/**/*.test.ts', 'scripts/**/*.test.mjs'], environment: 'node' },
 });

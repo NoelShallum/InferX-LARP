@@ -1,4 +1,5 @@
 import { FX_INR_PER_USD, PRO6000_EDITION, SUMMER_DERATE } from './data/gpus';
+import { OR_DAY, RENT_VIEW_LABEL, VAST_DAY, type RentView } from './data/live';
 import { AVAILABILITY_PRESETS, CASES, CASE_LABEL, LISTING_ODDS, QOS_PRESETS, ROUTE_COSTS, SCENARIOS, ZDR_SHARE_BONUS, type CaseId, type CostLevel } from './data/scenarios';
 import { NEUTRAL_WHATIF } from './engine/types';
 import { resolveCase } from './engine/slot';
@@ -69,6 +70,18 @@ function Assumptions() {
         Assumptions{whatIfActive ? ' · what-if active' : ''} · {CASE_LABEL[s.caseId]} case
       </summary>
       <div class="assump">
+        <Field label="Market prices, traffic and request shape">
+          <SelectInput label="Market data source" value={s.marketSource} options={[{ id: 'live', label: `Live OpenRouter · ${OR_DAY}` }, { id: 'report', label: 'Report snapshot · 22 Oct 2026' }]} onChange={(v) => updateSettings({ marketSource: v })} />
+        </Field>
+        <Field label="GPU rent">
+          <SelectInput label="Rent data source" value={s.rentSource} options={[{ id: 'live', label: `Live Vast.ai · ${VAST_DAY}` }, { id: 'report', label: 'Report and catalog prices' }]} onChange={(v) => updateSettings({ rentSource: v })} />
+        </Field>
+        <Field label="Vast.ai offers counted">
+          <SelectInput<RentView> label="Vast.ai offer filter" value={s.rentView} options={(Object.keys(RENT_VIEW_LABEL) as RentView[]).map((k) => ({ id: k, label: RENT_VIEW_LABEL[k] }))} onChange={(v) => updateSettings({ rentView: v })} />
+        </Field>
+        <Field label="Vast.ai price used">
+          <Segmented label="Vast.ai price statistic" value={s.rentStat} options={[{ id: 'cheapest', label: 'Cheapest' }, { id: 'median', label: 'Median' }]} onChange={(v) => updateSettings({ rentStat: v })} />
+        </Field>
         <Field label={<>Scenario share of traffic <ProvBadge p={sc.shareFactor.p} compact /></>}>
           <span class="row" style={{ gap: '6px' }}>
             <NumberInput value={Number(eff.shareFactor.toFixed(3))} label="Share factor" step={0.05} min={0} max={3} suffix="× equal share" onChange={(v) => updateSettings({ override: { ...s.override, shareFactor: v } })} />
@@ -135,6 +148,12 @@ function Filters() {
         <span class="row" style={{ gap: '6px' }}>
           <SelectInput label="Quality bar" value={s.qos.mode} options={QOS_PRESETS.map((q) => ({ id: q.id, label: q.label }))} onChange={(v) => updateSettings({ qos: { ...s.qos, mode: v } })} />
           {s.qos.mode === 'floor' ? <NumberInput label="Minimum tokens per second per user" value={s.qos.floorTps} min={1} max={200} step={1} width={70} suffix="tok/s/user" onChange={(v) => updateSettings({ qos: { ...s.qos, floorTps: v } })} /> : null}
+          {s.qos.mode === 'router' ? <span class="small">median live stream speed, per model</span> : null}
+        </span>
+      </Field>
+      <Field label="Prices">
+        <span class="small" title="Run npm run data to refresh these">
+          {s.marketSource === 'live' ? `OpenRouter live ${OR_DAY}` : 'OpenRouter: report snapshot'} · {s.rentSource === 'live' ? `Vast.ai live ${VAST_DAY}` : 'rent: report'}
         </span>
       </Field>
       <Field label="Availability">
@@ -195,7 +214,7 @@ export function App() {
         <V />
       </main>
       <footer class="small" style={{ marginTop: '28px' }}>
-        Numbers are built on the report "Inference as a Service: Platforms, Models and Margins" (22 Oct 2026) and the InferenceX repositories. Phase 1: static report data, live Vast.ai and OpenRouter prices and the roofline engine come next. Not financial or legal advice.
+        Numbers are built on the report "Inference as a Service: Platforms, Models and Margins" (22 Oct 2026) and the InferenceX repositories. Prices and traffic are live as of the last data run; the roofline engine for prefill and time to first token comes next. Not financial or legal advice.
       </footer>
       <Popover />
     </div>

@@ -4,6 +4,7 @@ import { GOLDEN_AL_QWEN38_FLASH_NEXT, MODEL_BY_ID } from '../data/models';
 import { DRAFT_COST, MAX_EXTRAPOLATION, capacityFor, mtpGain, mtpInfo, tpsAt, curveFor, chooseQuant } from '../engine/capacity';
 import { fmtNum, fmtTps } from '../engine/units';
 import { settings } from '../state';
+import { floorFor } from '../engine/sources';
 import { ChartCard, LineChart, type ExtraPoint, type LineSeries } from '../ui/charts';
 import { Field, SelectInput, Toggle } from '../ui/controls';
 import { ECON_MODELS, SERVE_GPUS } from '../ui/options';
@@ -30,6 +31,8 @@ export function ThroughputView() {
   const model = MODEL_BY_ID[modelId]!;
   const pro = GPU_BY_ID['pro6000']!;
 
+  const floorNow = floorFor(modelId, s);
+  const qosNow = s.qos.mode === 'report' ? { mode: 'report' as const, floorTps: s.qos.floorTps } : { mode: 'floor' as const, floorTps: floorNow.floor };
   const series: LineSeries[] = [];
   const points: ExtraPoint[] = [];
   const unfit: string[] = [];
@@ -80,7 +83,7 @@ export function ThroughputView() {
       const m = model.mtp.measured;
       points.push({ x: m.tps.v / m.c, y: m.tps.v, color, label: 'MTP measured', tipTitle: 'Measured with MTP', tip: [{ label: 'Output', value: `${fmtNum(m.tps.v)} tok/s` }, { label: 'Concurrent', value: String(m.c) }, { label: 'Source', value: 'measured' }] });
     }
-    const cap = capacityFor({ model, gpu, proGpu: pro, count: 1, quant: 'auto', mtp, qos: s.qos, extraMult: s.whatIf.throughput, avgContextTokens: 15300 });
+    const cap = capacityFor({ model, gpu, proGpu: pro, count: 1, quant: 'auto', mtp, qos: qosNow, extraMult: s.whatIf.throughput, avgContextTokens: 15300 });
     if (cap.ok) {
       points.push({ x: cap.userTps, y: cap.tpsNode, color, label: gpu.short, ring: true, hollow: true, tipTitle: `${gpu.short} operating point`, tip: [{ label: 'Output', value: `${fmtNum(cap.tpsNode)} tok/s` }, { label: 'Concurrent', value: fmtNum(cap.cNode, 0) }, { label: 'Per user', value: `${fmtTps(cap.userTps)} tok/s` }] });
     }
@@ -119,7 +122,7 @@ export function ThroughputView() {
       </div>
       <ChartCard
         title={`${model.name}: throughput against speed per user`}
-        subtitle={s.qos.mode === 'floor' ? `Quality bar: at least ${s.qos.floorTps} tok/s per user.` : "Quality bar: the report's convention (the operating point behind its busy-hour revenue)."}
+        subtitle={s.qos.mode === 'report' ? "Quality bar: the report's convention (the operating point behind its busy-hour revenue)." : s.qos.mode === 'router' && floorNow.v ? `Quality bar: the median OpenRouter stream for this model, ${fmtTps(floorNow.floor)} tok/s per user.` : `Quality bar: at least ${fmtTps(floorNow.floor)} tok/s per user.`}
         legend={
           <div class="legend" aria-label="GPU legend">
             {series.map((x) => (
@@ -144,7 +147,7 @@ export function ThroughputView() {
               yLabel="Output tokens per second"
               hover="nearest"
               height={340}
-              vrefs={s.qos.mode === 'floor' ? [{ x: s.qos.floorTps, label: 'floor' }] : []}
+              vrefs={s.qos.mode === 'report' ? [] : [{ x: floorNow.floor, label: 'floor' }]}
               xTicks={[1, 2, 5, 10, 20, 50, 100, 200, 500].filter((t) => t >= xd[0] * 0.95 && t <= xd[1] * 1.05)}
             />
           ) : (

@@ -2,6 +2,7 @@ import { useMemo, useState } from 'preact/hooks';
 import { FX_INR_PER_USD, GPUS, HOURS_PER_MONTH, SUMMER_DERATE } from '../data/gpus';
 import { CACHE_PRICE_FRACTION, MARKET } from '../data/market';
 import { BYTES_PER_PARAM, GOLDEN_AL_QWEN38_FLASH_NEXT, MODELS } from '../data/models';
+import { liveRegister, OPENROUTER, OR_DAY, VAST, VAST_DAY } from '../data/live';
 import { KIND_LABEL, KIND_ORDER, collectProvenance, countByKind, type ProvKind } from '../data/provenance';
 import * as SC from '../data/scenarios';
 import { GPU_MEM_UTIL, OVERHEAD_GB_PER_GPU, MIN_KV_TOKENS, MULTI_GPU_EFF, DRAFT_COST, MTP_DEFAULT_CSAT, VOLTA_KERNEL_PENALTY, MAX_EXTRAPOLATION } from '../engine/capacity';
@@ -21,6 +22,7 @@ const ALL = {
   workloads: SC.WORKLOADS,
   availability: SC.AVAILABILITY_PRESETS,
   uptimeTiers: SC.UPTIME_TIERS,
+  live: liveRegister(),
   constants: {
     fx: FX_INR_PER_USD,
     hoursPerMonth: HOURS_PER_MONTH,
@@ -64,7 +66,9 @@ const LIMITS = [
   { t: 'KV bytes per token are placeholders for most models.', d: 'Only Qwen3.8-27B has a figure derived from the report. The rest come from architecture as remembered or generic guesses until the Hugging Face configs are pulled in.' },
   { t: 'The V100 runs FP16 or INT4 only.', d: 'It has no FP8 or FP4, and older attention kernels. Its throughput is a rough scaling with a flat kernel penalty.' },
   { t: 'Request shape and cache price are calibrated, not observed.', d: 'They are back-solved from the report\'s busy-hour and typical-entrant figures. They reproduce the report, and match its stated 4.1% and 11.8% output shares for the two models where it states them.' },
-  { t: 'Prices are the report\'s 22 Oct 2026 snapshot.', d: 'Live Vast.ai and OpenRouter prices, with history, are phase 2.' },
+  { t: 'Live data is a snapshot.', d: 'Prices and traffic are as of the last data run (shown on the Prices view). Refresh with npm run data; trends need at least two snapshots on different days.' },
+  { t: 'Vast.ai coverage is thin for some cards.', d: 'The 6000 Ada has no offer at reliability 0.90 or above, and several multi-GPU sizes have none. Where a filter leaves no offer the dashboard falls back to the report or catalog price and says so on the card.' },
+  { t: 'Live request shape and report-calibrated capacity can disagree.', d: 'Capacity is anchored to the report; the live request shape changes what each output token earns but not how fast the card runs. Prefill, which ties the two together, arrives with the roofline engine.' },
   { t: 'Tax after the first step is approximate for rented cards on the crypto route.', d: 'Gains over a Lium bar are exact on either route. Rented-card margin on the crypto route is taxed on gross receipts.' },
 ];
 
@@ -98,6 +102,28 @@ export function DataView() {
             </button>
           ))}
         </div>
+      </section>
+
+      <section class="card" aria-label="Live data">
+        <h2>Live data</h2>
+        <div class="sub">Two scripts collect it and save dated snapshots under data/live, so the dashboard works offline and history builds up.</div>
+        <div class="kv" style={{ borderTop: 0, marginTop: 0, paddingTop: 0 }}>
+          <div>
+            <span>OpenRouter snapshot</span>
+            <b>
+              {OR_DAY} · {Object.keys(OPENROUTER.models).length} models
+            </b>
+          </div>
+          <div>
+            <span>Vast.ai snapshot</span>
+            <b>
+              {VAST_DAY} · {Object.keys(VAST.gpus).length} GPUs · {Object.values(VAST.gpus).reduce((a, g) => a + (g.nodes['1']?.views.any.count ?? 0), 0)} single-card offers
+            </b>
+          </div>
+        </div>
+        <p class="small mt">
+          Refresh with <code>npm run data</code> (both) or <code>npm run data:openrouter</code> and <code>npm run data:vast</code>. The Vast.ai script needs a Chromium; set <code>CHROME_PATH</code> if Playwright has none, or <code>HEADED=1</code> to watch it. Commit the changed files in <code>data/live</code>.
+        </p>
       </section>
 
       <section class="card" aria-label="Value register">
