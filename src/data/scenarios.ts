@@ -193,8 +193,8 @@ export interface ThroughputPreset {
 
 export const THROUGHPUT_PRESETS: ThroughputPreset[] = [
   { id: 'report', label: "Report's points as printed", help: "The report's published throughput points as printed (a power law through them), moved between cards and weight formats by the roofline but not between request shapes. Reproduces the report." },
-  { id: 'adjusted', label: 'Report, adjusted to the request', help: "The report's number at its own reference operating point, taken to describe each model's observed traffic, carried onto the roofline's shape. More concurrency, a longer context or a prompt-heavy request move it as the physics says, and nothing exceeds what the memory bus can deliver. Identical to the report at the reference point on observed traffic." },
-  { id: 'roofline', label: 'Roofline only', help: 'Ignore the report\'s estimates and compute speed from memory bandwidth, tensor throughput and the request shape, with the kernel efficiency fitted to the three throughput points the report states as measured.' },
+  { id: 'adjusted', label: 'Anchored to measurements', help: "The fitted roofline, scaled to a measurement wherever there is one: InferenceX's runs for the card and model if it measured them (curve and all), else the report's one measured point for that card. Everything else is the roofline alone; the report's own estimates are not used. Longer contexts, more concurrency and prompt-heavy requests move it as the physics says." },
+  { id: 'roofline', label: 'Roofline only', help: "Ignore every anchor and compute speed from memory bandwidth, tensor throughput, link speed and the request shape, with the efficiencies fitted to InferenceX's measured runs." },
 ];
 
 /** Tax and route costs. */

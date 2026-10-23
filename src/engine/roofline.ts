@@ -10,9 +10,8 @@ import { type V, drv, ph } from '../data/provenance';
  * bound by memory bandwidth until the batch is large enough for the tensor cores to matter. Prefill pushes many
  * tokens through the same weights at once and is bound by tensor-core throughput.
  *
- * The efficiencies below are what real kernels achieve against the datasheet peaks. The memory efficiency and the step
- * overhead are fitted to three PRO 6000 points of the report: Qwen3.8-27B at 16 concurrent (measured), gpt-oss-120b and
- * gpt-oss-20b at 50 (stated at Medium confidence). The roofline lands at 0.94, 0.82 and 1.10 of them.
+ * The efficiencies are what real serving stacks achieve against the datasheet peaks. They are fitted per card family to
+ * InferenceX's measured runs (see `ROOF_FIT`), and carried to cards InferenceX has not measured by family.
  */
 
 export interface RoofParams {
@@ -43,6 +42,35 @@ export const ROOF_DEFAULT: RoofParams = {
   allReduceUs: { nvlink: 12, pcie: 40 },
   linkGBs: { nvlink: 300, pcie: 25 },
 };
+
+/** Card families whose serving efficiency is fitted separately. */
+export type RoofClass = 'hopper' | 'blackwell-dc' | 'blackwell-ws';
+
+/**
+ * Hopper and the older cards share one family (no native FP4, HBM or GDDR6/6X); data-centre Blackwell has its own; the
+ * RTX PRO 6000 and the GeForce Blackwell cards (same GB202 silicon, GDDR7, PCIe only) share the workstation family.
+ */
+export function roofClassOf(gpu: Gpu): RoofClass {
+  if (gpu.id === 'b200') return 'blackwell-dc';
+  if (gpu.id === 'pro6000' || gpu.id === 'rtx5090') return 'blackwell-ws';
+  return 'hopper';
+}
+
+/**
+ * Fitted to 393 InferenceX measurement points (vLLM and SGLang runs of gpt-oss-120b and Llama 3.3 70B on H100, H200 and
+ * B200 at 1 to 8 GPUs, Qwen3.5-397B on B200 and on four RTX PRO 6000s), by minimising the squared log error of output
+ * speed, speed per user and time to first token. See the Data audit for the residuals.
+ *
+ * The workstation family has only four measured points (four PRO 6000s over PCIe), so it inherits the data-centre
+ * Blackwell family's memory efficiency and step overhead and fits only its prefill efficiency and the PCIe link.
+ */
+export const ROOF_CLASSES: Record<RoofClass, RoofParams> = {
+  hopper: { etaMem: 0.637, etaDecodeCompute: 0.35, etaPrefill: 0.508, etaPrefillMoe: 0.132, stepOverheadMs: 1.93, prefillChunkTokens: 8192, allReduceUs: { nvlink: 22, pcie: 74 }, linkGBs: { nvlink: 91, pcie: 9 } },
+  'blackwell-dc': { etaMem: 0.617, etaDecodeCompute: 0.35, etaPrefill: 0.374, etaPrefillMoe: 0.05, stepOverheadMs: 1.17, prefillChunkTokens: 8192, allReduceUs: { nvlink: 22, pcie: 74 }, linkGBs: { nvlink: 91, pcie: 9 } },
+  'blackwell-ws': { etaMem: 0.617, etaDecodeCompute: 0.35, etaPrefill: 0.5, etaPrefillMoe: 0.181, stepOverheadMs: 1.17, prefillChunkTokens: 8192, allReduceUs: { nvlink: 22, pcie: 74 }, linkGBs: { nvlink: 91, pcie: 9 } },
+};
+
+export const roofParamsFor = (gpu: Gpu): RoofParams => ROOF_CLASSES[roofClassOf(gpu)];
 
 export interface RoofInputs {
   model: Model;
@@ -132,7 +160,7 @@ export interface StepResult {
  * One decode step for `batch` sequences, each producing `rows` token rows (1 normally; draft length + 1 when
  * verifying speculative tokens).
  */
-export function decodeStep(i: RoofInputs, batch: number, rows = 1, p: RoofParams = ROOF_DEFAULT): StepResult {
+export function decodeStep(i: RoofInputs, batch: number, rows = 1, p: RoofParams = roofParamsFor(i.gpu)): StepResult {
   const { model, gpu, count } = i;
   const net = model.net;
   const split = weightSplit(model, i.quant, i.weightsGB);
@@ -178,7 +206,7 @@ export function bandwidthCeilingTps(i: RoofInputs, batch: number, includeCache =
 }
 
 /** Aggregate output tokens per second for `batch` concurrent sequences (all GPUs together). */
-export function decodeTps(i: RoofInputs, batch: number, p: RoofParams = ROOF_DEFAULT): number {
+export function decodeTps(i: RoofInputs, batch: number, p: RoofParams = roofParamsFor(i.gpu)): number {
   return batch / decodeStep(i, batch, 1, p).t;
 }
 
@@ -191,7 +219,7 @@ export interface PrefillResult {
 }
 
 /** Prefill speed for prompts of `promptTokens` fresh tokens. */
-export function prefillRate(i: RoofInputs, promptTokens: number, p: RoofParams = ROOF_DEFAULT): PrefillResult {
+export function prefillRate(i: RoofInputs, promptTokens: number, p: RoofParams = roofParamsFor(i.gpu)): PrefillResult {
   const { model, gpu, count } = i;
   const net = model.net;
   const cf = computeFormat(gpu, i.quant);
@@ -201,8 +229,10 @@ export function prefillRate(i: RoofInputs, promptTokens: number, p: RoofParams =
   // Each chunk also streams the whole weight file, which only matters for small chunks on big models.
   const chunkCompute = p.prefillChunkTokens / computeRate;
   const chunkRead = (i.weightsGB * 1e9) / count / (gpu.bwGBs.v * 1e9 * p.etaMem);
+  // Tensor-parallel nodes all-reduce the whole chunk's activations twice per layer, which is slow over PCIe.
+  const chunkComm = count > 1 ? (net?.layers ?? 60) * 2 * (p.allReduceUs[gpu.link] * 1e-6 + (p.prefillChunkTokens * (net?.hidden ?? 5120) * 2) / (p.linkGBs[gpu.link] * 1e9)) : 0;
   const bound = chunkRead > chunkCompute ? 'memory' : 'compute';
-  const tokPerSec = p.prefillChunkTokens / Math.max(chunkCompute, chunkRead);
+  const tokPerSec = p.prefillChunkTokens / (Math.max(chunkCompute, chunkRead) + chunkComm);
   return { tokPerSec, seconds: promptTokens / tokPerSec, bound };
 }
 
@@ -245,7 +275,7 @@ export interface ServingPoint {
  * the decode rate is cut by the share of time prefill needs; the queue in front of prefill sets time to first token
  * (an M/D/1 queue: Poisson arrivals, one fixed prefill time per request).
  */
-export function servingPoint(i: Omit<RoofInputs, 'ctx'>, shape: ShapeIn, batch: number, p: RoofParams = ROOF_DEFAULT): ServingPoint {
+export function servingPoint(i: Omit<RoofInputs, 'ctx'>, shape: ShapeIn, batch: number, p: RoofParams = roofParamsFor(i.gpu)): ServingPoint {
   const parts = requestParts(shape);
   const full: RoofInputs = { ...i, ctx: parts.ctx };
   const step = decodeStep(full, batch, 1, p);
@@ -271,21 +301,27 @@ export function servingPoint(i: Omit<RoofInputs, 'ctx'>, shape: ShapeIn, batch: 
   };
 }
 
-/**
- * Efficiencies of real kernels against datasheet peaks. The memory figure and the step overhead are fitted to the three
- * PRO 6000 points the report states with a concrete concurrency and no estimate flag (Qwen3.8-27B at 16, measured;
- * gpt-oss-120b and gpt-oss-20b at 50, Medium confidence): the roofline lands at 0.94, 0.82 and 1.10 of them. The rest
- * have no measurement behind them yet.
- */
+const FIT_SRC = 'Fit to InferenceX measured runs';
+const fitNote = (what: string) => `${what}. Fitted to 393 InferenceX points (vLLM and SGLang, H100, H200, B200, four RTX PRO 6000s).`;
+const carried = (what: string, from: string) => `${what}. Not measured for this family; carried over from ${from}.`;
+
 export const ROOF_PROV: Record<string, V> = {
-  etaMem: drv(ROOF_DEFAULT.etaMem, 'Fit to report §5.2', 'Share of peak memory bandwidth decode reaches; with 0.8 ms of step overhead the roofline lands at 0.94, 0.82 and 1.10 of three PRO 6000 points: Qwen3.8-27B at 16 concurrent (measured), gpt-oss-120b and gpt-oss-20b at 50 (Medium confidence)'),
-  stepOverheadMs: drv(ROOF_DEFAULT.stepOverheadMs, 'Fit to report §5.2', 'Time per decode step outside the counted kernels (sampling, scheduling, launch gaps)'),
-  etaDecodeCompute: ph(ROOF_DEFAULT.etaDecodeCompute, 'No source yet', 'Share of peak tensor throughput small-batch decode reaches; decode is memory-bound in every case checked, so it rarely matters'),
-  etaPrefill: ph(ROOF_DEFAULT.etaPrefill, 'No source yet', 'Share of peak tensor throughput dense prefill reaches. Report §5.1 concurrency at 8K (first token under 10 s) implies a burst of 29-36 for Qwen3.8-27B; the roofline gives 11-23 depending on weight format'),
-  etaPrefillMoe: ph(ROOF_DEFAULT.etaPrefillMoe, 'No source yet', 'Share of peak tensor throughput for mixture-of-experts prefill, whose grouped GEMMs are less efficient'),
-  prefillChunkTokens: ph(ROOF_DEFAULT.prefillChunkTokens, 'vLLM default', 'Tokens per chunked-prefill step; weights are read once per chunk'),
-  allReduceNvlinkUs: ph(ROOF_DEFAULT.allReduceUs.nvlink, 'No source yet', 'Tensor-parallel all-reduce latency per layer and direction over NVLink'),
-  allReducePcieUs: ph(ROOF_DEFAULT.allReduceUs.pcie, 'No source yet', 'Tensor-parallel all-reduce latency per layer and direction over PCIe'),
-  linkNvlinkGBs: ph(ROOF_DEFAULT.linkGBs.nvlink, 'No source yet', 'Usable NVLink bandwidth between GPUs'),
-  linkPcieGBs: ph(ROOF_DEFAULT.linkGBs.pcie, 'No source yet', 'Usable PCIe bandwidth between GPUs'),
+  'hopper.etaMem': drv(ROOF_CLASSES.hopper.etaMem, FIT_SRC, fitNote('Share of peak memory bandwidth decode reaches on H100 and H200. Also used for Ada, Volta and other cards InferenceX has not measured')),
+  'hopper.stepOverheadMs': drv(ROOF_CLASSES.hopper.stepOverheadMs, FIT_SRC, fitNote('Time per decode step outside the counted kernels')),
+  'hopper.etaPrefill': drv(ROOF_CLASSES.hopper.etaPrefill, FIT_SRC, fitNote('Share of peak tensor throughput dense prefill reaches (Llama 3.3 70B at FP8)')),
+  'hopper.etaPrefillMoe': drv(ROOF_CLASSES.hopper.etaPrefillMoe, FIT_SRC, fitNote('The same for a mixture of experts (gpt-oss-120b); its weights run at 16 bits')),
+  'blackwell-dc.etaMem': drv(ROOF_CLASSES['blackwell-dc'].etaMem, FIT_SRC, fitNote('Share of peak memory bandwidth decode reaches on B200')),
+  'blackwell-dc.stepOverheadMs': drv(ROOF_CLASSES['blackwell-dc'].stepOverheadMs, FIT_SRC, fitNote('Time per decode step outside the counted kernels')),
+  'blackwell-dc.etaPrefill': drv(ROOF_CLASSES['blackwell-dc'].etaPrefill, FIT_SRC, fitNote('Share of peak tensor throughput dense prefill reaches')),
+  'blackwell-dc.etaPrefillMoe': drv(ROOF_CLASSES['blackwell-dc'].etaPrefillMoe, FIT_SRC, fitNote('The same for a mixture of experts; low because FP4 peak is not what vLLM reaches in prefill')),
+  'blackwell-ws.etaMem': drv(ROOF_CLASSES['blackwell-ws'].etaMem, FIT_SRC, carried('Memory bandwidth share on the RTX PRO 6000 and RTX 5090', 'B200; four measured PRO 6000 points are consistent with it (output speed within 2%)')),
+  'blackwell-ws.stepOverheadMs': drv(ROOF_CLASSES['blackwell-ws'].stepOverheadMs, FIT_SRC, carried('Time per decode step', 'B200')),
+  'blackwell-ws.etaPrefill': ph(ROOF_CLASSES['blackwell-ws'].etaPrefill, 'No source yet', 'Dense prefill share on the PRO 6000: no dense model was measured on it'),
+  'blackwell-ws.etaPrefillMoe': drv(ROOF_CLASSES['blackwell-ws'].etaPrefillMoe, FIT_SRC, 'Mixture-of-experts prefill share on the PRO 6000, from four measured points of Qwen3.5-397B on four cards'),
+  etaDecodeCompute: ph(ROOF_CLASSES.hopper.etaDecodeCompute, 'No source yet', 'Share of peak tensor throughput small-batch decode reaches; decode is memory-bound in every case checked, so it rarely matters'),
+  prefillChunkTokens: ph(8192, 'vLLM default', 'Tokens per chunked-prefill step; weights are read once per chunk'),
+  allReduceNvlinkUs: drv(ROOF_CLASSES.hopper.allReduceUs.nvlink, FIT_SRC, fitNote('Effective all-reduce latency per layer and direction over NVLink, including the launch and synchronisation of the stack')),
+  allReducePcieUs: drv(ROOF_CLASSES.hopper.allReduceUs.pcie, FIT_SRC, 'Effective all-reduce latency over PCIe. Fitted to four measured PRO 6000 points only.'),
+  linkNvlinkGBs: drv(ROOF_CLASSES.hopper.linkGBs.nvlink, FIT_SRC, fitNote('Effective NVLink bandwidth an all-reduce sees, far below the link rating')),
+  linkPcieGBs: drv(ROOF_CLASSES.hopper.linkGBs.pcie, FIT_SRC, 'Effective PCIe bandwidth an all-reduce sees across four PRO 6000s. Fitted to four measured points only.'),
 };

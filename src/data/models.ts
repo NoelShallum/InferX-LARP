@@ -1,4 +1,4 @@
-import { type V, type Prov, rep, meas, est, drv, ph } from './provenance';
+import { type V, type Prov, rep, meas, est, srcd, drv, ph } from './provenance';
 import type { Quant } from './gpus';
 import { ARCH, activeFromConfigV, kvPerTokV, type ArchInfo } from './arch';
 
@@ -377,6 +377,33 @@ function withArch(m: Omit<Model, 'net'>): Model {
 }
 
 export const MODELS: Model[] = RAW_MODELS.map(withArch);
+
+/**
+ * Models that are not in the catalog but have measured data that calibrates the roofline. Qwen3.5-397B-A17B is the
+ * only model InferenceX measured on the RTX PRO 6000 (four cards, tensor-parallel over PCIe).
+ */
+export const CAL_MODELS: Model[] = [
+  withArch({
+    id: 'qwen35_397b',
+    name: 'Qwen3.5-397B-A17B',
+    arch: 'moe',
+    paramsB: rep(397, 'InferenceX display name', 'From the model name'),
+    activeB: ph(17, 'No source yet', 'Replaced by the figure derived from the config'),
+    weights: { nvfp4: srcd(251.2, 'https://huggingface.co/nvidia/Qwen3.5-397B-A17B-NVFP4', 'Safetensors files of the NVFP4 checkpoint InferenceX serves, summed from the Hugging Face file tree on 23 Oct 2026') },
+    defaultQuant: 'nvfp4',
+    kvBytesPerTok: ph(15_000, 'No source yet', 'Replaced by the figure from the config'),
+    conc8k: null,
+    conc32k: null,
+    pro6000: [],
+    ada: [],
+    refIdx: 0,
+    pointsQuant: { pro6000: 'nvfp4', ada: 'nvfp4' },
+    mtp: null,
+    economics: false,
+    note: 'Calibration only: too big for one card, measured by InferenceX on four RTX PRO 6000s.',
+  }),
+];
+export const CAL_MODEL_BY_ID: Record<string, Model> = Object.fromEntries(CAL_MODELS.map((m) => [m.id, m]));
 
 export const MODEL_BY_ID: Record<string, Model> = Object.fromEntries(MODELS.map((m) => [m.id, m]));
 

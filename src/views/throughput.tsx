@@ -1,6 +1,7 @@
 import { useState } from 'preact/hooks';
 import { GPU_BY_ID, QUANT_LABEL } from '../data/gpus';
 import { GOLDEN_AL_QWEN38_FLASH_NEXT, MODEL_BY_ID } from '../data/models';
+import { bestIxCurve, ixProv } from '../data/ix';
 import { THROUGHPUT_PRESETS, WORKLOAD_BY_ID } from '../data/scenarios';
 import { DRAFT_COST, REPORT_TEST_CTX, capacityFor, chooseQuant, curveFor, mtpInfo, weightsGB } from '../engine/capacity';
 import { makeSlot } from '../engine/defaults';
@@ -11,7 +12,7 @@ import { fmtNum, fmtPct, fmtTps } from '../engine/units';
 import { settings } from '../state';
 import { ChartCard, LineChart, type ExtraPoint, type LineSeries } from '../ui/charts';
 import { Field, SelectInput, Toggle } from '../ui/controls';
-import { ECON_MODELS, SERVE_GPUS, WORKLOAD_OPTIONS } from '../ui/options';
+import { COUNT_OPTIONS, ECON_MODELS, SERVE_GPUS, WORKLOAD_OPTIONS } from '../ui/options';
 import { ProvBadge, Val } from '../ui/prov';
 
 const GPU_COLOR: Record<string, string> = {
@@ -34,6 +35,8 @@ export function ThroughputView() {
   const [workloadId, setWorkloadId] = useState('observed');
   const [picked, setPicked] = useState<string[]>(['pro6000', 'ada6000', 'rtx5090', 'h100']);
   const [mtp, setMtp] = useState(false);
+  const [count, setCount] = useState('1');
+  const n = Number(count);
   const model = MODEL_BY_ID[modelId]!;
   const pro = GPU_BY_ID['pro6000']!;
   const wl = WORKLOAD_BY_ID[workloadId]!;
@@ -46,15 +49,15 @@ export function ThroughputView() {
   const unfit: string[] = [];
   const notes: string[] = [];
   const rows: { gpu: string; c: number; tps: number; user: number; kind: string; src: string }[] = [];
-  const ops: { gpu: string; color: string; quant: string; c: number; tps: number; user: number; share: number | null; ttft: number | null; limit: string; bound: string }[] = [];
+  const ops: { gpu: string; color: string; quant: string; c: number; tps: number; user: number; share: number | null; ttft: number | null; limit: string; bound: string; evidence: string }[] = [];
   const prefill: { gpu: string; color: string; rate: number; seconds: number; burst8k: number; reported: number | null }[] = [];
   let shapeNow = { avgTokens: 0, outShare: 0, cacheHit: 0 };
 
   for (const id of picked) {
     const gpu = GPU_BY_ID[id]!;
-    const fit = chooseQuant(model, gpu, 1, 'auto');
+    const fit = chooseQuant(model, gpu, n, 'auto');
     if (!fit.fits) {
-      unfit.push(`${gpu.short}: ${fit.reason}`);
+      unfit.push(`${gpu.short}${n > 1 ? ` ×${n}` : ''}: ${fit.reason}`);
       continue;
     }
     const slot = makeSlot({ gpuId: id, modelId, ownership: 'rent', workloadId });
@@ -68,7 +71,7 @@ export function ThroughputView() {
       model,
       gpu,
       proGpu: pro,
-      count: 1,
+      count: n,
       quant: 'auto',
       mtp,
       qos: { ...qosNow, ttftP90Sec: s.qos.ttftP90Sec },
@@ -80,12 +83,13 @@ export function ThroughputView() {
       sweepSteps: 36,
     });
     if (!cap.ok) {
-      unfit.push(`${gpu.short}: ${cap.reason}`);
+      unfit.push(`${gpu.short}${n > 1 ? ` ×${n}` : ''}: ${cap.reason}`);
       continue;
     }
     if (cap.basisNote) notes.push(`${gpu.short}: ${cap.basisNote}`);
-    series.push({ id, label: `${gpu.short} · ${QUANT_LABEL[fit.quant]}`, color, pts: cap.sweep.map((p) => ({ x: p.user, y: p.tps })), width: 2 });
-    if (cap.curve) {
+    series.push({ id, label: `${gpu.short}${n > 1 ? ` ×${n}` : ''} · ${QUANT_LABEL[fit.quant]}`, color, pts: cap.sweep.map((p) => ({ x: p.user, y: p.tps })), width: 2 });
+    // The report's points are for one card; they say nothing about a node of several.
+    if (cap.curve && n === 1) {
       const info = mtp ? mtpInfo(model, curveFor(model, pro, chooseQuant(model, pro, 1, model.pointsQuant.pro6000).quant, pro)) : null;
       cap.curve.pts.forEach((p, i) => {
         const kind = cap.curve!.baseProvs[i]?.kind ?? 'derived';
@@ -105,6 +109,29 @@ export function ThroughputView() {
           ],
         });
         rows.push({ gpu: gpu.short, c: p.c, tps, user: tps / p.c, kind, src: cap.curve!.baseProvs[i]?.src ?? '' });
+      });
+    }
+    const ix = bestIxCurve(modelId, id, fit.quant, n, requestParts(shapeNow).ctx);
+    if (ix) {
+      const prov = ixProv(ix);
+      ix.pts.forEach((p) => {
+        if (!p.user) return;
+        const tps = p.outPerGpu * ix.gpus;
+        points.push({
+          x: p.user,
+          y: tps,
+          color,
+          label: gpu.short,
+          square: true,
+          tipTitle: `${gpu.short}${n > 1 ? ` ×${n}` : ''}: InferenceX measured at ${p.conc} concurrent`,
+          tip: [
+            { label: 'Output', value: `${fmtNum(tps)} tok/s` },
+            { label: 'Per user', value: `${fmtTps(p.user)} tok/s` },
+            { label: 'First token, median', value: p.ttft50 === null ? '—' : fmtSec(p.ttft50) },
+            { label: 'Run', value: `${ix.framework} · ${ix.isl / 1024}K in / ${ix.osl / 1024}K out` },
+          ],
+        });
+        rows.push({ gpu: `${gpu.short}${n > 1 ? ` ×${n}` : ''} · InferenceX ${ix.framework} ${ix.isl / 1024}K/${ix.osl / 1024}K`, c: p.conc, tps, user: p.user, kind: 'measured', src: prov.src });
       });
     }
     if (mtp && id === 'pro6000' && model.mtp?.measured) {
@@ -127,13 +154,15 @@ export function ThroughputView() {
       ],
     });
     const limit = cap.belowFloor ? (cap.ttftLimited ? 'first-token time (cannot meet)' : 'speed floor (cannot meet)') : cap.kvLimited ? 'KV memory' : cap.ttftLimited ? 'first-token time' : s.qos.mode === 'report' ? 'report operating point' : cap.extrapolated ? 'end of curve' : 'speed floor';
-    ops.push({ gpu: gpu.short, color, quant: QUANT_LABEL[fit.quant], c: cap.cNode, tps: cap.tpsNode, user: cap.userTps, share: cap.serving?.share ?? null, ttft: cap.serving?.ttftP90 ?? null, limit, bound: cap.bound ?? '—' });
+    const ev = cap.evidence;
+    const evidenceLabel = ev.kind === 'inferencex' ? `InferenceX measured (×${ev.k.toFixed(2)} of roofline)` : ev.kind === 'report-measured' ? `Report measured point (×${ev.k.toFixed(2)})` : ev.kind === 'report-points' ? 'Report points' : 'Roofline only';
+    ops.push({ gpu: `${gpu.short}${n > 1 ? ` ×${n}` : ''}`, color, quant: QUANT_LABEL[fit.quant], c: cap.cNode, tps: cap.tpsNode, user: cap.userTps, share: cap.serving?.share ?? null, ttft: cap.serving?.ttftP90 ?? null, limit, bound: cap.bound ?? '—', evidence: evidenceLabel });
 
     const w = weightsGB(model, fit.quant)!;
     const parts = requestParts(shapeNow);
-    const pf = prefillRate({ model, gpu, quant: fit.quant, count: 1, weightsGB: w.gb, ctx: parts.ctx }, parts.input);
-    const p8 = prefillRate({ model, gpu, quant: fit.quant, count: 1, weightsGB: w.gb, ctx: 8192 }, 8192);
-    prefill.push({ gpu: gpu.short, color, rate: pf.tokPerSec, seconds: parts.fresh / pf.tokPerSec, burst8k: 10 / p8.seconds, reported: id === 'pro6000' ? (model.conc8k?.v ?? null) : null });
+    const pf = prefillRate({ model, gpu, quant: fit.quant, count: n, weightsGB: w.gb, ctx: parts.ctx }, parts.input);
+    const p8 = prefillRate({ model, gpu, quant: fit.quant, count: n, weightsGB: w.gb, ctx: 8192 }, 8192);
+    prefill.push({ gpu: `${gpu.short}${n > 1 ? ` ×${n}` : ''}`, color, rate: pf.tokPerSec, seconds: parts.fresh / pf.tokPerSec, burst8k: 10 / p8.seconds, reported: id === 'pro6000' ? (model.conc8k?.v ?? null) : null });
   }
 
   const info = model.mtp ? mtpInfo(model, curveFor(model, pro, chooseQuant(model, pro, 1, model.pointsQuant.pro6000).quant, pro)) : null;
@@ -158,7 +187,7 @@ export function ThroughputView() {
   return (
     <div class="stack">
       <div class="notice">
-        <b>{basisInfo.label}.</b> {basisInfo.help} Filled dots are the report's measurements, hollow dots its estimates, and the ring is the operating point under the current quality bar. Change the basis in the filter row above.
+        <b>{basisInfo.label}.</b> {basisInfo.help} Round dots are the report's points (filled where it measured them, hollow where it estimated), squares are InferenceX measurements, and the ring is the operating point under the current quality bar. Change the basis in the filter row above.
       </div>
       <div class="filters" role="region" aria-label="Throughput inputs">
         <Field label="Model">
@@ -174,6 +203,9 @@ export function ThroughputView() {
         </Field>
         <Field label="Request">
           <SelectInput label="Workload preset" value={workloadId} options={WORKLOAD_OPTIONS} onChange={setWorkloadId} />
+        </Field>
+        <Field label="GPUs per node">
+          <SelectInput label="GPUs per node" value={count} options={COUNT_OPTIONS} onChange={setCount} />
         </Field>
         <Toggle checked={mtp} onChange={setMtp} title={model.mtp?.note}>
           {model.mtp ? 'MTP on' : 'No MTP evidence for this model'}
@@ -276,6 +308,7 @@ export function ThroughputView() {
                 <th class="num">First token p90</th>
                 <th>Held back by</th>
                 <th>Step is</th>
+                <th>Anchored to</th>
               </tr>
             </thead>
             <tbody>
@@ -293,6 +326,7 @@ export function ThroughputView() {
                   <td class="num">{o.ttft === null ? '—' : fmtSec(o.ttft)}</td>
                   <td>{o.limit}</td>
                   <td>{o.bound === 'memory' ? 'memory-bound' : o.bound === 'compute' ? 'compute-bound' : o.bound === 'comm' ? 'link-bound' : '—'}</td>
+                  <td>{o.evidence}</td>
                 </tr>
               ))}
             </tbody>
@@ -304,7 +338,7 @@ export function ThroughputView() {
       <section class="card" aria-label="Roofline against the report">
         <h2>Roofline against the report's points for {model.name}</h2>
         <div class="sub">
-          The roofline reads the weights and cache once per step at {fmtNum(REPORT_TEST_CTX.v)} tokens of context <ProvBadge p={REPORT_TEST_CTX.p} compact />. Its memory efficiency was fitted to three of the report's points (Qwen3.8-27B at 16 concurrent, measured; gpt-oss-120b and gpt-oss-20b at 50); every other row is an independent check. The ceiling is the memory bus at full bandwidth with nothing but the weights to read.
+          The roofline reads the weights and cache once per step at {fmtNum(REPORT_TEST_CTX.v)} tokens of context <ProvBadge p={REPORT_TEST_CTX.p} compact />. Its efficiencies were fitted to InferenceX's measured runs on H100, H200, B200 and four PRO 6000s, not to these points, so each row is an independent check of the report. The ceiling is the memory bus at full bandwidth with nothing but the weights to read.
         </div>
         <div class="tablewrap">
           <table class="t">
@@ -382,7 +416,7 @@ export function ThroughputView() {
             </tbody>
           </table>
         </div>
-        <p class="small mt">Prefill efficiency (share of peak tensor throughput) is a placeholder: no measurement fixes it. Across the models the report measured, the roofline's burst lands between a third and one-and-a-third times the report's concurrency.</p>
+        <p class="small mt">Prefill efficiency was fitted to InferenceX's time-to-first-token runs on H100, H200 and B200 (and four PRO 6000s for mixture-of-experts models); for dense models on the PRO 6000 and Ada it is a carried-over placeholder. Across the models the report measured, the roofline's burst lands between a third and one-and-a-third times the report's concurrency.</p>
       </section>
 
       {model.mtp ? (

@@ -218,7 +218,7 @@ export function App() {
         <V />
       </main>
       <footer class="small" style={{ marginTop: '28px' }}>
-        Numbers are built on the report "Inference as a Service: Platforms, Models and Margins" (22 Oct 2026) and the InferenceX repositories. Prices and traffic are live as of the last data run; architecture figures come from each model's Hugging Face config. Throughput follows the report's points unless you switch it to the roofline. Not financial or legal advice.
+        Numbers are built on the report "Inference as a Service: Platforms, Models and Margins" (22 Oct 2026) and the InferenceX repositories. Prices and traffic are live as of the last data run; architecture figures come from each model's Hugging Face config. Throughput is anchored to InferenceX's measured runs and the report's one measured point; the other bases are one switch away. Not financial or legal advice.
       </footer>
       <Popover />
     </div>

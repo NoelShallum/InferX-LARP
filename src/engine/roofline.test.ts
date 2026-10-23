@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { kvBytesPerSeq } from '../data/arch';
 import { GPU_BY_ID } from '../data/gpus';
-import { MODELS, MODEL_BY_ID } from '../data/models';
+import { bestIxCurve } from '../data/ix';
+import { CAL_MODEL_BY_ID, MODELS, MODEL_BY_ID } from '../data/models';
 import { capacityFor, fitOn, seqKvBytes, weightsGB } from './capacity';
 import { bandwidthCeilingTps, computeFormat, decodeStep, decodeTps, expertCoverage, prefillRate, requestParts, servingPoint } from './roofline';
 
@@ -61,15 +62,14 @@ describe('roofline decode', () => {
     expect(s.tMem).toBeGreaterThan(ideal * 0.7);
     expect(s.tMem).toBeLessThan(ideal * 1.6);
   });
-  it('reproduces the measured 862 tok/s for Qwen3.8-27B at 16 concurrent within 10%', () => {
-    expect(decodeTps(inputs('qwen38_27b', 'pro6000', 'nvfp4'), 16) / 862).toBeGreaterThan(0.9);
-    expect(decodeTps(inputs('qwen38_27b', 'pro6000', 'nvfp4'), 16) / 862).toBeLessThan(1.1);
+  it("sits below the report's measured 862 tok/s for Qwen3.8-27B at 16 concurrent, because it is fitted to InferenceX's runs, not to that point", () => {
+    const r = decodeTps(inputs('qwen38_27b', 'pro6000', 'nvfp4'), 16) / 862;
+    expect(r).toBeGreaterThan(0.5);
+    expect(r).toBeLessThan(0.9);
   });
-  it("lands within 25% of the report's gpt-oss figures at 50 concurrent", () => {
-    expect(decodeTps(inputs('gptoss_120b', 'pro6000', 'mxfp4'), 50) / 1525).toBeGreaterThan(0.75);
-    expect(decodeTps(inputs('gptoss_120b', 'pro6000', 'mxfp4'), 50) / 1525).toBeLessThan(1.25);
-    expect(decodeTps(inputs('gptoss_20b', 'pro6000', 'mxfp4'), 50) / 3753).toBeGreaterThan(0.75);
-    expect(decodeTps(inputs('gptoss_20b', 'pro6000', 'mxfp4'), 50) / 3753).toBeLessThan(1.25);
+  it("puts the report's gpt-oss estimates for one PRO 6000 well above what the fitted roofline allows", () => {
+    expect(decodeTps(inputs('gptoss_120b', 'pro6000', 'mxfp4'), 50) / 1525).toBeLessThan(0.8);
+    expect(decodeTps(inputs('gptoss_20b', 'pro6000', 'mxfp4'), 50) / 3753).toBeLessThan(1.0);
   });
   it("shows the report's Llama 3.3 70B figure of 700 tok/s at 16 concurrent is above what the memory bus allows", () => {
     const i = inputs('llama33_70b', 'pro6000', 'nvfp4');
@@ -142,11 +142,11 @@ describe('throughput bases', () => {
   const model = MODEL_BY_ID['qwen38_27b']!;
   const observed = { avgTokens: 16118, outShare: 0.041, cacheHit: 0.73 };
   const base = { model, gpu: pro, proGpu: pro, count: 1, quant: 'nvfp4' as const, mtp: false, extraMult: 1, shape: observed, qos: { mode: 'report' as const, floorTps: 40 } };
-  it("'adjusted' equals the report's number when the request is the one the points describe", () => {
+  it("'adjusted' equals the report's measured number when the request is the one the point describes", () => {
     const rep = capacityFor({ ...base, basis: 'report' });
     const adj = capacityFor({ ...base, basis: 'adjusted', baseShape: observed });
+    expect(adj.evidence.kind).toBe('report-measured');
     expect(adj.tpsNode).toBeCloseTo(rep.tpsNode, 6);
-    expect(adj.prefillFactor).toBeCloseTo(1, 10);
   });
   it("'adjusted' lowers throughput for a prompt-heavy agentic request and raises it for a short chat", () => {
     const rep = capacityFor({ ...base, basis: 'report' }).tpsNode;
@@ -199,22 +199,48 @@ describe('throughput bases', () => {
     expect(c.kvConcPerGpu).toBeCloseTo((f.kvPoolGB * 1e9) / seqKvBytes(model, requestParts(observed).ctx), 3);
     expect(c.kvLimited || c.cPerGpu <= c.kvConcPerGpu).toBe(true);
   });
-  it("'adjusted' passes through the report's number at its reference concurrency and follows the roofline's shape from there", () => {
-    const rep = capacityFor({ ...base, basis: 'report', baseShape: observed });
-    const adj = capacityFor({ ...base, basis: 'adjusted', baseShape: observed, qos: { mode: 'floor', floorTps: 40 } });
-    expect(capacityFor({ ...base, basis: 'adjusted', baseShape: observed }).tpsNode).toBeCloseTo(rep.tpsNode, 6);
-    const physics = capacityFor({ ...base, basis: 'roofline', qos: { mode: 'floor', floorTps: 40 } });
-    // Same shape as the roofline, level set by the report's point: within a few tens of percent of the roofline on a model the roofline fits.
-    expect(adj.tpsNode / physics.tpsNode).toBeGreaterThan(0.8);
-    expect(adj.tpsNode / physics.tpsNode).toBeLessThan(2.5);
+  it("'adjusted' is the fitted roofline scaled by how far the measurement sits from it", () => {
+    const adj = capacityFor({ ...base, basis: 'adjusted', baseShape: observed });
+    const physics = capacityFor({ ...base, basis: 'roofline' });
+    expect(adj.tpsNode / physics.tpsNode).toBeCloseTo(adj.evidence.k, 6);
+    expect(adj.evidence.k).toBeGreaterThan(1);
   });
-  it("'adjusted' never delivers more than the memory bus could, even when the report's figure for the model is too high", () => {
+  it('without a measurement for the card, adjusted is the roofline alone and says so', () => {
+    const gemma = MODEL_BY_ID['gemma4_26b']!;
+    const c = capacityFor({ ...base, model: gemma, quant: 'fp8', basis: 'adjusted', shape: { avgTokens: 3000, outShare: 0.06, cacheHit: 0.25 } });
+    const r = capacityFor({ ...base, model: gemma, quant: 'fp8', basis: 'roofline', shape: { avgTokens: 3000, outShare: 0.06, cacheHit: 0.25 } });
+    expect(c.evidence.kind).toBe('none');
+    expect(c.tpsNode).toBeCloseTo(r.tpsNode, 6);
+  });
+  it('the roofline never delivers more than the memory bus could', () => {
     const llama = MODEL_BY_ID['llama33_70b']!;
     const chat = { avgTokens: 3000, outShare: 0.15, cacheHit: 0.3 };
-    const c = capacityFor({ ...base, model: llama, quant: 'nvfp4', basis: 'adjusted', baseShape: { avgTokens: 1731, outShare: 0.07, cacheHit: 0.26 }, shape: chat, qos: { mode: 'floor', floorTps: 20 } });
+    const c = capacityFor({ ...base, model: llama, quant: 'nvfp4', basis: 'roofline', shape: chat, qos: { mode: 'floor', floorTps: 20 } });
     const w = weightsGB(llama, 'nvfp4')!.gb;
     const ceiling = bandwidthCeilingTps({ model: llama, gpu: pro, quant: 'nvfp4', count: 1, weightsGB: w, ctx: requestParts(chat).ctx }, c.cNode, true);
-    expect(c.tpsNode / c.prefillFactor).toBeLessThanOrEqual(ceiling * 1.0001);
+    expect(c.tpsNode / c.prefillFactor).toBeLessThanOrEqual(ceiling);
+  });
+  it("reproduces an InferenceX curve exactly at the concurrencies it measured, and follows the roofline between them", () => {
+    const gpt = MODEL_BY_ID['gptoss_120b']!;
+    const h200 = GPU_BY_ID['h200']!;
+    const curve = bestIxCurve('gptoss_120b', 'h200', 'mxfp4', 8, 8700)!;
+    expect(curve).not.toBeNull();
+    const shape = { avgTokens: curve.isl + curve.osl, outShare: curve.osl / (curve.isl + curve.osl), cacheHit: 0 };
+    const pt = curve.pts[Math.floor(curve.pts.length / 2)]!;
+    const c = capacityFor({ ...base, model: gpt, gpu: h200, count: 8, quant: 'mxfp4', basis: 'adjusted', shape, sweepAt: [pt.conc / 8] });
+    expect(c.evidence.kind).toBe('inferencex');
+    expect(c.sweep[0]!.tps / (pt.outPerGpu * 8)).toBeCloseTo(1, 2);
+  });
+  it('four PRO 6000s over PCIe: the measured Qwen3.5-397B curve is reproduced and PCIe all-reduce costs real time', () => {
+    const q = CAL_MODEL_BY_ID['qwen35_397b']!;
+    const curve = bestIxCurve('qwen35_397b', 'pro6000', 'nvfp4', 4, 8700)!;
+    expect(curve).not.toBeNull();
+    const shape = { avgTokens: curve.isl + curve.osl, outShare: curve.osl / (curve.isl + curve.osl), cacheHit: 0 };
+    const pt = curve.pts.find((p) => p.conc === 16)!;
+    const c = capacityFor({ ...base, model: q, count: 4, quant: 'nvfp4', basis: 'adjusted', shape, sweepAt: [pt.conc / 4] });
+    expect(c.sweep[0]!.tps / (pt.outPerGpu * 4)).toBeCloseTo(1, 2);
+    const step = decodeStep({ model: q, gpu: pro, quant: 'nvfp4', count: 4, weightsGB: 251.2, ctx: 8700 }, 16);
+    expect(step.tComm).toBeGreaterThan(step.tMem * 0.2);
   });
   it('the bus ceiling drops when the cache each user reads is counted', () => {
     const i = inputs('llama33_70b', 'pro6000', 'nvfp4');

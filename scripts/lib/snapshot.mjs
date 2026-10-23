@@ -20,9 +20,9 @@ export const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 export const REPO_DIR = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../..');
 
 /** Write a JSON file under the repository, relative to its root. */
-export function writeJson(rel, payload) {
+export function writeJson(rel, payload, indent = 1) {
   const file = path.join(REPO_DIR, rel);
   fs.mkdirSync(path.dirname(file), { recursive: true });
-  fs.writeFileSync(file, JSON.stringify(payload, null, 1) + '\n');
+  fs.writeFileSync(file, JSON.stringify(payload, null, indent || undefined) + '\n');
   return rel;
 }

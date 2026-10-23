@@ -1,6 +1,6 @@
 {
  "source": "huggingface.co",
- "generatedAt": "2026-10-23T11:43:51.673Z",
+ "generatedAt": "2026-10-23T12:15:43.740Z",
  "models": {
   "qwen38_27b": {
    "repo": "Qwen/Qwen3.8-27B",
@@ -648,6 +648,59 @@
     "excluded": {
      "towers": 411070464,
      "mtpExperts": 2415919104,
+     "ngram": 0
+    }
+   },
+   "mtpLayers": 1,
+   "maxPositions": 262144
+  },
+  "qwen35_397b": {
+   "repo": "Qwen/Qwen3.5-397B-A17B",
+   "sha": "8472618112abcbd45acbcdc58436aff4233c23f7",
+   "configUrl": "https://huggingface.co/Qwen/Qwen3.5-397B-A17B/blob/8472618112abcbd45acbcdc58436aff4233c23f7/config.json",
+   "paramsRepo": "Qwen/Qwen3.5-397B-A17B",
+   "note": "Calibration only: InferenceX measured this model on four RTX PRO 6000s, the one measured multi-GPU PCIe data for that card",
+   "family": "hybrid-linear-moe",
+   "layers": 60,
+   "layerMix": {
+    "full": 15,
+    "sliding": 0,
+    "linear": 45,
+    "mamba": 0,
+    "other": 0
+   },
+   "hidden": 4096,
+   "vocab": 248320,
+   "heads": 32,
+   "kvHeads": 2,
+   "headDim": 256,
+   "kEqV": false,
+   "mla": null,
+   "window": null,
+   "fullTokBytes": 15360,
+   "slidingTokBytes": 0,
+   "stateBytes": 192061440,
+   "stateDetail": "45 gated-delta-net layers × 4.27 MB",
+   "readCapTokens": null,
+   "moe": {
+    "experts": 512,
+    "topK": 10,
+    "moeLayers": 60,
+    "expertInter": 1024,
+    "matrices": 3,
+    "dimIn": 4096,
+    "routedParams": 386547056640
+   },
+   "params": {
+    "total": 403397928944,
+    "text": 396544407536,
+    "active": 16529979376,
+    "embed": 1017118720,
+    "embedTied": false,
+    "routedShare": 0.9747888238845169,
+    "excluded": {
+     "towers": 411070464,
+     "mtpExperts": 6442450944,
      "ngram": 0
     }
    },

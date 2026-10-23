@@ -4,7 +4,8 @@ import { BYTES_PER_PARAM, type Model } from '../data/models';
 import { MARKET_BY_MODEL, RENT_REFS } from '../data/market';
 import { type Prov, ph, drv } from '../data/provenance';
 import { calibrationFor } from './calibration';
-import { bandwidthCeilingTps, decodeTps, requestParts, servingPoint, type Bound, type ServingPoint, type ShapeIn } from './roofline';
+import { bestIxCurve, ixProv, type IxCurve } from '../data/ix';
+import { decodeTps, requestParts, roofClassOf, roofParamsFor, servingPoint, type Bound, type ServingPoint, type ShapeIn } from './roofline';
 
 export const GPU_MEM_UTIL = ph(0.9, 'vLLM default gpu_memory_utilization', 'Share of VRAM the serving engine may use');
 export const OVERHEAD_GB_PER_GPU = ph(4, 'No source yet', 'CUDA context, activations and graph capture per GPU; the report does not give one');
@@ -265,6 +266,16 @@ export interface QosInput {
   ttftP90Sec?: number;
 }
 
+/** What anchors the speed: a measurement, or nothing but the fitted roofline. */
+export interface CapacityEvidence {
+  kind: 'inferencex' | 'report-measured' | 'report-points' | 'none';
+  label: string;
+  prov: Prov | null;
+  /** How far the measurement sits above (>1) or below (<1) the fitted roofline at the operating point. */
+  k: number;
+  curve: IxCurve | null;
+}
+
 export interface Capacity {
   ok: boolean;
   reason: string;
@@ -298,6 +309,7 @@ export interface Capacity {
   multipliers: { name: string; value: number; prov: Prov }[];
   /** Curve through the operating range, when `sweepSteps` was asked for. */
   sweep: SweepPoint[];
+  evidence: CapacityEvidence;
 }
 
 export interface CapacityArgs {
@@ -323,6 +335,8 @@ export interface CapacityArgs {
   batch?: boolean;
   /** Also evaluate this many log-spaced concurrencies from one user to the most the node can hold, for plotting. */
   sweepSteps?: number;
+  /** Or evaluate exactly these per-GPU concurrencies. */
+  sweepAt?: number[];
 }
 
 export interface SweepPoint {
@@ -367,16 +381,18 @@ export function capacityFor(a: CapacityArgs): Capacity {
     bound: null,
     multipliers: [],
     sweep: [],
+    evidence: { kind: 'none', label: '', prov: null, k: 1, curve: null },
   });
   if (!fit.fits) return empty(fit.reason);
   const curve = curveFor(a.model, a.gpu, fit.quant, a.proGpu);
   let basis = requested;
   let basisNote = '';
-  if (!curve && requested !== 'roofline') {
+  if (!curve && requested === 'report') {
     if (!a.model.net) return empty(`The report has no throughput data for ${a.model.name}`);
     basis = 'roofline';
     basisNote = `The report has no throughput points for ${a.model.name}, so speed comes from the roofline alone`;
   }
+  if (!curve && !a.model.net) return empty(`No throughput data for ${a.model.name}`);
 
   const n = a.count;
   const shape = a.shape;
@@ -385,65 +401,68 @@ export function capacityFor(a: CapacityArgs): Capacity {
   const parts0 = requestParts(base0);
   const roofIn = { model: a.model, gpu: a.gpu, quant: fit.quant, count: n, weightsGB: fit.weightsGB };
   const prefillMult = a.prefillMult ?? 1;
+  const pBase = roofParamsFor(a.gpu);
+  // The PRO 6000 Max-Q loses prefill speed far more than decode.
+  const pSlot = prefillMult === 1 ? pBase : { ...pBase, etaPrefill: pBase.etaPrefill * prefillMult, etaPrefillMoe: pBase.etaPrefillMoe * prefillMult };
 
+  // What anchors the roofline: an InferenceX run of exactly this config, else the report's measured point for this card, else nothing.
+  const refC = curve ? curve.cRef : 16;
+  const ix = basis === 'adjusted' ? bestIxCurve(a.model.id, a.gpu.id, fit.quant, n, parts.ctx) : null;
+  const reportMeasured = basis === 'adjusted' && !ix && curve && curve.source !== 'scaled' && curve.baseProvs[Math.min(a.model.refIdx, curve.baseProvs.length - 1)]?.kind === 'measured';
+  const ixRatios = ix
+    ? ix.pts.map((pt) => {
+        const sh = { avgTokens: ix.isl + ix.osl, outShare: ix.osl / (ix.isl + ix.osl), cacheHit: 0 };
+        return { x: Math.log(pt.conc), y: Math.log((pt.outPerGpu * ix.gpus) / servingPoint(roofIn, sh, pt.conc, pBase).tps) };
+      })
+    : [];
+  const kReport = reportMeasured && curve ? tpsAt(curve, curve.cRef) / servingPoint({ ...roofIn, count: 1 }, base0, refC, pBase).tps : 1;
+  const kAt = (B: number): number => {
+    if (ixRatios.length) {
+      const x = Math.log(Math.max(1, B));
+      const first = ixRatios[0]!;
+      const last = ixRatios[ixRatios.length - 1]!;
+      if (x <= first.x) return Math.exp(first.y);
+      if (x >= last.x) return Math.exp(last.y);
+      const j = ixRatios.findIndex((r) => r.x >= x);
+      const lo = ixRatios[j - 1]!;
+      const hi = ixRatios[j]!;
+      return Math.exp(lo.y + ((hi.y - lo.y) * (x - lo.x)) / (hi.x - lo.x));
+    }
+    return reportMeasured ? kReport : 1;
+  };
+
+  // Speculative-decoding gain is calibrated against the report's measured point, so its plain speed must come from the same basis.
   const proFit = chooseQuant(a.model, a.proGpu, 1, a.model.pointsQuant.pro6000);
   const proCurve = curveFor(a.model, a.proGpu, proFit.quant, a.proGpu);
-  const proRoof = (c: number) => decodeTps({ model: a.model, gpu: a.proGpu, quant: proFit.quant, count: 1, weightsGB: proFit.weightsGB, ctx: parts0.ctx }, c);
-  // The report's level at its reference concurrency, carried onto the roofline's shape: K scales the roofline so it passes through the report's number there.
-  const kOf = (cv: Curve | null, roofAt: (c: number) => number) => (cv ? tpsAt(cv, cv.cRef) / roofAt(cv.cRef) : 1);
-  const kPro = kOf(proCurve, proRoof);
-  const plainPro: PlainTps | null = !proCurve ? null : basis === 'report' ? (c) => tpsAt(proCurve, c) : basis === 'adjusted' ? (c) => kPro * proRoof(c) : proRoof;
+  const proIn = { model: a.model, gpu: a.proGpu, quant: proFit.quant, count: 1, weightsGB: proFit.weightsGB };
+  const proPlain = (c: number) => servingPoint(proIn, base0, c).tps;
+  const proMeasured = proCurve && proCurve.source === 'pro6000' && proCurve.baseProvs[Math.min(a.model.refIdx, proCurve.baseProvs.length - 1)]?.kind === 'measured';
+  const kPro = proMeasured && proCurve ? tpsAt(proCurve, proCurve.cRef) / proPlain(proCurve.cRef) : 1;
+  const plainPro: PlainTps | null = basis === 'report' ? (proCurve ? (c) => tpsAt(proCurve, c) : null) : (c) => kPro * proPlain(c);
   const info = a.mtp ? mtpInfo(a.model, plainPro) : null;
   const gain = (c: number) => (a.mtp ? mtpGain(info, c) : 1);
-  const kTarget = basis === 'adjusted' ? kOf(curve, (c) => decodeTps({ ...roofIn, count: 1, ctx: parts0.ctx }, c)) : 1;
 
-  // Tensor-parallel scaling from the roofline at the same per-GPU concurrency; the report has no multi-GPU data.
+  // Tensor-parallel scaling from the roofline at the same per-GPU concurrency, for display and for the report's single-card points.
   const tpEff = (c: number): number => {
     if (n <= 1) return 1;
-    const ctx = basis === 'roofline' ? parts.ctx : parts0.ctx;
+    const ctx = basis === 'report' ? parts0.ctx : parts.ctx;
     const node = decodeTps({ ...roofIn, ctx }, c * n);
     const one = decodeTps({ ...roofIn, count: 1, ctx }, c);
     return node / (n * one);
   };
 
-  /** Aggregate decode tokens per second for the node at per-GPU concurrency c, before prefill takes its share. */
-  const decodeNode = (c: number): { tps: number; contextFactor: number } => {
-    const B = c * n;
-    if (basis === 'roofline') return { tps: decodeTps({ ...roofIn, ctx: parts.ctx }, B) * gain(c) * a.extraMult, contextFactor: 1 };
-    if (basis === 'adjusted') {
-      const now = decodeTps({ ...roofIn, ctx: parts.ctx }, B);
-      const was = decodeTps({ ...roofIn, ctx: parts0.ctx }, B);
-      // A report figure that sits above the memory bus carries into every point scaled from it; nothing may beat the bus.
-      const ceiling = bandwidthCeilingTps({ ...roofIn, ctx: parts.ctx }, B, true);
-      return { tps: Math.min(kTarget * now, ceiling) * gain(c) * a.extraMult, contextFactor: now / was };
-    }
-    return { tps: tpsAt(curve!, c) * n * tpEff(c) * gain(c) * a.extraMult, contextFactor: 1 };
-  };
-
   /** Everything at per-GPU concurrency c: speed per user, time to first token, prefill's share. */
   const evalAt = (c: number) => {
-    const d = decodeNode(c);
     const B = c * n;
-    if (basis === 'report') return { tps: d.tps, user: d.tps / B, ttftP90: 0, serving: null as ServingPoint | null, prefillFactor: 1, contextFactor: 1 };
-    const sp = servingPoint(roofIn, shape, B);
-    // The share is re-derived from the decode rate this engine actually has, with this slot's own prefill multiplier.
-    const rate = sp.prefill.tokPerSec * prefillMult;
-    const sPrefill = sp.freshTokens / rate;
-    const aNow = parts.out > 0 ? (d.tps * sPrefill) / parts.out : Infinity;
-    const share = aNow / (1 + aNow);
-    let factor = 1 - share;
-    if (basis === 'adjusted') {
-      // The report's numbers come from a card at full prefill speed, so the baseline carries no edition penalty.
-      const rate0 = servingPoint(roofIn, base0, B).prefill.tokPerSec;
-      const a0 = parts0.out > 0 ? (d.tps * (parts0.fresh / rate0)) / parts0.out : Infinity;
-      factor = (1 + a0) / (1 + aNow);
+    if (basis === 'report') {
+      const tps = tpsAt(curve!, c) * n * tpEff(c) * gain(c) * a.extraMult;
+      return { tps, user: tps / B, ttftP90: 0, serving: null as ServingPoint | null, prefillFactor: 1, k: 1 };
     }
-    const tps = d.tps * factor;
-    const wq = share < 1 ? (share * sPrefill) / (2 * (1 - share)) : Infinity;
-    const tail = share > 0.1 && share < 1 ? (Math.log(10 * share) * sPrefill) / (2 * (1 - share)) : 0;
-    const ttftP90 = sPrefill + Math.max(0, tail) + sp.step.t;
-    const serving: ServingPoint = { ...sp, prefill: { ...sp.prefill, tokPerSec: rate, seconds: sPrefill }, a: aNow, share, tps, ttftP50: sPrefill + wq + sp.step.t, ttftP90 };
-    return { tps, user: tps / B, ttftP90, serving, prefillFactor: factor, contextFactor: d.contextFactor };
+    const sp = servingPoint(roofIn, shape, B, pSlot);
+    const k = kAt(B);
+    const decode = k * sp.decodeTps * gain(c) * a.extraMult;
+    const tps = decode * (1 - sp.share);
+    return { tps, user: tps / B, ttftP90: sp.ttftP90, serving: { ...sp, tps }, prefillFactor: 1 - sp.share, k };
   };
 
   const cLast = curve ? curve.pts[curve.pts.length - 1]!.c : ROOFLINE_MAX_CONC.v;
@@ -482,17 +501,25 @@ export function capacityFor(a: CapacityArgs): Capacity {
 
   const at = evalAt(c);
   const eff = tpEff(c);
+  // Dense prefill on the workstation family has no measurement behind it.
+  const prefillIsGuess = roofClassOf(a.gpu) === 'blackwell-ws' && a.model.arch === 'dense';
+  const evidence: CapacityEvidence =
+    basis === 'report'
+      ? { kind: 'report-points', label: "The report's published points", prov: curve?.multProv ?? null, k: 1, curve: null }
+      : ix
+        ? { kind: 'inferencex', label: `InferenceX measured ${ix.gpus}× ${a.gpu.short}, ${ix.framework}, ${ix.isl / 1024}K in / ${ix.osl / 1024}K out`, prov: ixProv(ix), k: at.k, curve: ix }
+        : reportMeasured && curve
+          ? { kind: 'report-measured', label: "The report's measured point for this card", prov: curve.baseProvs[Math.min(a.model.refIdx, curve.baseProvs.length - 1)] ?? null, k: at.k, curve: null }
+          : { kind: 'none', label: 'No measurement for this card and model: the fitted roofline alone', prov: null, k: 1, curve: null };
   const multipliers = [
-    ...(curve ? [{ name: curve.source === 'scaled' ? 'GPU scaling' : 'Quant scaling', value: curve.mult, prov: curve.multProv }] : []),
+    ...(basis === 'report' && curve ? [{ name: curve.source === 'scaled' ? 'GPU scaling' : 'Quant scaling', value: curve.mult, prov: curve.multProv }] : []),
+    ...(basis !== 'report' && evidence.kind !== 'none' && evidence.prov ? [{ name: evidence.kind === 'inferencex' ? 'Anchored to InferenceX measurement' : 'Anchored to the report\'s measured point', value: at.k, prov: evidence.prov }] : []),
     ...(a.mtp ? [{ name: 'MTP gain', value: gain(c), prov: { kind: (info?.calibrated ? 'derived' : 'placeholder') as Prov['kind'], src: 'Acceptance length', note: info ? `AL/(1+k·ρ) = ${info.s1.toFixed(2)} at one user, fading to 1 by about ${Number.isFinite(info.cSat) ? Math.round(info.cSat) : '∞'} concurrent` : '' } }] : []),
     ...(n > 1
-      ? [{ name: `${n}-GPU scaling`, value: eff, prov: { kind: 'placeholder' as const, src: 'Roofline', note: `Weights split over ${n} GPUs; the all-reduce latency and link bandwidth (${a.gpu.link === 'nvlink' ? 'NVLink' : 'PCIe'}) are placeholders. Replace with InferenceX multi-GPU curves.` } }]
-      : []),
-    ...(basis === 'adjusted' && Math.abs(at.contextFactor - 1) > 0.005
-      ? [{ name: 'Context length vs report', value: at.contextFactor, prov: { kind: 'derived' as const, src: 'Roofline', note: `This request averages ${Math.round(parts.ctx)} tokens of context in decode against the report's ${Math.round(parts0.ctx)}; more context means more cache to read per step.` } }]
+      ? [{ name: `${n}-GPU scaling`, value: eff, prov: ix ? ixProv(ix) : { kind: 'derived' as const, src: 'Roofline', note: `Weights split over ${n} GPUs; the all-reduce latency and effective ${a.gpu.link === 'nvlink' ? 'NVLink' : 'PCIe'} bandwidth are fitted to InferenceX multi-GPU runs${a.gpu.link === 'pcie' ? ' (four PRO 6000 points only)' : ''}.` } }]
       : []),
     ...(basis !== 'report' && at.serving && Math.abs(at.prefillFactor - 1) > 0.005
-      ? [{ name: basis === 'roofline' ? 'Prefill share' : 'Prefill vs report', value: at.prefillFactor, prov: { kind: 'placeholder' as const, src: 'Roofline', note: `Prefill takes ${(at.serving.share * 100).toFixed(0)}% of GPU time at this load (${Math.round(at.serving.freshTokens)} fresh prompt tokens per request at ${Math.round(at.serving.prefill.tokPerSec)} tok/s). Prefill efficiency is not fitted to any measurement.` } }]
+      ? [{ name: 'Prefill share', value: at.prefillFactor, prov: { kind: (prefillIsGuess ? 'placeholder' : 'derived') as Prov['kind'], src: 'Roofline', note: `Prefill takes ${(at.serving.share * 100).toFixed(0)}% of GPU time at this load (${Math.round(at.serving.freshTokens)} fresh prompt tokens per request at ${Math.round(at.serving.prefill.tokPerSec)} tok/s). Prefill efficiency is fitted to InferenceX time-to-first-token runs on H100, H200 and B200.` } }]
       : []),
     ...(a.extraNotes ?? []),
   ];
@@ -517,16 +544,14 @@ export function capacityFor(a: CapacityArgs): Capacity {
     ttftLimited,
     serving: at.serving,
     prefillFactor: at.prefillFactor,
-    contextFactor: at.contextFactor,
+    contextFactor: 1,
     bound: at.serving?.step.bound ?? null,
     multipliers,
-    sweep: a.sweepSteps
-      ? Array.from({ length: a.sweepSteps + 1 }, (_, i) => {
-          const cc = Math.exp((Math.log(Math.max(1.0001, cMax)) * i) / a.sweepSteps!);
-          const e = evalAt(cc);
-          return { c: cc, tps: e.tps, user: e.user, ttftP90: e.ttftP90, share: e.serving?.share ?? 0 };
-        })
-      : [],
+    sweep: (a.sweepAt ?? (a.sweepSteps ? Array.from({ length: a.sweepSteps + 1 }, (_, i) => Math.exp((Math.log(Math.max(1.0001, cMax)) * i) / a.sweepSteps!)) : [])).map((cc) => {
+      const e = evalAt(cc);
+      return { c: cc, tps: e.tps, user: e.user, ttftP90: e.ttftP90, share: e.serving?.share ?? 0 };
+    }),
+    evidence,
   };
 }
 

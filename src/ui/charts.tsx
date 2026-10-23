@@ -116,6 +116,8 @@ export interface ExtraPoint {
   label: string;
   hollow?: boolean;
   ring?: boolean;
+  /** Draw a square, for measurements from a different source than the round points. */
+  square?: boolean;
   tip: TipRow[];
   tipTitle?: string;
 }
@@ -265,9 +267,13 @@ export function LineChart(p: LineChartProps) {
               ) : null}
             </g>
           ))}
-          {extra.map((d, i) => (
-            <circle key={i} cx={x(d.x)} cy={y(d.y)} r={d.ring ? 7 : 5} fill={d.hollow ? 'var(--surface)' : d.color} stroke={d.color} stroke-width={d.hollow || d.ring ? 2 : 2} />
-          ))}
+          {extra.map((d, i) =>
+            d.square ? (
+              <rect key={i} x={x(d.x) - 4.5} y={y(d.y) - 4.5} width={9} height={9} rx={1.5} fill={d.color} stroke="var(--surface)" stroke-width={1.5} />
+            ) : (
+              <circle key={i} cx={x(d.x)} cy={y(d.y)} r={d.ring ? 7 : 5} fill={d.hollow ? 'var(--surface)' : d.color} stroke={d.color} stroke-width={2} />
+            ),
+          )}
           {p.hover === 'nearest' ? null : <rect class="hit" x={0} y={0} width={iw} height={ih} />}
         </g>
       </svg>

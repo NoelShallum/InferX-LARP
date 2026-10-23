@@ -26,6 +26,8 @@ export const MODEL_REPOS = {
   mistral_small4: { repo: 'mistralai/Mistral-Small-4-119B-2603' },
   devstral2: { repo: 'mistralai/Devstral-2-123B-Instruct-2512' },
   qwen35_122b: { repo: 'Qwen/Qwen3.5-122B-A10B' },
+  // Not a catalog model: it only calibrates the roofline, because InferenceX measured it on four PRO 6000s.
+  qwen35_397b: { repo: 'Qwen/Qwen3.5-397B-A17B', note: 'Calibration only: InferenceX measured this model on four RTX PRO 6000s, the one measured multi-GPU PCIe data for that card' },
 };
 
 const num = (x) => (typeof x === 'number' && Number.isFinite(x) ? x : null);

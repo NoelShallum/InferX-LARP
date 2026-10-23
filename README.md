@@ -49,6 +49,7 @@ npm run data            # both
 npm run data:vast       # Vast.ai GPU rent
 npm run data:openrouter # OpenRouter prices, traffic, stream speed
 npm run data:hf         # model architecture from Hugging Face configs (rarely needs re-running)
+npm run data:inferencex # InferenceX measured throughput, speed per user and time to first token
 ```
 
 **Vast.ai** refuses plain HTTP clients (403), so the script opens `cloud.vast.ai/create/` in a real Chromium once, lets the page set up its session, and then runs every search from inside that page. It needs a Chrome or Chromium on the machine; `playwright-core` does not download one.
@@ -67,6 +68,8 @@ In the dashboard, **Market source** and **Rent source** (Assumptions → Data so
 
 **Hugging Face** needs no browser either. For each catalog model it reads `config.json` at a pinned commit and writes `data/hf/archs.json`: KV bytes per token (full-attention layers only), sliding-window size, recurrent state per sequence for linear-attention and Mamba layers, expert counts and active parameters. The cache is counted at one byte per element (an FP8 cache) and the recurrent state in fp32. Active parameters are checked against the published figures (gpt-oss-120b 5.2B against 5.1B, Qwen3.6-35B 3.0B against A3B, Nemotron 12.4B against A12B).
 
+**InferenceX** is read from its public API (`/api/v1/benchmarks`). For gpt-oss-120b, Llama 3.3 70B, Qwen3.8-Flash-Next and Qwen3.5-397B it keeps vLLM and SGLang single-node runs on H100, H200, B200 and the RTX PRO 6000: concurrency, output speed per GPU, speed per user and time to first token, with the run id. The 397B model is not in the catalog; it is there because InferenceX measured it on four PRO 6000s over PCIe, the only measured data for that card.
+
 Commit the new snapshot files to publish them: the Pages workflow builds from the repository.
 
 ## How the engine works
@@ -74,7 +77,7 @@ Commit the new snapshot files to publish them: the Pages workflow builds from th
 `src/engine` is plain TypeScript with no UI imports.
 
 - `calibration.ts` — the report gives, per model, what a fully busy hour earns (§6.1) and what a typical new endpoint grosses (§6.3). With the §5.2 throughput point, those two figures pin the request's output share and the cache-read price. For Qwen3.8-27B and gpt-oss-120b the output share lands within half a point of the 4.1% and 11.8% the report states.
-- `roofline.ts` — one decode step reads the weights the batch needs (only the experts it touches, for a mixture of experts) plus every sequence's cache and recurrent state, against the card's memory bandwidth; compute is checked against tensor throughput at the precision the weights run in; tensor-parallel nodes pay an all-reduce per layer. Prefill is compute-bound. A request's prefill takes a share of GPU time away from decode and queues in front of the first token. The memory efficiency (0.85) and 0.8 ms step overhead are fitted to three PRO 6000 points of the report; the roofline lands at 0.94, 0.82 and 1.10 of them.
+- `roofline.ts` — one decode step reads the weights the batch needs (only the experts it touches, for a mixture of experts) plus every sequence's cache and recurrent state, against the card's memory bandwidth; compute is checked against tensor throughput at the precision the weights run in; tensor-parallel nodes pay an all-reduce per layer. Prefill is compute-bound. A request's prefill takes a share of GPU time away from decode and queues in front of the first token. Its efficiencies (memory bandwidth, step overhead, prefill, all-reduce latency and bandwidth) are fitted per card family to 393 InferenceX measurement points, and the residuals are on the Data audit. Refit with `FIT=1 npx vitest run src/engine/roofline.fit.test.ts`.
 - `capacity.ts` — fit (weights, overhead, KV pool), quantisation choice, three throughput bases, MTP gain from acceptance length, operating point under a speed floor and a first-token limit.
 - `pricing.ts` — blended price per million tokens from request shape and cache price; price elasticity (−0.63) and its limits.
 - `slot.ts` — one card on one model: capacity, demand (marketplace share model, hours sold, or overflow), revenue, cost or Lium bar, margin, tax, break-even.
@@ -90,10 +93,10 @@ Commit the new snapshot files to publish them: the Pages workflow builds from th
 | Basis | What it does |
 | --- | --- |
 | **Report's points as printed** | A power law through the report's published points. Reproduces the report. Does not know about request shape. |
-| **Report, adjusted to the request** (default) | The report's number at its own reference operating point, carried onto the roofline's shape. A longer context, more concurrency or a prompt-heavy request move it as the physics says, and nothing exceeds what the memory bus can deliver. On observed traffic at the reference point it equals the report. |
-| **Roofline only** | Ignore the report's estimates; speed comes from bandwidth, tensor throughput and the request shape. |
+| **Anchored to measurements** (default) | The fitted roofline, scaled to a measurement wherever there is one: InferenceX's runs for the card and model (the whole curve, at the concurrencies it measured), else the report's one measured point for that card. Everything else is the roofline alone; the report's own estimates are not used. |
+| **Roofline only** | Every anchor ignored; speed from bandwidth, tensor throughput, link speed and the request shape. |
 
-Most of the report's throughput points are its own estimates. The Throughput view and the Data audit set them against the roofline and mark the ones that sit above what the memory bus could deliver (Llama 3.3 70B at 16 concurrent).
+Most of the report's throughput points are its own estimates, and the fitted roofline disagrees with several. The Throughput view and the Data audit set them against the roofline and mark the ones that sit above what the memory bus could deliver (Llama 3.3 70B at 16 concurrent).
 
 ## Run it
 
@@ -114,8 +117,9 @@ npm run data       # refresh live prices (see Live data)
 
 - **Phase 1:** the interface, the portfolio planner and the economics engine on the report's static numbers.
 - **Phase 2:** live Vast.ai prices (a headless-browser scrape, then scripted) and an OpenRouter script, both saved as dated snapshots. The dashboard defaults to live data with the report as a switch, and has an OpenRouter-competitive quality bar from live stream speeds.
-- **Phase 3 (this version):** model architecture from Hugging Face configs, a roofline for decode, prefill and time to first token, three throughput bases, a first-token limit in the quality bar, KV counting for sliding windows and recurrent state.
-- **Next:** InferenceX measured curves for multi-GPU nodes, a measurement run on your own cards to fit prefill efficiency, AMD and A100.
+- **Phase 3:** model architecture from Hugging Face configs, a roofline for decode, prefill and time to first token, three throughput bases, a first-token limit in the quality bar, KV counting for sliding windows and recurrent state.
+- **Phase 4 (this version):** InferenceX measured runs (single card and tensor-parallel) fit the roofline per card family and anchor it where a card and model were measured; multi-GPU nodes use the fitted all-reduce model.
+- **Next:** a measurement run on your own cards to fit dense prefill and the Ada, AMD and A100.
 
 What this version does not do yet is listed at the bottom of the Data audit view.
 

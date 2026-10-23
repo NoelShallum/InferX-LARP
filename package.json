@@ -13,8 +13,9 @@
     "typecheck": "tsc --noEmit",
     "data:vast": "node scripts/vast.mjs",
     "data:openrouter": "node scripts/openrouter.mjs",
-    "data": "npm run data:vast && npm run data:openrouter",
-    "data:hf": "node scripts/hf.mjs"
+    "data": "npm run data:vast && npm run data:openrouter && npm run data:inferencex",
+    "data:hf": "node scripts/hf.mjs",
+    "data:inferencex": "node scripts/inferencex.mjs"
   },
   "dependencies": {
     "@preact/signals": "^2.0.0",
