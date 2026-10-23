@@ -206,6 +206,63 @@ describe('live data sources', () => {
   });
 });
 
+describe('models with live data only', () => {
+  const LIVE_ONLY = ['dsv41flash', 'glm53', 'glm53flash', 'minimaxm3', 'mimo26flash'];
+  const rpt = { ...DEFAULT_SETTINGS, rentSource: 'report' as const, marketSource: 'report' as const };
+
+  it('has live OpenRouter data for every one, and no report row', () => {
+    for (const id of LIVE_ONLY) {
+      expect(MODEL_BY_ID[id]!.liveOnly, id).toBe(true);
+      expect(OPENROUTER.models[id], id).toBeDefined();
+    }
+  });
+  it('builds the market from live data even when the report source is chosen, and never from a report figure', () => {
+    for (const id of LIVE_ONLY) {
+      const m = marketFor(id, rpt)!;
+      expect(m, id).not.toBeNull();
+      expect(m.live, id).not.toBeNull();
+      expect(m.row.endpoints.p.kind, id).toBe('live');
+      expect(m.row.busyHourMedianUsd, id).toBeNull();
+      expect(m.row.typicalMedianUsd, id).toBeNull();
+    }
+  });
+  it('takes weights only from a listed checkpoint: no derived 8-bit size for MiMo, which ships MXFP4', () => {
+    const mimo = MODEL_BY_ID['mimo26flash']!;
+    expect(Object.keys(mimo.weights)).toEqual(['mxfp4']);
+    expect(chooseQuant(mimo, GPU_BY_ID['h200']!, 8, 'fp8').fits).toBe(false);
+  });
+  it('does not fit on one card of any kind, and the smallest node that holds each is 2 or more', () => {
+    for (const id of LIVE_ONLY) {
+      for (const g of ['pro6000', 'ada6000', 'h200', 'b200']) {
+        expect(chooseQuant(MODEL_BY_ID[id]!, GPU_BY_ID[g]!, 1, 'auto').fits, `${id} on ${g}`).toBe(false);
+      }
+    }
+  });
+  it('prices a rented node of eight B200s serving GLM-5.3 with no report curve, and says speed is the roofline', () => {
+    const slot = makeSlot({ id: 'r', ownership: 'rent', gpuId: 'b200', modelId: 'glm53', count: 8 });
+    const r = evaluateSlot(slot, DEFAULT_SETTINGS);
+    expect(r.ok).toBe(true);
+    expect(r.capacity!.curve).toBeNull();
+    expect(r.capacity!.evidence.kind).toBe('none');
+    expect(r.capacity!.tpsNode).toBeGreaterThan(200);
+    expect(r.revenueUsd).toBeGreaterThan(0);
+    expect(r.evidence.some((e) => e.label.includes('fitted roofline'))).toBe(true);
+  });
+  it('anchors MiniMax-M3 on B200s to the InferenceX run, and charges the live rent for the whole node', () => {
+    const slot = makeSlot({ id: 'r', ownership: 'rent', gpuId: 'b200', modelId: 'minimaxm3', count: 2 });
+    const r = evaluateSlot(slot, DEFAULT_SETTINGS);
+    expect(r.ok).toBe(true);
+    expect(r.capacity!.evidence.kind).toBe('inferencex');
+    const rent = rentFor(GPU_BY_ID['b200']!, 2, DEFAULT_SETTINGS)!.v;
+    expect(r.costUsd).toBeCloseTo(rent * 2 * 730 * 1, -1);
+  });
+  it('a bigger node of the same card costs proportionally more and never earns less than a smaller one', () => {
+    const at = (n: number) => evaluateSlot(makeSlot({ id: 'r', ownership: 'rent', gpuId: 'b200', modelId: 'glm53', count: n }), DEFAULT_SETTINGS);
+    expect(at(8).costUsd).toBeGreaterThan(at(4).costUsd * 1.5);
+    expect(at(8).capacity!.tpsNode).toBeGreaterThan(at(4).capacity!.tpsNode);
+  });
+});
+
 describe('trends from saved snapshots', () => {
   const vsnap = (date: string, min: number | null) =>
     ({ generatedAt: `${date}T10:00:00Z`, gpus: { rtx5090: { nodes: { '1': { views: { r90: { count: min === null ? 0 : 5, minPerGpu: min, medianPerGpu: min === null ? null : min + 0.3, p25PerGpu: null, cheapest: [] } } } } } } }) as unknown as Parameters<typeof vastTrend>[0][number];

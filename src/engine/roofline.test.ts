@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { kvBytesPerSeq } from '../data/arch';
-import { GPU_BY_ID } from '../data/gpus';
+import { kvBytesPerSeq, kvReadBytesPerSeq } from '../data/arch';
+import { GPUS, GPU_BY_ID } from '../data/gpus';
 import { bestIxCurve } from '../data/ix';
 import { CAL_MODEL_BY_ID, MODELS, MODEL_BY_ID } from '../data/models';
 import { capacityFor, fitOn, seqKvBytes, weightsGB } from './capacity';
@@ -27,6 +27,25 @@ describe('architecture from the Hugging Face configs', () => {
   it('Llama 3.3 70B costs 160 KB a token, five times Qwen3.8-27B', () => {
     expect(MODEL_BY_ID['llama33_70b']!.net!.fullTokBytes).toBe(80 * 2 * 8 * 128);
   });
+  it('DeepSeek V4.1 Flash: the model card\'s 890 B a token, with the 196 GB Engram table counted out of the decode read', () => {
+    const m = MODEL_BY_ID['dsv41flash']!;
+    expect(m.net!.fullTokBytes).toBe(890);
+    expect(m.net!.kvSource).toBe('model-card');
+    expect(m.net!.lookupGB).toBe(196);
+    expect(m.net!.params!.activePrefill!).toBeLessThan(m.net!.params!.active);
+    const w = weightsGB(m, 'nvfp4')!.gb;
+    expect(w).toBeGreaterThan(420);
+  });
+  it('sparse-attention models read a bounded slice: GLM-5.3 reads the top 2048 tokens, MiniMax-M3 17 blocks of 128', () => {
+    const glm = MODEL_BY_ID['glm53']!.net!;
+    const mm = MODEL_BY_ID['minimaxm3']!.net!;
+    expect(glm.readCapTokens).toBe(2048);
+    expect(mm.readCapTokens).toBe(17 * 128);
+    // Past the cap a longer context adds only the index scan, not attention reads.
+    const a = kvReadBytesPerSeq(mm, 8192);
+    const b = kvReadBytesPerSeq(mm, 65536);
+    expect(b / a).toBeLessThan(65536 / 8192);
+  });
   it('sliding-window layers stop growing at the window, so Gemma 4 31B costs the same at 8K and 64K for them', () => {
     const net = MODEL_BY_ID['gemma4_31b']!.net!;
     const at = (ctx: number) => kvBytesPerSeq(net, ctx) - net.fullTokBytes * ctx;
@@ -44,8 +63,13 @@ describe('architecture from the Hugging Face configs', () => {
   it('gives every model a config-derived KV figure, none left as a placeholder', () => {
     for (const m of MODELS) {
       expect(m.net).not.toBeNull();
-      expect(m.kvBytesPerTok.p.kind).toBe('sourced');
+      expect(['sourced', 'derived']).toContain(m.kvBytesPerTok.p.kind);
+      // A derived figure is one the model's config alone doesn't settle; it carries the assumption in its note.
+      if (m.kvBytesPerTok.p.kind === 'derived') expect(m.kvBytesPerTok.p.note).toBeTruthy();
     }
+  });
+  it('the original catalog models take their KV figure straight from the config', () => {
+    for (const m of MODELS.filter((m) => !m.liveOnly)) expect(m.kvBytesPerTok.p.kind, m.id).toBe('sourced');
   });
   it('a model with a sliding window and recurrent state needs more than tokens × KV bytes per token', () => {
     const m = MODEL_BY_ID['qwen38_27b']!;
@@ -154,6 +178,29 @@ describe('throughput bases', () => {
     const chat = capacityFor({ ...base, basis: 'adjusted', baseShape: observed, shape: { avgTokens: 3000, outShare: 0.3, cacheHit: 0.1 } });
     expect(agent.tpsNode).toBeLessThan(rep);
     expect(chat.tpsNode).toBeGreaterThan(rep);
+  });
+  it('off the report basis, no operating point holds more users than the KV pool does, for any model, card and node', () => {
+    for (const m of MODELS.filter((m) => m.economics)) {
+      for (const g of GPUS.filter((g) => g.role === 'serve')) {
+        for (const count of [1, 2, 4, 8]) {
+          for (const basis of ['adjusted', 'roofline'] as const) {
+            const c = capacityFor({ ...base, model: m, gpu: g, count, quant: 'auto', basis, qos: { mode: 'report' as const, floorTps: 40 } });
+            if (!c.ok) continue;
+            expect(c.cPerGpu, `${m.id} on ${count}× ${g.id} (${basis})`).toBeLessThanOrEqual(Math.max(1, c.kvConcPerGpu) * 1.0001);
+          }
+        }
+      }
+    }
+  });
+  it('a card the cache cannot fill at 16 users stops at what it holds and says the cache is the limit (Qwen3.8-27B on a 5090)', () => {
+    const c = capacityFor({ ...base, gpu: GPU_BY_ID['rtx5090']!, basis: 'adjusted', baseShape: observed });
+    expect(c.ok).toBe(true);
+    expect(c.kvLimited).toBe(true);
+    expect(c.cPerGpu).toBeCloseTo(c.kvConcPerGpu, 6);
+    expect(c.cPerGpu).toBeLessThan(16);
+    // The report's own points are left as printed.
+    const rep = capacityFor({ ...base, gpu: GPU_BY_ID['rtx5090']!, basis: 'report' });
+    expect(rep.cPerGpu).toBe(16);
   });
   it("'roofline' needs no published points and works for a model the report has none for", () => {
     const m = MODEL_BY_ID['qwen35_122b']!;

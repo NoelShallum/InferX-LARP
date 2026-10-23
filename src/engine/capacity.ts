@@ -31,6 +31,8 @@ export function weightsGB(model: Model, quant: Quant): WeightsInfo | null {
   if (listed) return { gb: listed.v, prov: listed.p };
   // 4-bit float formats need a published checkpoint, so they are never derived.
   if (quant === 'nvfp4' || quant === 'mxfp4') return null;
+  // A model that is not in the report is sized only from checkpoints that exist; no format is derived for it.
+  if (model.liveOnly) return null;
   const bpp = BYTES_PER_PARAM[quant];
   return {
     gb: model.paramsB.v * bpp.v,
@@ -499,6 +501,12 @@ export function capacityFor(a: CapacityArgs): Capacity {
     ttftLimited = evalAt(Math.min(cMax, c * 1.02)).user >= a.qos.floorTps;
   }
 
+  // The report's convention assumes 16 users a card whether or not the cache holds them; only its own points are left that way.
+  const wanted = c;
+  if (basis !== 'report') c = Math.min(c, cMax);
+  // True when the cache, not the quality bar, is what stops concurrency rising.
+  const kvLimited =
+    basis === 'report' ? c > cMaxKv * 1.0001 : a.qos.mode === 'report' ? wanted > cMaxKv * 1.0001 : c >= cMax * 0.9999 && cMaxKv < cMaxCurve * 0.9999;
   const at = evalAt(c);
   const eff = tpEff(c);
   // Dense prefill on the workstation family has no measurement behind it.
@@ -540,7 +548,7 @@ export function capacityFor(a: CapacityArgs): Capacity {
     extrapolated: basis === 'report' && c > cLast * 1.0001,
     belowFloor,
     kvConcPerGpu: cMaxKv,
-    kvLimited: c > cMaxKv * 1.0001,
+    kvLimited,
     ttftLimited,
     serving: at.serving,
     prefillFactor: at.prefillFactor,

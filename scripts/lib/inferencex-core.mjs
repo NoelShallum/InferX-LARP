@@ -10,6 +10,8 @@ export const IX_MODELS = {
   'Qwen3.8-Flash-Next': { id: 'flashnext' },
   'Qwen3.8-27B': { id: 'qwen38_27b' },
   'Qwen-3.5-397B-A17B': { id: 'qwen35_397b', calibrationOnly: true },
+  'MiniMax-M3': { id: 'minimaxm3' },
+  'DeepSeek-V4.1-Flash': { id: 'dsv41flash' },
 };
 
 /** InferenceX hardware key → catalog GPU id. Cards the catalog does not have are kept under their own key. */

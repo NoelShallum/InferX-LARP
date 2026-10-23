@@ -111,7 +111,7 @@ export interface WeightSplit {
   denseGB: number;
   /** Routed experts. A step reads only the experts its batch touches. */
   routedGB: number;
-  /** Embedding table, a lookup that is never read in full. */
+  /** Embedding table, a lookup that is never read in full. N-gram and Engram tables are lookups too and are left out of both other parts. */
   embedGB: number;
 }
 
@@ -119,8 +119,10 @@ export function weightSplit(model: Model, quant: Quant, weightsGB: number): Weig
   const net = model.net;
   const routedShare = net?.params?.routedShare ?? 0;
   const embedGB = net && !net.params?.embedTied ? (net.vocab * net.hidden * 2) / 1e9 : 0;
-  const routedGB = weightsGB * routedShare;
-  const denseGB = Math.max(0, weightsGB - routedGB - embedGB);
+  // N-gram and Engram tables are lookups too: a step reads a few rows, not the table.
+  const readableGB = Math.max(0, weightsGB - (net?.lookupGB ?? 0));
+  const routedGB = readableGB * routedShare;
+  const denseGB = Math.max(0, readableGB - routedGB - embedGB);
   void quant;
   void BYTES_PER_PARAM;
   return { denseGB, routedGB, embedGB };
@@ -224,7 +226,7 @@ export function prefillRate(i: RoofInputs, promptTokens: number, p: RoofParams =
   const net = model.net;
   const cf = computeFormat(gpu, i.quant);
   const eta = model.arch === 'moe' ? p.etaPrefillMoe : p.etaPrefill;
-  const flopsPerTok = 2 * activeParams(model) + attnFlopsPerToken(net, promptTokens / 2);
+  const flopsPerTok = 2 * (net?.params?.activePrefill ?? activeParams(model)) + attnFlopsPerToken(net, promptTokens / 2);
   const computeRate = (eta * cf.tflops * 1e12 * count) / flopsPerTok;
   // Each chunk also streams the whole weight file, which only matters for small chunks on big models.
   const chunkCompute = p.prefillChunkTokens / computeRate;

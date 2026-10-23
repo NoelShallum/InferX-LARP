@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ROOF_CLASSES, type RoofClass, type RoofParams } from './roofline';
-import { fitGroups, fitLoss, fitRows } from './ix-fit';
+import { fitGroups, fitLoss, fitRows, holdoutRows } from './ix-fit';
 
 /**
  * Refit the roofline's efficiencies to InferenceX:  FIT=1 npx vitest run src/engine/roofline.fit.test.ts
@@ -64,5 +64,15 @@ describe('roofline against InferenceX', () => {
     const by = (n: number) => med(fitGroups(rows).filter((g) => g.gpus === n).map((g) => g.out));
     expect(by(8) / by(1)).toBeGreaterThan(0.75);
     expect(by(8) / by(1)).toBeLessThan(1.35);
+  });
+  it('predicts a model it was never fitted on from its architecture alone (MiniMax-M3, 2 to 8 cards)', () => {
+    const held = holdoutRows();
+    expect(held.length).toBeGreaterThan(80);
+    for (const g of fitGroups(held)) {
+      expect(g.out, g.key).toBeGreaterThan(0.7);
+      expect(g.out, g.key).toBeLessThan(1.4);
+      expect(g.user, g.key).toBeGreaterThan(0.85);
+      expect(g.user, g.key).toBeLessThan(1.4);
+    }
   });
 });

@@ -30,6 +30,8 @@ import {
 } from './pricing';
 import type { Pricing, ResolvedCase, Settings, Slot } from './types';
 
+const ROOFLINE_ONLY_PROV: Prov = { kind: 'derived', src: 'Roofline fitted to InferenceX', note: 'No measurement for this model on this card: speed is the fitted roofline, accurate to about ±30% where checked' };
+
 export const POWER_TARIFF_INR_PER_KWH = ph(8, 'No source yet', 'Electricity price used for buy-slot power cost; the report folds power into the Lium bar instead');
 export const AVG_POWER_FRACTION = ph(0.8, 'No source yet', 'Average draw as a fraction of TDP while serving');
 
@@ -169,7 +171,8 @@ const emptyResult = (slot: Slot, gpu: Gpu, reason: string, extra: Partial<SlotRe
 export function slotShape(slot: Slot, settings: Settings): Shape | null {
   const model = MODEL_BY_ID[slot.modelId];
   const resolved = marketFor(slot.modelId, settings);
-  const base = MARKET_BY_MODEL[slot.modelId];
+  // A model the report has no row for has no calibration either; its shape comes from live data or a flagged default.
+  const base = resolved ? (MARKET_BY_MODEL[slot.modelId] ?? resolved.row) : undefined;
   const wl = WORKLOAD_BY_ID[slot.workloadId];
   if (!model || !resolved || !base || !wl) return null;
   // The report's calibration stays the anchor for capacity; live data only changes what a token sells for.
@@ -402,8 +405,13 @@ export function evaluateSlot(slot: Slot, settings: Settings, opts: SlotEvalOpts 
   const prefillTpsAtCapacity = reqPerSec * shape.avgTokens * (1 - shape.outShare) * (1 - shape.cacheHit);
 
   evidence.push(
-    ...capacity.curve!.baseProvs.map((p, i) => ({ label: `Throughput point ${i + 1}`, prov: p })),
-    { label: capacity.curve!.multNote, prov: capacity.curve!.multProv },
+    ...(capacity.curve
+      ? [
+          ...capacity.curve.baseProvs.map((p, i) => ({ label: `Throughput point ${i + 1}`, prov: p })),
+          { label: capacity.curve.multNote, prov: capacity.curve.multProv },
+        ]
+      : []),
+    ...(capacity.evidence.prov ? [{ label: capacity.evidence.label, prov: capacity.evidence.prov }] : [{ label: capacity.evidence.label, prov: ROOFLINE_ONLY_PROV }]),
     { label: 'Weights', prov: capacity.fit.weightsProv },
     { label: 'KV bytes per token', prov: model.kvBytesPerTok.p },
     ...shape.provs.map((p, i) => ({ label: `Request shape ${i + 1}`, prov: p })),

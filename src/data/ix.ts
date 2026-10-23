@@ -38,6 +38,7 @@ export const IX_RUN_URL = 'https://github.com/SemiAnalysisAI/InferenceX/actions/
 const HW: Record<string, string> = { rtx6000pro: 'pro6000', h100: 'h100', h200: 'h200', b200: 'b200' };
 /** Stacks a small provider can run. TensorRT-LLM and Dynamo runs are tuned beyond that. */
 const OPEN_STACKS = ['vllm', 'sglang'];
+const MIN_ANCHOR_POINTS = 3;
 
 type RawPoint = [conc: number, out: number, user: number | null, ttft50: number | null, ttft90: number | null];
 
@@ -68,6 +69,50 @@ function quantOf(modelId: string, precision: string): Quant | null {
   return null;
 }
 
+/** A measured point the dashboard ignores, with the reason. */
+export interface IxDropped {
+  modelName: string;
+  gpuId: string;
+  precision: string;
+  gpus: number;
+  isl: number;
+  osl: number;
+  conc: number;
+  outPerGpu: number;
+  reason: string;
+  run: string | null;
+}
+
+export const IX_DROPPED: IxDropped[] = [];
+
+/**
+ * A benchmark run that crashed or stalled shows up as a point that breaks the physics: node throughput collapsing as
+ * concurrency rises, or a user seeing a much slower stream at low load than at high load. Such points are dropped.
+ */
+const COLLAPSE = 0.5;
+const USER_INVERSION = 1.5;
+
+function sane(pts: RawPoint[], gpus: number): { keep: RawPoint[]; drop: { p: RawPoint; reason: string }[] } {
+  const sorted = [...pts].sort((a, b) => a[0] - b[0]);
+  const keep: RawPoint[] = [];
+  const drop: { p: RawPoint; reason: string }[] = [];
+  sorted.forEach((p, i) => {
+    const node = p[1] * gpus;
+    const lower = sorted.slice(0, i).reduce((m, q) => Math.max(m, q[1] * gpus), 0);
+    if (lower > 0 && node < COLLAPSE * lower) {
+      drop.push({ p, reason: `throughput fell to ${Math.round((100 * node) / lower)}% of the best at lower concurrency` });
+      return;
+    }
+    const slower = p[2] != null && sorted.slice(i + 1).some((q) => q[2] != null && q[2] > USER_INVERSION * p[2]!);
+    if (slower) {
+      drop.push({ p, reason: 'a lone user saw a far slower stream than users at higher concurrency' });
+      return;
+    }
+    keep.push(p);
+  });
+  return { keep, drop };
+}
+
 function build(): IxCurve[] {
   const out: IxCurve[] = [];
   const models = bench.models as unknown as Record<string, { id: string; curves: RawCurve[] }>;
@@ -77,6 +122,9 @@ function build(): IxCurve[] {
       if (r.type !== 'single_turn' || r.spec !== 'none' || r.dpAttn || r.ep > 1 || !r.isl || !r.osl || !HW[r.hardware] || !OPEN_STACKS.includes(r.framework)) continue;
       const quant = quantOf(m.id, r.precision);
       if (!quant) continue;
+      const { keep, drop } = sane(r.pts, r.gpus);
+      for (const d of drop) IX_DROPPED.push({ modelName: name, gpuId: HW[r.hardware]!, precision: r.precision, gpus: r.gpus, isl: r.isl, osl: r.osl, conc: d.p[0], outPerGpu: d.p[1], reason: d.reason, run: r.run ?? null });
+      if (keep.length === 0) continue;
       out.push({
         modelId: m.id,
         modelName: name,
@@ -90,7 +138,7 @@ function build(): IxCurve[] {
         osl: r.osl,
         date: r.date,
         run: r.run ?? null,
-        pts: r.pts.map(([conc, outPerGpu, user, ttft50, ttft90]) => ({ conc, outPerGpu, user, ttft50, ttft90 })),
+        pts: keep.map(([conc, outPerGpu, user, ttft50, ttft90]) => ({ conc, outPerGpu, user, ttft50, ttft90 })),
       });
     }
   }
@@ -114,7 +162,8 @@ export function ixCurves(modelId: string, gpuId: string, quant: Quant, gpus: num
  * where several were run. Null where this config was never measured.
  */
 export function bestIxCurve(modelId: string, gpuId: string, quant: Quant, gpus: number, ctx: number): IxCurve | null {
-  const all = ixCurves(modelId, gpuId, quant, gpus);
+  // A curve left with one or two points after the sanity filter cannot say how speed changes with load.
+  const all = ixCurves(modelId, gpuId, quant, gpus).filter((c) => c.pts.length >= MIN_ANCHOR_POINTS);
   if (all.length === 0) return null;
   const dist = (c: IxCurve) => Math.abs(Math.log((c.isl + c.osl / 2) / Math.max(1, ctx)));
   const best = Math.min(...all.map(dist));

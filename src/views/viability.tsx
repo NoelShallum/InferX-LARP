@@ -7,7 +7,7 @@ import { addSlot, goTo, setSlot, settings, slots } from '../state';
 import { ChartCard, Heatmap, type HeatCell } from '../ui/charts';
 import { Field, SelectInput, Segmented, Toggle } from '../ui/controls';
 import { M, money } from '../ui/money';
-import { COUNT_OPTIONS, ECON_MODELS, WORKLOAD_OPTIONS, gpuShort, modelName } from '../ui/options';
+import { AUTO_NODE_OPTION, COUNT_OPTIONS, ECON_MODELS, NODE_SIZES, WORKLOAD_OPTIONS, gpuShort, modelName } from '../ui/options';
 import { ProvBadge } from '../ui/prov';
 
 type Metric = 'ratio' | 'margin' | 'breakeven' | 'used';
@@ -22,7 +22,26 @@ const SHORT: Record<string, string> = {
   llama33_70b: 'Llama 3.3 70B',
   mistral_nemo: 'Mistral Nemo 12B',
   flashnext: 'Qwen3.8-Flash-Next',
+  dsv41flash: 'DeepSeek V4.1 Flash',
+  glm53: 'GLM-5.3',
+  glm53flash: 'GLM-5.3 Flash',
+  minimaxm3: 'MiniMax-M3',
+  mimo26flash: 'MiMo-V2.6 Flash',
 };
+const short = (id: string) => SHORT[id] ?? modelName(id);
+
+type NodeMode = 'auto' | 'best' | '1' | '2' | '4' | '8';
+const NODE_OPTIONS: { id: NodeMode; label: string }[] = [
+  AUTO_NODE_OPTION as { id: NodeMode; label: string },
+  { id: 'best', label: 'Best of 1, 2, 4, 8' },
+  ...COUNT_OPTIONS.map((o) => ({ id: o.id as NodeMode, label: o.label })),
+];
+
+interface Cell {
+  res: SlotResult;
+  /** Cards in the rented node; owned boxes are always one card. */
+  count: number;
+}
 
 interface RowDef {
   id: string;
@@ -37,7 +56,7 @@ const SLOW_TPS = 25;
 
 export function ViabilityView() {
   const s = settings.value;
-  const [count, setCount] = useState('1');
+  const [nodeMode, setNodeMode] = useState<NodeMode>('auto');
   const [metric, setMetric] = useState<Metric>('ratio');
   const [workload, setWorkload] = useState('observed');
   const [mtp, setMtp] = useState(false);
@@ -49,35 +68,57 @@ export function ViabilityView() {
       if (g.owned > 0) out.push({ id: `own|${g.id}`, label: `${g.short} · owned`, gpuId: g.id, ownership: 'owned' });
     }
     for (const g of GPUS.filter((x) => x.role === 'serve' && x.rentUsdHr)) {
-      out.push({ id: `rent|${g.id}`, label: `${g.short} · rent${Number(count) > 1 ? ` ×${count}` : ''}`, gpuId: g.id, ownership: 'rent' });
+      out.push({ id: `rent|${g.id}`, label: `${g.short} · rent${/^\d+$/.test(nodeMode) && nodeMode !== '1' ? ` ×${nodeMode}` : ''}`, gpuId: g.id, ownership: 'rent' });
     }
     return out;
-  }, [count]);
+  }, [nodeMode]);
 
   const results = useMemo(() => {
-    const m = new Map<string, SlotResult>();
+    const m = new Map<string, Cell>();
     for (const r of rowDefs) {
       for (const mod of ECON_MODELS) {
-        const slot = makeSlot({
-          id: 'grid',
-          ownership: r.ownership,
-          boxKey: r.ownership === 'owned' ? r.gpuId : undefined,
-          gpuId: r.gpuId,
-          modelId: mod.id,
-          count: r.ownership === 'rent' ? Number(count) : 1,
-          workloadId: workload,
-          mtp: mtp && !!mod.mtp,
-          availabilityId: r.ownership === 'rent' ? 'dc' : 'global',
-        });
-        m.set(`${r.id}|${mod.id}`, evaluateSlot(slot, s));
+        const at = (count: number) =>
+          evaluateSlot(
+            makeSlot({
+              id: 'grid',
+              ownership: r.ownership,
+              boxKey: r.ownership === 'owned' ? r.gpuId : undefined,
+              gpuId: r.gpuId,
+              modelId: mod.id,
+              count,
+              workloadId: workload,
+              mtp: mtp && !!mod.mtp,
+              availabilityId: r.ownership === 'rent' ? 'dc' : 'global',
+            }),
+            s,
+          );
+        if (r.ownership === 'owned') {
+          m.set(`${r.id}|${mod.id}`, { res: at(1), count: 1 });
+          continue;
+        }
+        if (nodeMode !== 'auto' && nodeMode !== 'best') {
+          m.set(`${r.id}|${mod.id}`, { res: at(Number(nodeMode)), count: Number(nodeMode) });
+          continue;
+        }
+        const tried: Cell[] = [];
+        for (const n of NODE_SIZES) {
+          const res = at(n);
+          tried.push({ res, count: n });
+          if (res.ok && nodeMode === 'auto') break;
+        }
+        const fitting = tried.filter((t) => t.res.ok);
+        // With nothing fitting, show why the biggest node failed.
+        const ratio = (t: Cell) => (t.res.costUsd > 0 ? t.res.revenueUsd / t.res.costUsd : 0);
+        const pick = fitting.length === 0 ? tried[tried.length - 1]! : nodeMode === 'best' ? fitting.reduce((a, b) => (ratio(b) > ratio(a) ? b : a)) : fitting[0]!;
+        m.set(`${r.id}|${mod.id}`, pick);
       }
     }
     return m;
-  }, [rowDefs, s, count, workload, mtp]);
+  }, [rowDefs, s, nodeMode, workload, mtp]);
 
   const marginOf = (r: SlotResult) => (s.afterTax ? r.afterTaxMarginUsd : r.marginUsd);
   const marginScale = useMemo(() => {
-    const vals = [...results.values()].filter((r) => r.ok).map((r) => Math.abs(r.marginUsd));
+    const vals = [...results.values()].filter((c) => c.res.ok).map((c) => Math.abs(c.res.marginUsd));
     vals.sort((a, b) => a - b);
     return vals.length ? Math.max(1, vals[Math.floor(vals.length * 0.9)] ?? 1) : 1;
   }, [results]);
@@ -85,9 +126,9 @@ export function ViabilityView() {
   const cells: HeatCell[] = [];
   for (const r of rowDefs) {
     for (const mod of ECON_MODELS) {
-      const res = results.get(`${r.id}|${mod.id}`)!;
+      const { res, count: nodeCount } = results.get(`${r.id}|${mod.id}`)!;
       const key = { row: r.id, col: mod.id };
-      const title = `${r.label} · ${SHORT[mod.id]}`;
+      const title = `${r.label}${r.ownership === 'rent' && nodeCount > 1 ? ` ×${nodeCount}` : ''} · ${short(mod.id)}`;
       if (!res.ok) {
         cells.push({ ...key, t: null, text: '—', tipTitle: title, tip: [{ label: 'Cannot serve', value: res.reason }] });
         continue;
@@ -117,6 +158,7 @@ export function ViabilityView() {
         text: slow ? `${text}*` : text,
         tipTitle: title,
         tip: [
+          ...(r.ownership === 'rent' ? [{ label: 'Node', value: `${nodeCount} × ${gpuShort(r.gpuId)}` }] : []),
           { label: 'Revenue a month', value: money(res.revenueUsd) },
           { label: r.ownership === 'owned' ? 'Lium bar' : 'Rent', value: money(comp) },
           { label: 'Margin', value: money(marginOf(res)) },
@@ -124,6 +166,7 @@ export function ViabilityView() {
           { label: 'Break-even card use', value: res.breakEvenUtil === null ? 'not reachable' : fmtPct(res.breakEvenUtil) },
           { label: 'Weights', value: res.capacity ? QUANT_LABEL[res.capacity.quant] : '' },
           { label: 'Output speed', value: `${fmtTps(res.capacity?.tpsNode ?? 0)} tok/s` },
+          ...(res.capacity ? [{ label: 'Speed from', value: res.capacity.evidence.kind === 'inferencex' ? 'InferenceX measurement' : res.capacity.evidence.kind === 'report-measured' ? "the report's measured point" : res.capacity.evidence.kind === 'report-points' ? "the report's points" : 'fitted roofline only' }] : []),
           { label: 'Per user', value: `${fmtTps(user)} tok/s${slow ? ' (slow)' : ''}` },
           ...(res.hasPlaceholder ? [{ label: 'Inputs', value: 'includes placeholders' }] : []),
         ],
@@ -131,7 +174,9 @@ export function ViabilityView() {
     }
   }
 
-  const selRes = sel ? results.get(sel) : null;
+  const selCell = sel ? results.get(sel) : null;
+  const selRes = selCell?.res ?? null;
+  const selCount = selCell?.count ?? 1;
   const selRow = sel ? rowDefs.find((r) => sel.startsWith(`${r.id}|`)) : undefined;
   const selModelId = sel && selRow ? sel.slice(selRow.id.length + 1) : '';
   const metricLabel: Record<Metric, string> = {
@@ -144,7 +189,7 @@ export function ViabilityView() {
   const addFromSel = () => {
     if (!selRow || !selModelId) return;
     if (selRow.ownership === 'rent') {
-      addSlot(makeSlot({ ownership: 'rent', gpuId: selRow.gpuId, modelId: selModelId, count: Number(count), workloadId: workload, mtp: mtp && !!ECON_MODELS.find((m) => m.id === selModelId)?.mtp, label: `Rented ${gpuShort(selRow.gpuId)} · ${modelName(selModelId)}` }));
+      addSlot(makeSlot({ ownership: 'rent', gpuId: selRow.gpuId, modelId: selModelId, count: selCount, workloadId: workload, mtp: mtp && !!ECON_MODELS.find((m) => m.id === selModelId)?.mtp, label: `Rented ${selCount > 1 ? `${selCount}× ` : ''}${gpuShort(selRow.gpuId)} · ${modelName(selModelId)}` }));
     } else {
       const target = slots.value.find((x) => x.ownership === 'owned' && x.gpuId === selRow.gpuId);
       if (target) setSlot(target.id, { modelId: selModelId, label: `Owned ${gpuShort(selRow.gpuId)} · ${modelName(selModelId)}` });
@@ -156,9 +201,9 @@ export function ViabilityView() {
     if (!selRow || !selModelId) return null;
     const g = GPUS.find((x) => x.id === selRow.gpuId);
     if (!g || !g.buyInr) return null;
-    const slot = makeSlot({ id: 'b', ownership: 'buy', gpuId: g.id, modelId: selModelId, count: 1, workloadId: workload, mtp: mtp && !!ECON_MODELS.find((m) => m.id === selModelId)?.mtp, availabilityId: 'global' });
+    const slot = makeSlot({ id: 'b', ownership: 'buy', gpuId: g.id, modelId: selModelId, count: selCount, workloadId: workload, mtp: mtp && !!ECON_MODELS.find((m) => m.id === selModelId)?.mtp, availabilityId: 'global' });
     return { res: evaluateSlot(slot, s), gpu: g };
-  }, [selRow, selModelId, s, workload, mtp]);
+  }, [selRow, selModelId, selCount, s, workload, mtp]);
 
   const scaleNote =
     metric === 'ratio' ? 'Blue is above break-even, red is below; the colour saturates at 8× or 1/8×. * marks a stream slower than 25 tok/s per user at the operating point.' : metric === 'margin' ? `Blue earns more than it costs, red less; saturates at ${money(marginScale)}.` : metric === 'breakeven' ? 'Darker means a fuller card is needed to break even.' : 'Darker means a busier card.';
@@ -166,7 +211,7 @@ export function ViabilityView() {
   return (
     <div class="stack">
       <div class="notice">
-        Every cell uses the global scenario, quality bar, tax view and route, with the typical-entrant marketplace share. Owned rows are compared with the Lium bar; rented rows with market rent. Hatched cells cannot serve that model.
+        Every cell uses the global scenario, quality bar, tax view and route, with the typical-entrant marketplace share. Owned rows are one card, compared with the Lium bar; rented rows are a node of 1, 2, 4 or 8 cards compared with market rent. Hatched cells cannot serve that model.
       </div>
       <div class="filters" role="region" aria-label="Grid options">
         <Field label="Colour shows">
@@ -176,7 +221,7 @@ export function ViabilityView() {
           <SelectInput label="Workload" value={workload} options={WORKLOAD_OPTIONS} onChange={setWorkload} />
         </Field>
         <Field label="GPUs per rented node">
-          <SelectInput label="GPUs per rented node" value={count} options={COUNT_OPTIONS} onChange={setCount} />
+          <SelectInput<NodeMode> label="GPUs per rented node" value={nodeMode} options={NODE_OPTIONS} onChange={setNodeMode} />
         </Field>
         <Toggle checked={mtp} onChange={setMtp}>
           MTP where available
@@ -185,7 +230,7 @@ export function ViabilityView() {
       <ChartCard
         title={`GPU × model: ${metricLabel[metric]}`}
         subtitle={scaleNote}
-        chart={<Heatmap rows={rowDefs.map((r) => ({ id: r.id, label: r.label }))} cols={ECON_MODELS.map((m) => ({ id: m.id, label: SHORT[m.id] ?? m.name }))} cells={cells} mode={metric === 'ratio' || metric === 'margin' ? 'diverging' : 'sequential'} ariaLabel={`Grid of GPUs against models showing ${metricLabel[metric]}`} selected={sel} onSelect={(r, c) => setSel(`${r}|${c}`)} />}
+        chart={<Heatmap rows={rowDefs.map((r) => ({ id: r.id, label: r.label }))} cols={ECON_MODELS.map((m) => ({ id: m.id, label: short(m.id) }))} cells={cells} mode={metric === 'ratio' || metric === 'margin' ? 'diverging' : 'sequential'} ariaLabel={`Grid of GPUs against models showing ${metricLabel[metric]}`} selected={sel} onSelect={(r, c) => setSel(`${r}|${c}`)} />}
         table={
           <table class="t">
             <thead>
@@ -193,7 +238,7 @@ export function ViabilityView() {
                 <th>GPU</th>
                 {ECON_MODELS.map((m) => (
                   <th key={m.id} class="num">
-                    {SHORT[m.id]}
+                    {short(m.id)}
                   </th>
                 ))}
               </tr>
@@ -205,6 +250,7 @@ export function ViabilityView() {
                   {ECON_MODELS.map((m) => (
                     <td key={m.id} class="num">
                       {cells.find((c) => c.row === r.id && c.col === m.id)?.text ?? '—'}
+                      {r.ownership === 'rent' && results.get(`${r.id}|${m.id}`)?.res.ok && results.get(`${r.id}|${m.id}`)!.count > 1 ? <span class="faint"> ×{results.get(`${r.id}|${m.id}`)!.count}</span> : null}
                     </td>
                   ))}
                 </tr>
@@ -217,7 +263,8 @@ export function ViabilityView() {
         <section class="card" aria-label="Selected cell">
           <div class="spread">
             <h2>
-              {selRow.label} on {modelName(selModelId)}
+              {selRow.label}
+              {selRow.ownership === 'rent' && selCount > 1 && !selRow.label.includes('×') ? ` ×${selCount}` : ''} on {modelName(selModelId)}
             </h2>
             <button type="button" class="btn primary" disabled={!selRes.ok} onClick={addFromSel}>
               {selRow.ownership === 'rent' ? 'Add as a rented card' : 'Put my owned box on this model'}
@@ -270,11 +317,11 @@ export function ViabilityView() {
                   This cell scales throughput from another card by memory bandwidth, which is a placeholder until the roofline engine arrives. <ProvBadge p={{ kind: 'placeholder', src: 'Bandwidth scaling' }} />
                 </div>
               ) : null}
-              {buyRes && selRow.ownership === 'rent' ? (
+              {buyRes && buyRes.res.ok && selRow.ownership === 'rent' ? (
                 <div class="mt">
                   <h3>Buy instead of rent</h3>
                   <p class="small">
-                    A new {buyRes.gpu.short} costs {money(((buyRes.gpu.buyInr?.v ?? 0) / s.fx))} <ProvBadge p={buyRes.gpu.buyInr!.p} compact />. Serving this model it would earn {money(buyRes.res.revenueUsd)} a month and pay itself back in{' '}
+                    {selCount > 1 ? `${selCount} new ${buyRes.gpu.short}s cost` : `A new ${buyRes.gpu.short} costs`} {money(((buyRes.gpu.buyInr?.v ?? 0) * selCount) / s.fx)} <ProvBadge p={buyRes.gpu.buyInr!.p} compact />. Serving this model {selCount > 1 ? 'they' : 'it'} would earn {money(buyRes.res.revenueUsd)} a month and pay {selCount > 1 ? 'themselves' : 'itself'} back in{' '}
                     {buyRes.res.paybackServingMonths === null ? 'never' : `${buyRes.res.paybackServingMonths.toFixed(1)} months`}
                     {buyRes.res.paybackLiumMonths ? `, against ${buyRes.res.paybackLiumMonths.toFixed(1)} months on Lium alone` : ''}. The report's rule: buy only after a rented card has stayed above break-even for three months.
                   </p>

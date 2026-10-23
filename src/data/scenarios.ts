@@ -180,7 +180,7 @@ export interface QosPreset {
 }
 
 export const QOS_PRESETS: QosPreset[] = [
-  { id: 'report', label: 'Report convention', help: 'Each model runs at the operating point the report\'s busy-hour revenue is based on (15-25% of vendor peak).' },
+  { id: 'report', label: 'Report convention', help: 'Each model runs at the operating point the report\'s busy-hour revenue is based on (15-25% of vendor peak), 16 users a card, held down to what the KV cache can carry. On the report-points basis the cache is not checked, as in the report.' },
   { id: 'router', label: 'OpenRouter-competitive', help: "Serve as many concurrent requests as keep every user at the median typical stream speed of the model's listed OpenRouter endpoints (live)." },
   { id: 'floor', label: 'Custom tok/s/user floor', help: 'Serve as many concurrent requests as keep every user above a speed you set.' },
 ];

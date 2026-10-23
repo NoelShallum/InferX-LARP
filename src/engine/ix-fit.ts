@@ -14,15 +14,29 @@ export interface FitRow {
 }
 
 /**
+ * Models whose InferenceX runs were never fitted. The roofline predicts them from their architecture alone, so they are
+ * the out-of-sample check on the constants.
+ */
+export const HOLDOUT_MODELS = ['minimaxm3'];
+
+const servedFormats = (c: IxCurve) => c.quant !== 'fp16' && (c.modelId !== 'qwen35_397b' || c.precision === 'fp4');
+
+/**
  * Runs at the weight formats the dashboard serves: 4-bit and FP8 for the catalog models, and 4-bit only for the 397B
  * model, whose 4-bit run is the one measured on the PRO 6000. Its 8-GPU FP8 and BF16 runs are far outside what a small
  * fleet rents and stay out of the fit.
  */
 export function fitRows(): FitRow[] {
-  return IX_CURVES.filter((c) => c.quant !== 'fp16' && (c.modelId !== 'qwen35_397b' || c.precision === 'fp4')).flatMap((curve) =>
-    curve.pts.map((p) => ({ curve, conc: p.conc, outM: p.outPerGpu, userM: p.user, ttftM: p.ttft50 })),
-  );
+  return rowsOf(IX_CURVES.filter((c) => servedFormats(c) && !HOLDOUT_MODELS.includes(c.modelId)));
 }
+
+/** The same rows for the models the fit never saw. */
+export function holdoutRows(): FitRow[] {
+  return rowsOf(IX_CURVES.filter((c) => servedFormats(c) && HOLDOUT_MODELS.includes(c.modelId)));
+}
+
+const rowsOf = (curves: IxCurve[]): FitRow[] =>
+  curves.flatMap((curve) => curve.pts.map((p) => ({ curve, conc: p.conc, outM: p.outPerGpu, userM: p.user, ttftM: p.ttft50 })));
 
 export interface FitPrediction {
   /** Output tokens per second per GPU. */

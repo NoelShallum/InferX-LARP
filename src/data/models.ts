@@ -46,6 +46,8 @@ export interface Model {
   mtp: MtpSpec | null;
   /** Whether the report models revenue for this model. */
   economics: boolean;
+  /** Not in the report: priced and sized from live OpenRouter data alone, with only the checkpoints listed here. */
+  liveOnly?: boolean;
   note?: string;
 }
 
@@ -53,6 +55,114 @@ const T52 = 'Report §5.2';
 const T51 = 'Report §5.1';
 
 const kvGeneric = (bytes: number, why: string): V => ph(bytes, 'No source yet', why);
+
+const HF = (repo: string) => `https://huggingface.co/${repo}`;
+const SUM = 'Safetensors files of the checkpoint, summed from the Hugging Face file tree on 23 Oct 2026';
+const NO_POINTS: Pick<Model, 'conc8k' | 'conc32k' | 'pro6000' | 'ada' | 'refIdx'> = { conc8k: null, conc32k: null, pro6000: [], ada: [], refIdx: 0 };
+
+/**
+ * Models the report leaves out because they need several data-centre GPUs, but which carry most of OpenRouter's traffic.
+ * Their market comes from live OpenRouter data; their speed from InferenceX where it measured them and the fitted
+ * roofline otherwise. Parameter counts are the model cards'; KV cache comes from `net` (see `withArch`).
+ */
+const LIVE_ONLY: Omit<Model, 'net'>[] = [
+  {
+    id: 'dsv41flash',
+    name: 'DeepSeek V4.1 Flash',
+    orSlug: 'deepseek/deepseek-v4.1-flash',
+    arch: 'moe',
+    paramsB: srcd(552, HF('deepseek-ai/DeepSeek-V4.1-Flash'), 'Model card: 552B backbone parameters, plus a 196B Engram lookup table'),
+    activeB: srcd(16, HF('deepseek-ai/DeepSeek-V4.1-Flash'), 'Model card: 16B activated per token in decode, 8B in prefill'),
+    weights: {
+      nvfp4: srcd(429.0, HF('nvidia/DeepSeek-V4.1-Flash-NVFP4'), SUM),
+      fp8: srcd(510.3, HF('deepseek-ai/DeepSeek-V4.1-Flash'), `${SUM}. The released checkpoint keeps attention and Engram in FP8 and experts in FP4; treated here as FP8.`),
+    },
+    defaultQuant: 'nvfp4',
+    kvBytesPerTok: ph(890, 'No source yet', 'Replaced by the model card figure'),
+    ...NO_POINTS,
+    pointsQuant: { pro6000: 'nvfp4', ada: 'nvfp4' },
+    mtp: null,
+    economics: true,
+    liveOnly: true,
+    note: 'The biggest market on OpenRouter. The Engram table (196 GB) stays on the GPUs here; hosting it in CPU memory would let it fit fewer cards but is not modelled.',
+  },
+  {
+    id: 'glm53',
+    name: 'GLM-5.3',
+    orSlug: 'z-ai/glm-5.3',
+    arch: 'moe',
+    paramsB: ph(744, 'No source yet', 'Replaced by the figure derived from the config'),
+    activeB: ph(40, 'No source yet', 'Replaced by the figure derived from the config'),
+    weights: {
+      nvfp4: srcd(464.1, HF('nvidia/GLM-5.3-NVFP4'), SUM),
+      fp8: srcd(755.6, HF('zai-org/GLM-5.3'), `${SUM}. The released checkpoint is FP8.`),
+    },
+    defaultQuant: 'nvfp4',
+    kvBytesPerTok: ph(55000, 'No source yet', 'Replaced by the figure from the config'),
+    ...NO_POINTS,
+    pointsQuant: { pro6000: 'nvfp4', ada: 'nvfp4' },
+    mtp: null,
+    economics: true,
+    liveOnly: true,
+  },
+  {
+    id: 'glm53flash',
+    name: 'GLM-5.3 Flash',
+    orSlug: 'z-ai/glm-5.3-flash',
+    arch: 'moe',
+    paramsB: srcd(320, HF('zai-org/GLM-5.3-Flash'), 'Model card: 320B total parameters'),
+    activeB: srcd(18, HF('zai-org/GLM-5.3-Flash'), 'Model card: 18B active parameters'),
+    weights: {
+      nvfp4: srcd(204.4, HF('nvidia/GLM-5.3-Flash-NVFP4'), SUM),
+      fp8: srcd(328.3, HF('zai-org/GLM-5.3-Flash'), `${SUM}. The released checkpoint is FP8.`),
+    },
+    defaultQuant: 'nvfp4',
+    kvBytesPerTok: ph(7000, 'No source yet', 'Replaced by the figure from the config'),
+    ...NO_POINTS,
+    pointsQuant: { pro6000: 'nvfp4', ada: 'nvfp4' },
+    mtp: null,
+    economics: true,
+    liveOnly: true,
+  },
+  {
+    id: 'minimaxm3',
+    name: 'MiniMax-M3',
+    orSlug: 'minimax/minimax-m3',
+    arch: 'moe',
+    paramsB: srcd(428, HF('MiniMaxAI/MiniMax-M3'), 'Model card: about 428B parameters'),
+    activeB: srcd(23, HF('MiniMaxAI/MiniMax-M3'), 'Model card: about 23B activated parameters'),
+    weights: {
+      nvfp4: srcd(250.1, HF('nvidia/MiniMax-M3-NVFP4'), SUM),
+      fp8: srcd(443.7, HF('MiniMaxAI/MiniMax-M3-MXFP8'), SUM),
+    },
+    defaultQuant: 'nvfp4',
+    kvBytesPerTok: ph(90000, 'No source yet', 'Replaced by the figure from the config'),
+    ...NO_POINTS,
+    pointsQuant: { pro6000: 'nvfp4', ada: 'nvfp4' },
+    mtp: null,
+    economics: true,
+    liveOnly: true,
+  },
+  {
+    id: 'mimo26flash',
+    name: 'MiMo-V2.6 Flash',
+    orSlug: 'xiaomi/mimo-v2.6-flash',
+    arch: 'moe',
+    paramsB: srcd(309, HF('XiaomiMiMo/MiMo-V2.6-Flash-RL'), 'Model card: 309B total parameters'),
+    activeB: srcd(15, HF('XiaomiMiMo/MiMo-V2.6-Flash-RL'), 'Model card: 15B activated parameters'),
+    weights: {
+      mxfp4: srcd(172.9, HF('XiaomiMiMo/MiMo-V2.6-Flash-RL'), `${SUM}. The released checkpoint keeps attention in FP8 and experts in MXFP4.`),
+    },
+    defaultQuant: 'mxfp4',
+    kvBytesPerTok: ph(11500, 'No source yet', 'Replaced by the figure from the config'),
+    ...NO_POINTS,
+    pointsQuant: { pro6000: 'mxfp4', ada: 'mxfp4' },
+    mtp: null,
+    economics: true,
+    liveOnly: true,
+    note: 'Only the released MXFP4 checkpoint is sized; the OpenRouter listing is the RL variant.',
+  },
+];
 
 const RAW_MODELS: Omit<Model, 'net'>[] = [
   {
@@ -358,6 +468,7 @@ const RAW_MODELS: Omit<Model, 'net'>[] = [
     economics: false,
     note: 'Barely fits a PRO 6000 and carries only 1.5B paid tokens a day.',
   },
+  ...LIVE_ONLY,
 ];
 
 /** Replace placeholder memory figures with what each model's Hugging Face config says. */

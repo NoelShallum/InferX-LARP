@@ -14,7 +14,9 @@ Agreed in the interview before building. Kept here so the reasons survive.
 - InferenceX has no measured data for one PRO 6000, Ada or 5090 on 27–35B models, so the report's published points are the anchors and the roofline fills the gaps.
 - Default basis: the fitted roofline scaled to a measurement where one exists ("measured where it exists, scaling model elsewhere"): InferenceX's curve for the card and model, else the report's one measured point. The report's estimates are not used. The report's points as printed and the roofline alone are one switch away.
 - The roofline's efficiencies are fitted per card family to 393 InferenceX points (H100, H200, B200, four PRO 6000s; gpt-oss-120b, Llama 3.3 70B, Qwen3.5-397B). Cards InferenceX has not measured inherit the nearest family; dense prefill on the PRO 6000 and Ada is a placeholder.
-- Model architecture (KV per token, sliding windows, recurrent state, experts, active parameters) comes from Hugging Face configs, tagged Sourced with the commit.
+- Model architecture (KV per token, sliding windows, recurrent state, experts, active parameters) comes from Hugging Face configs, tagged Sourced with the commit. Where a config cannot settle a figure (DeepSeek V4.1 Flash's cache, a sparse indexer's key layout) the model card or a stated assumption is used and the value is tagged Derived with the assumption in its note.
+- MiniMax-M3's InferenceX runs are held out of the fit (`HOLDOUT_MODELS` in `ix-fit.ts`) so the roofline's accuracy on an uncalibrated model is measured, not assumed; a regression test bounds it.
+- A benchmark point that breaks the physics of a load test (throughput collapsing as concurrency rises, a lone user slower than a crowd) is dropped and listed, never silently.
 - **Multi-GPU rentals are in scope now.** InferenceX measured curves are used where they exist; a tensor-parallel scaling model fills the rest.
 
 ## Demand and price
@@ -50,7 +52,7 @@ Every value is tagged measured, report, report estimate, derived, sourced or pla
 
 ## Scope for now
 
-- **Models:** the report's, from its §5 tables.
+- **Models:** the report's, from its §5 tables, plus the five busiest OpenRouter models it does not cover (DeepSeek V4.1 Flash, GLM-5.3, GLM-5.3 Flash, MiniMax-M3, MiMo-V2.6 Flash). Those have no report numbers: market from live OpenRouter data, speed from the roofline (MiniMax-M3 anchored to InferenceX), and rented nodes of 2, 4 and 8 cards because none fits one card.
 - **GPUs:** the report's (PRO 6000, 6000 Ada, 3050, 5090, 4090, L40S, H100, H200, B200) plus the Tesla V100 32 GB. The 16 GB V100 is left out because it fits almost none of the models. AMD and A100 come later.
 
 ## Build order
@@ -59,7 +61,8 @@ Every value is tagged measured, report, report estimate, derived, sourced or pla
 2. Vast.ai browser scrape (done once live, then scripted) and an OpenRouter script, with dated snapshots; replace the static prices. **Done.**
 3. Roofline engine, starting with PRO 6000 × Qwen3.8-27B end to end, then every model and card. **Done** (Hugging Face configs, roofline, prefill and first-token time).
 4. InferenceX measured curves (single card and tensor-parallel) fit the roofline and anchor it. **Done.**
-5. Next: a measurement run on the owned cards, AMD and A100.
+5. Widen the models: the five highest-traffic OpenRouter models on nodes of 1, 2, 4 and 8 cards. **Done.**
+6. Next: a measurement run on the owned cards, AMD and A100.
 
 ## Acceptance
 

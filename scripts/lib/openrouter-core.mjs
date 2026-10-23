@@ -18,6 +18,12 @@ export const MODEL_SLUGS = {
   qwen35_122b: 'qwen/qwen3.5-122b-a10b',
   mistral_small4: 'mistralai/mistral-small-2603',
   devstral2: 'mistralai/devstral-2512',
+  // Not in the report: they carry most of OpenRouter's traffic.
+  dsv41flash: 'deepseek/deepseek-v4.1-flash',
+  glm53: 'z-ai/glm-5.3',
+  glm53flash: 'z-ai/glm-5.3-flash',
+  minimaxm3: 'minimax/minimax-m3',
+  mimo26flash: 'xiaomi/mimo-v2.6-flash',
 };
 
 /** One endpoint from /api/v1/models/{slug}/endpoints, merged with its frontend stats where the names match. */

@@ -38,7 +38,7 @@ for (const id of wanted) {
     const paramsRepo = spec.paramsRepo ?? spec.repo;
     const meta = await getJson(`${HF}/api/models/${paramsRepo}?expand%5B%5D=safetensors`);
     const total = meta.safetensors?.total ?? null;
-    const arch = archFromConfig(config, { totalParams: total, towersInTotal: paramsRepo === spec.repo });
+    const arch = archFromConfig(config, { totalParams: total, towersInTotal: paramsRepo === spec.repo, card: spec.card ?? null });
     models[id] = {
       repo: spec.repo,
       sha,
@@ -48,7 +48,7 @@ for (const id of wanted) {
       ...arch,
     };
     const kv = (arch.fullTokBytes / 1000).toFixed(1);
-    console.log(`${id.padEnd(15)} ${arch.family.padEnd(18)} KV ${kv} KB/token, state ${(arch.stateBytes / 1e6).toFixed(0)} MB, active ${arch.params ? (arch.params.active / 1e9).toFixed(1) + 'B' : 'n/a'} of ${arch.params ? (arch.params.text / 1e9).toFixed(1) + 'B' : 'n/a'} text, routed ${arch.params ? Math.round(arch.params.routedShare * 100) : 0}%`);
+    console.log(`${id.padEnd(15)} ${arch.family.padEnd(18)} KV ${kv} KB/token, state ${(arch.stateBytes / 1e6).toFixed(0)} MB, active ${arch.params ? (arch.params.active / 1e9).toFixed(1) + 'B' : 'n/a'} of ${arch.params ? (arch.params.text / 1e9).toFixed(1) + 'B' : 'n/a'} text, routed ${arch.params ? Math.round(arch.params.routedShare * 100) : 0}%${arch.kvSource === 'model-card' ? ' (KV from the model card)' : ''}`);
   } catch (e) {
     console.error(`${id}: ${e.message}`);
   }

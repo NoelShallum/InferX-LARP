@@ -372,7 +372,10 @@ export function StackedBar({ segments, ariaLabel, total, totalLabel }: { segment
   const [ref, w] = useWidth();
   const [tip, setTip] = useState<TipData | null>(null);
   const h = 54;
-  const x = scaleLinear().domain([0, total]).range([0, w]);
+  // Weights that exceed the card run past its limit; the bar then spans what is needed and marks where the card ends.
+  const sum = segments.reduce((a, s) => a + s.value, 0);
+  const over = sum > total * 1.001;
+  const x = scaleLinear().domain([0, over ? sum : total]).range([0, w]);
   let acc = 0;
   return (
     <div class="chart" ref={ref} onPointerLeave={() => setTip(null)}>
@@ -408,11 +411,19 @@ export function StackedBar({ segments, ariaLabel, total, totalLabel }: { segment
             </g>
           );
         })}
+        {over ? (
+          <g>
+            <line x1={x(total)} x2={x(total)} y1={2} y2={44} stroke="var(--ink)" stroke-width={2} stroke-dasharray="3 3" />
+            <text x={x(total) + 5} y={h - 4}>
+              card ends at {totalLabel}
+            </text>
+          </g>
+        ) : null}
         <text x={0} y={h - 4}>
           0
         </text>
         <text x={w} y={h - 4} text-anchor="end">
-          {totalLabel}
+          {over ? `${sum.toFixed(0)} GB needed` : totalLabel}
         </text>
       </svg>
       <Tip tip={tip} width={w} />
@@ -451,10 +462,14 @@ export function Heatmap({
   const [tip, setTip] = useState<TipData | null>(null);
   const labelW = 150;
   const headH = 96;
-  const cw = Math.max(54, Math.min(104, (w - labelW - 8) / Math.max(1, cols.length)));
+  const colW = (room: number) => Math.max(54, Math.min(104, room / Math.max(1, cols.length)));
+  // The rotated headings run up and to the right, so the last one needs room past its column.
+  const longest = Math.max(0, ...cols.map((c) => c.label.length));
+  const pad = Math.max(8, Math.ceil(longest * 4.8 - colW(w - labelW - 8) / 2));
+  const cw = colW(w - labelW - pad);
   const rh = 38;
   const h = headH + rows.length * rh + 6;
-  const W = labelW + cw * cols.length + 8;
+  const W = labelW + cw * cols.length + pad;
   const map = new Map(cells.map((c) => [`${c.row}|${c.col}`, c]));
   const fill = (t: number | null): string => {
     if (t === null) return 'url(#nodata)';

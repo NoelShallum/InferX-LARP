@@ -322,7 +322,9 @@ function SlotCard({ r }: { r: SlotResult }) {
         <>
           {cap.kvLimited ? (
             <div class="warnbox">
-              The KV pool holds about {fmtNum(cap.kvConcPerGpu, 0)} users per GPU at {fmtTokens(r.shape?.avgTokens ?? 0)}-token context, fewer than the {fmtNum(cap.cPerGpu, 0)} this operating point assumes.
+              {cap.cPerGpu > cap.kvConcPerGpu * 1.0001
+                ? `The KV pool holds about ${fmtNum(cap.kvConcPerGpu, 0)} users per GPU at ${fmtTokens(r.shape?.avgTokens ?? 0)}-token context, fewer than the ${fmtNum(cap.cPerGpu, 0)} this operating point assumes.`
+                : `The KV pool is the limit here: it holds about ${fmtNum(cap.kvConcPerGpu, 0)} users per GPU at ${fmtTokens(r.shape?.avgTokens ?? 0)}-token context, so the operating point stops there although the quality bar would allow more.`}
             </div>
           ) : null}
           {cap.extrapolated ? <div class="warnbox">This operating point is beyond the highest measured concurrency; throughput is extrapolated.</div> : null}

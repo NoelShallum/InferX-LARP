@@ -14,6 +14,9 @@ export const WORKLOAD_OPTIONS = WORKLOADS.map((w) => ({ id: w.id, label: w.label
 export const QUANT_OPTIONS: { id: Quant | 'auto'; label: string }[] = [{ id: 'auto', label: 'Auto' }, ...(Object.keys(QUANT_LABEL) as Quant[]).map((q) => ({ id: q, label: QUANT_LABEL[q] }))];
 export const AVAIL_OPTIONS = AVAILABILITY_PRESETS.map((a) => ({ id: a.id, label: a.label }));
 export const COUNT_OPTIONS = ['1', '2', '4', '8'].map((n) => ({ id: n, label: `${n}×` }));
+/** Node sizes a provider can rent. */
+export const NODE_SIZES = [1, 2, 4, 8];
+export const AUTO_NODE_OPTION = { id: 'auto', label: 'Smallest that fits' };
 
 export const modelName = (id: string) => (id === 'lium' ? 'Stay on Lium' : (MODELS.find((m) => m.id === id)?.name ?? id));
 export const gpuShort = (id: string) => GPUS.find((g) => g.id === id)?.short ?? id;

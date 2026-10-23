@@ -1,5 +1,5 @@
 import { useState } from 'preact/hooks';
-import { GPU_BY_ID, QUANT_LABEL } from '../data/gpus';
+import { GPU_BY_ID, QUANT_LABEL, type Gpu } from '../data/gpus';
 import { GOLDEN_AL_QWEN38_FLASH_NEXT, MODEL_BY_ID } from '../data/models';
 import { bestIxCurve, ixProv } from '../data/ix';
 import { THROUGHPUT_PRESETS, WORKLOAD_BY_ID } from '../data/scenarios';
@@ -12,7 +12,7 @@ import { fmtNum, fmtPct, fmtTps } from '../engine/units';
 import { settings } from '../state';
 import { ChartCard, LineChart, type ExtraPoint, type LineSeries } from '../ui/charts';
 import { Field, SelectInput, Toggle } from '../ui/controls';
-import { COUNT_OPTIONS, ECON_MODELS, SERVE_GPUS, WORKLOAD_OPTIONS } from '../ui/options';
+import { AUTO_NODE_OPTION, COUNT_OPTIONS, ECON_MODELS, NODE_SIZES, SERVE_GPUS, WORKLOAD_OPTIONS } from '../ui/options';
 import { ProvBadge, Val } from '../ui/prov';
 
 const GPU_COLOR: Record<string, string> = {
@@ -35,8 +35,7 @@ export function ThroughputView() {
   const [workloadId, setWorkloadId] = useState('observed');
   const [picked, setPicked] = useState<string[]>(['pro6000', 'ada6000', 'rtx5090', 'h100']);
   const [mtp, setMtp] = useState(false);
-  const [count, setCount] = useState('1');
-  const n = Number(count);
+  const [count, setCount] = useState('auto');
   const model = MODEL_BY_ID[modelId]!;
   const pro = GPU_BY_ID['pro6000']!;
   const wl = WORKLOAD_BY_ID[workloadId]!;
@@ -53,8 +52,16 @@ export function ThroughputView() {
   const prefill: { gpu: string; color: string; rate: number; seconds: number; burst8k: number; reported: number | null }[] = [];
   let shapeNow = { avgTokens: 0, outShare: 0, cacheHit: 0 };
 
+  // The request does not depend on the card, so it is shown even when no card can hold the model.
+  const reqSlot = makeSlot({ gpuId: picked[0] ?? 'pro6000', modelId, ownership: 'rent', workloadId });
+  const reqShape = slotShape(reqSlot, s);
+  if (reqShape) shapeNow = { avgTokens: reqShape.avgTokens, outShare: reqShape.outShare, cacheHit: reqShape.cacheHit };
+  /** Cards in the node: the one chosen, or the smallest rentable size that holds the model. */
+  const nodeFor = (g: Gpu) => (count === 'auto' ? (NODE_SIZES.find((k) => chooseQuant(model, g, k, 'auto').fits) ?? NODE_SIZES[NODE_SIZES.length - 1]!) : Number(count));
+
   for (const id of picked) {
     const gpu = GPU_BY_ID[id]!;
+    const n = nodeFor(gpu);
     const fit = chooseQuant(model, gpu, n, 'auto');
     if (!fit.fits) {
       unfit.push(`${gpu.short}${n > 1 ? ` ×${n}` : ''}: ${fit.reason}`);
@@ -205,7 +212,7 @@ export function ThroughputView() {
           <SelectInput label="Workload preset" value={workloadId} options={WORKLOAD_OPTIONS} onChange={setWorkloadId} />
         </Field>
         <Field label="GPUs per node">
-          <SelectInput label="GPUs per node" value={count} options={COUNT_OPTIONS} onChange={setCount} />
+          <SelectInput label="GPUs per node" value={count} options={[AUTO_NODE_OPTION, ...COUNT_OPTIONS]} onChange={setCount} />
         </Field>
         <Toggle checked={mtp} onChange={setMtp} title={model.mtp?.note}>
           {model.mtp ? 'MTP on' : 'No MTP evidence for this model'}

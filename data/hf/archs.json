@@ -1,6 +1,6 @@
 {
  "source": "huggingface.co",
- "generatedAt": "2026-10-23T12:15:43.740Z",
+ "generatedAt": "2026-10-23T12:58:51.902Z",
  "models": {
   "qwen38_27b": {
    "repo": "Qwen/Qwen3.8-27B",
@@ -24,17 +24,23 @@
    "headDim": 256,
    "kEqV": false,
    "mla": null,
-   "window": null,
    "fullTokBytes": 32768,
+   "cappedTokBytes": 0,
+   "scanTokBytes": 0,
    "slidingTokBytes": 0,
+   "window": null,
+   "readCapTokens": null,
    "stateBytes": 153944064,
    "stateDetail": "48 gated-delta-net layers × 3.21 MB",
-   "readCapTokens": null,
+   "lookupGB": 0,
+   "kvSource": "config",
+   "kvNote": "",
    "moe": null,
    "params": {
     "total": 27781427952,
     "text": 27370357488,
     "active": 26098959088,
+    "activePrefill": null,
     "embed": 1271398400,
     "embedTied": false,
     "routedShare": 0,
@@ -42,7 +48,8 @@
      "towers": 411070464,
      "mtpExperts": 0,
      "ngram": 0
-    }
+    },
+    "source": null
    },
    "mtpLayers": 1,
    "maxPositions": 262144
@@ -69,12 +76,17 @@
    "headDim": 256,
    "kEqV": false,
    "mla": null,
-   "window": null,
    "fullTokBytes": 10240,
+   "cappedTokBytes": 0,
+   "scanTokBytes": 0,
    "slidingTokBytes": 0,
+   "window": null,
+   "readCapTokens": null,
    "stateBytes": 64389120,
    "stateDetail": "30 gated-delta-net layers × 2.15 MB",
-   "readCapTokens": null,
+   "lookupGB": 0,
+   "kvSource": "config",
+   "kvNote": "",
    "moe": {
     "experts": 256,
     "topK": 8,
@@ -88,6 +100,7 @@
     "total": 35951822704,
     "text": 34735445872,
     "active": 3021264752,
+    "activePrefill": null,
     "embed": 508559360,
     "embedTied": false,
     "routedShare": 0.9273597592125936,
@@ -95,7 +108,8 @@
      "towers": 411070464,
      "mtpExperts": 805306368,
      "ngram": 0
-    }
+    },
+    "source": null
    },
    "mtpLayers": 1,
    "maxPositions": 262144
@@ -122,12 +136,17 @@
    "headDim": 256,
    "kEqV": true,
    "mla": null,
-   "window": 1024,
    "fullTokBytes": 5120,
+   "cappedTokBytes": 0,
+   "scanTokBytes": 0,
    "slidingTokBytes": 102400,
+   "window": 1024,
+   "readCapTokens": null,
    "stateBytes": 0,
    "stateDetail": "",
-   "readCapTokens": null,
+   "lookupGB": 0,
+   "kvSource": "config",
+   "kvNote": "",
    "moe": {
     "experts": 128,
     "topK": 8,
@@ -141,6 +160,7 @@
     "total": 25805936206,
     "text": 25394865742,
     "active": 3984254542,
+    "activePrefill": null,
     "embed": 738197504,
     "embedTied": true,
     "routedShare": 0.8993150628171571,
@@ -148,7 +168,8 @@
      "towers": 411070464,
      "mtpExperts": 0,
      "ngram": 0
-    }
+    },
+    "source": null
    },
    "mtpLayers": 0,
    "maxPositions": 262144
@@ -175,17 +196,23 @@
    "headDim": 256,
    "kEqV": true,
    "mla": null,
-   "window": 1024,
    "fullTokBytes": 20480,
+   "cappedTokBytes": 0,
+   "scanTokBytes": 0,
    "slidingTokBytes": 409600,
+   "window": 1024,
+   "readCapTokens": null,
    "stateBytes": 0,
    "stateDetail": "",
-   "readCapTokens": null,
+   "lookupGB": 0,
+   "kvSource": "config",
+   "kvNote": "",
    "moe": null,
    "params": {
     "total": 31273088876,
     "text": 30862018412,
     "active": 30862018412,
+    "activePrefill": null,
     "embed": 1409286144,
     "embedTied": true,
     "routedShare": 0,
@@ -193,7 +220,8 @@
      "towers": 411070464,
      "mtpExperts": 0,
      "ngram": 0
-    }
+    },
+    "source": null
    },
    "mtpLayers": 0,
    "maxPositions": 262144
@@ -220,12 +248,17 @@
    "headDim": 64,
    "kEqV": false,
    "mla": null,
-   "window": 128,
    "fullTokBytes": 18432,
+   "cappedTokBytes": 0,
+   "scanTokBytes": 0,
    "slidingTokBytes": 18432,
+   "window": 128,
+   "readCapTokens": null,
    "stateBytes": 0,
    "stateDetail": "",
-   "readCapTokens": null,
+   "lookupGB": 0,
+   "kvSource": "config",
+   "kvNote": "",
    "moe": {
     "experts": 128,
     "topK": 4,
@@ -239,6 +272,7 @@
     "total": 116829156672,
     "text": 116829156672,
     "active": 5171418432,
+    "activePrefill": null,
     "embed": 579133440,
     "embedTied": false,
     "routedShare": 0.9814483718470643,
@@ -246,7 +280,8 @@
      "towers": 0,
      "mtpExperts": 0,
      "ngram": 0
-    }
+    },
+    "source": null
    },
    "mtpLayers": 0,
    "maxPositions": 131072
@@ -273,12 +308,17 @@
    "headDim": 64,
    "kEqV": false,
    "mla": null,
-   "window": 128,
    "fullTokBytes": 12288,
+   "cappedTokBytes": 0,
+   "scanTokBytes": 0,
    "slidingTokBytes": 12288,
+   "window": 128,
+   "readCapTokens": null,
    "stateBytes": 0,
    "stateDetail": "",
-   "readCapTokens": null,
+   "lookupGB": 0,
+   "kvSource": "config",
+   "kvNote": "",
    "moe": {
     "experts": 32,
     "topK": 4,
@@ -292,6 +332,7 @@
     "total": 20914757184,
     "text": 20914757184,
     "active": 3614113344,
+    "activePrefill": null,
     "embed": 579133440,
     "embedTied": false,
     "routedShare": 0.9137231396891172,
@@ -299,7 +340,8 @@
      "towers": 0,
      "mtpExperts": 0,
      "ngram": 0
-    }
+    },
+    "source": null
    },
    "mtpLayers": 0,
    "maxPositions": 131072
@@ -326,17 +368,23 @@
    "headDim": 128,
    "kEqV": false,
    "mla": null,
-   "window": null,
    "fullTokBytes": 163840,
+   "cappedTokBytes": 0,
+   "scanTokBytes": 0,
    "slidingTokBytes": 0,
+   "window": null,
+   "readCapTokens": null,
    "stateBytes": 0,
    "stateDetail": "",
-   "readCapTokens": null,
+   "lookupGB": 0,
+   "kvSource": "config",
+   "kvNote": "",
    "moe": null,
    "params": {
     "total": 70553706496,
     "text": 70553706496,
     "active": 69503033344,
+    "activePrefill": null,
     "embed": 1050673152,
     "embedTied": false,
     "routedShare": 0,
@@ -344,7 +392,8 @@
      "towers": 0,
      "mtpExperts": 0,
      "ngram": 0
-    }
+    },
+    "source": null
    },
    "mtpLayers": 0,
    "maxPositions": 131072
@@ -371,17 +420,23 @@
    "headDim": 128,
    "kEqV": false,
    "mla": null,
-   "window": null,
    "fullTokBytes": 81920,
+   "cappedTokBytes": 0,
+   "scanTokBytes": 0,
    "slidingTokBytes": 0,
+   "window": null,
+   "readCapTokens": null,
    "stateBytes": 0,
    "stateDetail": "",
-   "readCapTokens": null,
+   "lookupGB": 0,
+   "kvSource": "config",
+   "kvNote": "",
    "moe": null,
    "params": {
     "total": 12247782400,
     "text": 12247782400,
     "active": 11576693760,
+    "activePrefill": null,
     "embed": 671088640,
     "embedTied": false,
     "routedShare": 0,
@@ -389,7 +444,8 @@
      "towers": 0,
      "mtpExperts": 0,
      "ngram": 0
-    }
+    },
+    "source": null
    },
    "mtpLayers": 0,
    "maxPositions": 131072
@@ -416,12 +472,17 @@
    "headDim": 256,
    "kEqV": false,
    "mla": null,
-   "window": null,
    "fullTokBytes": 12288,
+   "cappedTokBytes": 12288,
+   "scanTokBytes": 0,
    "slidingTokBytes": 0,
+   "window": null,
+   "readCapTokens": 2048,
    "stateBytes": 115458048,
    "stateDetail": "36 gated-delta-net layers × 3.21 MB",
-   "readCapTokens": 2048,
+   "lookupGB": 102.4,
+   "kvSource": "config",
+   "kvNote": "",
    "moe": {
     "experts": 512,
     "topK": 10,
@@ -435,6 +496,7 @@
     "total": 179999981459,
     "text": 125872328595,
     "active": 6799970195,
+    "activePrefill": null,
     "embed": 635699200,
     "embedTied": false,
     "routedShare": 0.959670457743469,
@@ -442,7 +504,8 @@
      "towers": 411070464,
      "mtpExperts": 2516582400,
      "ngram": 51200000000
-    }
+    },
+    "source": null
    },
    "mtpLayers": 1,
    "maxPositions": 262144
@@ -469,12 +532,17 @@
    "headDim": 128,
    "kEqV": false,
    "mla": null,
-   "window": null,
    "fullTokBytes": 4096,
+   "cappedTokBytes": 0,
+   "scanTokBytes": 0,
    "slidingTokBytes": 0,
+   "window": null,
+   "readCapTokens": null,
    "stateBytes": 170229760,
    "stateDetail": "40 Mamba layers × 4.26 MB",
-   "readCapTokens": null,
+   "lookupGB": 0,
+   "kvSource": "config",
+   "kvNote": "",
    "moe": {
     "experts": 512,
     "topK": 22,
@@ -488,6 +556,7 @@
     "total": 123611012096,
     "text": 120792439808,
     "active": 12357098496,
+    "activePrefill": null,
     "embed": 536870912,
     "embedTied": false,
     "routedShare": 0.9333604958986276,
@@ -495,7 +564,8 @@
      "towers": 0,
      "mtpExperts": 2818572288,
      "ngram": 0
-    }
+    },
+    "source": null
    },
    "mtpLayers": 1,
    "maxPositions": 1048576
@@ -525,12 +595,17 @@
     "latent": 256,
     "rope": 64
    },
-   "window": null,
    "fullTokBytes": 11520,
+   "cappedTokBytes": 0,
+   "scanTokBytes": 0,
    "slidingTokBytes": 0,
+   "window": null,
+   "readCapTokens": null,
    "stateBytes": 0,
    "stateDetail": "",
-   "readCapTokens": null,
+   "lookupGB": 0,
+   "kvSource": "config",
+   "kvNote": "",
    "moe": {
     "experts": 128,
     "topK": 4,
@@ -544,6 +619,7 @@
     "total": 119401317376,
     "text": 119099327488,
     "active": 6222218240,
+    "activePrefill": null,
     "embed": 536870912,
     "embedTied": false,
     "routedShare": 0.9736756658318168,
@@ -551,7 +627,8 @@
      "towers": 301989888,
      "mtpExperts": 0,
      "ngram": 0
-    }
+    },
+    "source": null
    },
    "mtpLayers": 0,
    "maxPositions": 1048576
@@ -578,17 +655,23 @@
    "headDim": 128,
    "kEqV": false,
    "mla": null,
-   "window": null,
    "fullTokBytes": 180224,
+   "cappedTokBytes": 0,
+   "scanTokBytes": 0,
    "slidingTokBytes": 0,
+   "window": null,
+   "readCapTokens": null,
    "stateBytes": 0,
    "stateDetail": "",
-   "readCapTokens": null,
+   "lookupGB": 0,
+   "kvSource": "config",
+   "kvNote": "",
    "moe": null,
    "params": {
     "total": 125025989840,
     "text": 125025989840,
     "active": 123415377104,
+    "activePrefill": null,
     "embed": 1610612736,
     "embedTied": false,
     "routedShare": 0,
@@ -596,7 +679,8 @@
      "towers": 0,
      "mtpExperts": 0,
      "ngram": 0
-    }
+    },
+    "source": null
    },
    "mtpLayers": 0,
    "maxPositions": 262144
@@ -623,12 +707,17 @@
    "headDim": 256,
    "kEqV": false,
    "mla": null,
-   "window": null,
    "fullTokBytes": 12288,
+   "cappedTokBytes": 0,
+   "scanTokBytes": 0,
    "slidingTokBytes": 0,
+   "window": null,
+   "readCapTokens": null,
    "stateBytes": 153649152,
    "stateDetail": "36 gated-delta-net layers × 4.27 MB",
-   "readCapTokens": null,
+   "lookupGB": 0,
+   "kvSource": "config",
+   "kvNote": "",
    "moe": {
     "experts": 256,
     "topK": 8,
@@ -642,6 +731,7 @@
     "total": 125086497008,
     "text": 122259507440,
     "active": 9156430064,
+    "activePrefill": null,
     "embed": 762839040,
     "embedTied": false,
     "routedShare": 0.9485079681750761,
@@ -649,7 +739,8 @@
      "towers": 411070464,
      "mtpExperts": 2415919104,
      "ngram": 0
-    }
+    },
+    "source": null
    },
    "mtpLayers": 1,
    "maxPositions": 262144
@@ -676,12 +767,17 @@
    "headDim": 256,
    "kEqV": false,
    "mla": null,
-   "window": null,
    "fullTokBytes": 15360,
+   "cappedTokBytes": 0,
+   "scanTokBytes": 0,
    "slidingTokBytes": 0,
+   "window": null,
+   "readCapTokens": null,
    "stateBytes": 192061440,
    "stateDetail": "45 gated-delta-net layers × 4.27 MB",
-   "readCapTokens": null,
+   "lookupGB": 0,
+   "kvSource": "config",
+   "kvNote": "",
    "moe": {
     "experts": 512,
     "topK": 10,
@@ -695,6 +791,7 @@
     "total": 403397928944,
     "text": 396544407536,
     "active": 16529979376,
+    "activePrefill": null,
     "embed": 1017118720,
     "embedTied": false,
     "routedShare": 0.9747888238845169,
@@ -702,10 +799,317 @@
      "towers": 411070464,
      "mtpExperts": 6442450944,
      "ngram": 0
-    }
+    },
+    "source": null
    },
    "mtpLayers": 1,
    "maxPositions": 262144
+  },
+  "dsv41flash": {
+   "repo": "deepseek-ai/DeepSeek-V4.1-Flash",
+   "sha": "314113f8a7dadb388215396ba5fbee2c610a04d6",
+   "configUrl": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/blob/314113f8a7dadb388215396ba5fbee2c610a04d6/config.json",
+   "paramsRepo": "deepseek-ai/DeepSeek-V4.1-Flash",
+   "note": "DeepSeek-V4.1-Flash is a causal encoder-decoder with Compressed Sparse Attention 2 and a 196B-parameter Engram lookup table. Parameter counts, the Engram size and the KV cache per token are the model card's figures; the sliding-window part of the cache is an estimate.",
+   "family": "gqa-moe",
+   "layers": 40,
+   "layerMix": {
+    "full": 40,
+    "sliding": 0,
+    "linear": 0,
+    "mamba": 0,
+    "other": 0
+   },
+   "hidden": 5120,
+   "vocab": 129280,
+   "heads": 64,
+   "kvHeads": 1,
+   "headDim": 512,
+   "kEqV": false,
+   "mla": null,
+   "fullTokBytes": 890,
+   "cappedTokBytes": 0,
+   "scanTokBytes": 0,
+   "slidingTokBytes": 20480,
+   "window": 128,
+   "readCapTokens": null,
+   "stateBytes": 0,
+   "stateDetail": "",
+   "lookupGB": 196,
+   "kvSource": "model-card",
+   "kvNote": "Model card: 890 bytes of global KV per token with an FP4 main cache. The sliding-window state (128 tokens, one 512-wide KV head per layer) is an estimate.",
+   "moe": {
+    "experts": 384,
+    "topK": 6,
+    "moeLayers": 40,
+    "expertInter": 2304,
+    "matrices": 3,
+    "dimIn": 5120,
+    "routedParams": 543581798400
+   },
+   "params": {
+    "total": 763205315794,
+    "text": 552000000000,
+    "active": 16000000000,
+    "activePrefill": 8000000000,
+    "embed": 661913600,
+    "embedTied": false,
+    "routedShare": 0.9847496347826087,
+    "excluded": {
+     "towers": 0,
+     "mtpExperts": 0,
+     "ngram": 0
+    },
+    "source": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash"
+   },
+   "mtpLayers": 3,
+   "maxPositions": 1048576
+  },
+  "glm53": {
+   "repo": "zai-org/GLM-5.3",
+   "sha": "ba32f8c19c8738e2c57c71798c601d477a7bf844",
+   "configUrl": "https://huggingface.co/zai-org/GLM-5.3/blob/ba32f8c19c8738e2c57c71798c601d477a7bf844/config.json",
+   "paramsRepo": "zai-org/GLM-5.3",
+   "note": "Multi-head latent attention with a DeepSeek-style sparse indexer. The indexer cache (one 128-wide key per token per layer) is an assumption.",
+   "family": "mla-moe",
+   "layers": 78,
+   "layerMix": {
+    "full": 78,
+    "sliding": 0,
+    "linear": 0,
+    "mamba": 0,
+    "other": 0
+   },
+   "hidden": 6144,
+   "vocab": 154880,
+   "heads": 64,
+   "kvHeads": 64,
+   "headDim": 192,
+   "kEqV": false,
+   "mla": {
+    "latent": 512,
+    "rope": 64
+   },
+   "fullTokBytes": 44928,
+   "cappedTokBytes": 44928,
+   "scanTokBytes": 9984,
+   "slidingTokBytes": 0,
+   "window": null,
+   "readCapTokens": 2048,
+   "stateBytes": 0,
+   "stateDetail": "",
+   "lookupGB": 0,
+   "kvSource": "config",
+   "kvNote": "sparse indexer: 78 layers × 128 bytes of index key per token (assumed one head), attention over the top 2048 tokens",
+   "moe": {
+    "experts": 256,
+    "topK": 8,
+    "moeLayers": 75,
+    "expertInter": 2048,
+    "matrices": 3,
+    "dimIn": 6144,
+    "routedParams": 724775731200
+   },
+   "params": {
+    "total": 753329940480,
+    "text": 743666264064,
+    "active": 40588191744,
+    "activePrefill": null,
+    "embed": 951582720,
+    "embedTied": false,
+    "routedShare": 0.9745981043152788,
+    "excluded": {
+     "towers": 0,
+     "mtpExperts": 9663676416,
+     "ngram": 0
+    },
+    "source": null
+   },
+   "mtpLayers": 1,
+   "maxPositions": 1048576
+  },
+  "glm53flash": {
+   "repo": "zai-org/GLM-5.3-Flash",
+   "sha": "46a050bec13002ad29ee795c16e61cf4fa3c4a9c",
+   "configUrl": "https://huggingface.co/zai-org/GLM-5.3-Flash/blob/46a050bec13002ad29ee795c16e61cf4fa3c4a9c/config.json",
+   "paramsRepo": "zai-org/GLM-5.3-Flash",
+   "note": "Hybrid of 34 Kimi-delta linear-attention layers and 11 sparse latent-attention layers. The indexer cache (one 128-wide key per token per layer) is an assumption.",
+   "family": "hybrid-linear-moe",
+   "layers": 45,
+   "layerMix": {
+    "full": 11,
+    "sliding": 0,
+    "linear": 34,
+    "mamba": 0,
+    "other": 0
+   },
+   "hidden": 4096,
+   "vocab": 154880,
+   "heads": 64,
+   "kvHeads": 64,
+   "headDim": 64,
+   "kEqV": false,
+   "mla": {
+    "latent": 512,
+    "rope": 0
+   },
+   "fullTokBytes": 5632,
+   "cappedTokBytes": 5632,
+   "scanTokBytes": 1408,
+   "slidingTokBytes": 0,
+   "window": null,
+   "readCapTokens": 2048,
+   "stateBytes": 147619840,
+   "stateDetail": "34 Kimi-delta layers × 4.34 MB",
+   "lookupGB": 0,
+   "kvSource": "config",
+   "kvNote": "sparse indexer: 11 layers × 128 bytes of index key per token (assumed one head), attention over the top 2048 tokens",
+   "moe": {
+    "experts": 288,
+    "topK": 8,
+    "moeLayers": 42,
+    "expertInter": 2048,
+    "matrices": 3,
+    "dimIn": 4096,
+    "routedParams": 304405807104
+   },
+   "params": {
+    "total": 321323031390,
+    "text": 320000000000,
+    "active": 18000000000,
+    "activePrefill": null,
+    "embed": 634388480,
+    "embedTied": false,
+    "routedShare": 0.9512681472,
+    "excluded": {
+     "towers": 0,
+     "mtpExperts": 0,
+     "ngram": 0
+    },
+    "source": "https://huggingface.co/zai-org/GLM-5.3-Flash"
+   },
+   "mtpLayers": 1,
+   "maxPositions": 1048576
+  },
+  "minimaxm3": {
+   "repo": "MiniMaxAI/MiniMax-M3",
+   "sha": "f0e1c1e04d40177e4673a22097036854f536e9c0",
+   "configUrl": "https://huggingface.co/MiniMaxAI/MiniMax-M3/blob/f0e1c1e04d40177e4673a22097036854f536e9c0/config.json",
+   "paramsRepo": "MiniMaxAI/MiniMax-M3",
+   "note": "Grouped-query attention with MiniMax Sparse Attention. The index cache (4 heads of 128 per token on each sparse layer) and the block-sparse read budget come from the config; whether the index keeps values is an assumption.",
+   "family": "gqa-moe",
+   "layers": 60,
+   "layerMix": {
+    "full": 60,
+    "sliding": 0,
+    "linear": 0,
+    "mamba": 0,
+    "other": 0
+   },
+   "hidden": 6144,
+   "vocab": 200064,
+   "heads": 64,
+   "kvHeads": 4,
+   "headDim": 128,
+   "kEqV": false,
+   "mla": null,
+   "fullTokBytes": 61440,
+   "cappedTokBytes": 58368,
+   "scanTokBytes": 29184,
+   "slidingTokBytes": 0,
+   "window": null,
+   "readCapTokens": 2176,
+   "stateBytes": 0,
+   "stateDetail": "",
+   "lookupGB": 0,
+   "kvSource": "config",
+   "kvNote": "sparse attention on 57 of 60 layers: 17 blocks of 128 tokens read, 4 index heads of 128 per token (keys only, assumed)",
+   "moe": {
+    "experts": 128,
+    "topK": 4,
+    "moeLayers": 57,
+    "expertInter": 3072,
+    "matrices": 3,
+    "dimIn": 6144,
+    "routedParams": 413122166784
+   },
+   "params": {
+    "total": 427040140160,
+    "text": 428000000000,
+    "active": 23000000000,
+    "activePrefill": null,
+    "embed": 1229193216,
+    "embedTied": false,
+    "routedShare": 0.9652387074392523,
+    "excluded": {
+     "towers": 0,
+     "mtpExperts": 0,
+     "ngram": 0
+    },
+    "source": "https://huggingface.co/MiniMaxAI/MiniMax-M3"
+   },
+   "mtpLayers": 1,
+   "maxPositions": 1048576
+  },
+  "mimo26flash": {
+   "repo": "XiaomiMiMo/MiMo-V2.6-Flash-RL",
+   "sha": "dcd3fd83fb181622fbc606fbb1709901982a62c2",
+   "configUrl": "https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Flash-RL/blob/dcd3fd83fb181622fbc606fbb1709901982a62c2/config.json",
+   "paramsRepo": "XiaomiMiMo/MiMo-V2.6-Flash-RL",
+   "note": "9 global-attention layers and 39 sliding-window layers of 128 tokens.",
+   "family": "sliding-moe",
+   "layers": 48,
+   "layerMix": {
+    "full": 9,
+    "sliding": 39,
+    "linear": 0,
+    "mamba": 0,
+    "other": 0
+   },
+   "hidden": 4096,
+   "vocab": 152576,
+   "heads": 64,
+   "kvHeads": 4,
+   "headDim": 192,
+   "kEqV": false,
+   "mla": null,
+   "fullTokBytes": 11520,
+   "cappedTokBytes": 0,
+   "scanTokBytes": 0,
+   "slidingTokBytes": 99840,
+   "window": 128,
+   "readCapTokens": null,
+   "stateBytes": 0,
+   "stateDetail": "",
+   "lookupGB": 0,
+   "kvSource": "config",
+   "kvNote": "",
+   "moe": {
+    "experts": 256,
+    "topK": 8,
+    "moeLayers": 47,
+    "expertInter": 2048,
+    "matrices": 3,
+    "dimIn": 4096,
+    "routedParams": 302795194368
+   },
+   "params": {
+    "total": 310756322688,
+    "text": 309000000000,
+    "active": 15000000000,
+    "activePrefill": null,
+    "embed": 624951296,
+    "embedTied": false,
+    "routedShare": 0.9799197228737864,
+    "excluded": {
+     "towers": 0,
+     "mtpExperts": 0,
+     "ngram": 0
+    },
+    "source": "https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Flash-RL"
+   },
+   "mtpLayers": 3,
+   "maxPositions": 1048576
   }
  }
 }

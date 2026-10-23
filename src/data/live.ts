@@ -199,11 +199,35 @@ export interface LiveMarket {
   p50Tps: number | null;
 }
 
+/** A model the report has no row for: the market row is built from live OpenRouter numbers alone. */
+function liveOnlyBase(modelId: string, m: OrModel): MarketRow | null {
+  const s = m.summary;
+  const t = m.traffic;
+  if (!t || s.inMedian === null || s.outMedian === null) return null;
+  const src = 'OpenRouter public API';
+  const v = (x: number, note: string) => ({ v: x, p: liveP(src, note, OR_DAY) });
+  return {
+    modelId,
+    paidTokensPerDayB: v(t.tokensPerDay / 1e9, 'Paid tokens a day'),
+    endpoints: v(s.endpointsListed, 'Endpoints listed'),
+    inMin: v(s.inMin ?? s.inMedian, 'Cheapest listed endpoint'),
+    inMed: v(s.inMedian, 'Median across listed endpoints'),
+    outMin: v(s.outMin ?? s.outMedian, 'Cheapest listed endpoint'),
+    outMed: v(s.outMedian, 'Median across listed endpoints'),
+    outMax: v(s.outMax ?? s.outMedian, 'Dearest listed endpoint'),
+    cacheHit: t.cacheHit != null ? v(t.cacheHit, 'Cached share of prompt tokens') : { v: 0.5, p: { kind: 'placeholder', src: 'No source yet', note: 'OpenRouter gave no cache figure for this model' } },
+    busyHourMedianUsd: null,
+    busyHourLowestUsd: null,
+    typicalMedianUsd: null,
+  };
+}
+
 /** The static report row with live OpenRouter numbers laid over it. Null when the model is not in the live snapshot. */
 export function liveMarket(modelId: string, useMedianVolume: boolean): LiveMarket | null {
-  const base = MARKET_BY_MODEL[modelId];
   const m = OPENROUTER.models[modelId];
-  if (!base || !m || m.summary.endpointsListed === 0 || m.summary.inMedian === null || m.summary.outMedian === null) return null;
+  if (!m || m.summary.endpointsListed === 0 || m.summary.inMedian === null || m.summary.outMedian === null) return null;
+  const base = MARKET_BY_MODEL[modelId] ?? liveOnlyBase(modelId, m);
+  if (!base) return null;
   const s = m.summary;
   const src = 'OpenRouter public API';
   const asOf = OR_DAY;

@@ -9,10 +9,16 @@ export interface ResolvedMarket {
   live: LiveMarket | null;
 }
 
-/** The market row for a model: live OpenRouter numbers over the report's row when the live source is chosen and available. */
+/**
+ * The market row for a model: live OpenRouter numbers over the report's row when the live source is chosen and
+ * available. A model the report has no row for is priced from live data whichever source is chosen.
+ */
 export function marketFor(modelId: string, settings: Settings): ResolvedMarket | null {
   const base = MARKET_BY_MODEL[modelId];
-  if (!base) return null;
+  if (!base) {
+    const live = liveMarket(modelId, settings.medianVolume);
+    return live ? { row: live.row, live } : null;
+  }
   if (settings.marketSource === 'live') {
     const live = liveMarket(modelId, settings.medianVolume);
     if (live) return { row: live.row, live };
