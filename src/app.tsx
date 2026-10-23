@@ -3,7 +3,7 @@ import { AVAILABILITY_PRESETS, CASES, CASE_LABEL, LISTING_ODDS, QOS_PRESETS, ROU
 import { NEUTRAL_WHATIF } from './engine/types';
 import { resolveCase } from './engine/slot';
 import { fmtPct } from './engine/units';
-import { resetAll, settings, theme, updateSettings, view, VIEWS } from './state';
+import { goTo, resetAll, settings, theme, updateSettings, view, VIEWS } from './state';
 import { Field, NumberInput, SelectInput, Segmented, Toggle } from './ui/controls';
 import { KindLegend, Popover, ProvBadge } from './ui/prov';
 import { CapacityView } from './views/capacity';
@@ -175,7 +175,15 @@ export function App() {
       </header>
       <nav class="nav" aria-label="Views">
         {VIEWS.map((v) => (
-          <a key={v.id} href={`#/${v.id}`} aria-current={view.value === v.id ? 'page' : undefined}>
+          <a
+            key={v.id}
+            href={`#${v.id}`}
+            aria-current={view.value === v.id ? 'page' : undefined}
+            onClick={(e) => {
+              e.preventDefault();
+              goTo(v.id);
+            }}
+          >
             {v.label}
           </a>
         ))}

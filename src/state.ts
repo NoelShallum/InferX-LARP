@@ -49,10 +49,16 @@ effect(() => {
   }
 });
 
+let setByUs = false;
 effect(() => {
   const root = document.documentElement;
-  if (theme.value === 'system') root.removeAttribute('data-theme');
-  else root.setAttribute('data-theme', theme.value);
+  if (theme.value === 'system') {
+    if (setByUs) root.removeAttribute('data-theme');
+    setByUs = false;
+  } else {
+    root.setAttribute('data-theme', theme.value);
+    setByUs = true;
+  }
 });
 
 export const steady = computed(() => portfolioSteady(slots.value, settings.value));
@@ -99,6 +105,15 @@ export const VIEWS = [
 ] as const;
 
 export type ViewId = (typeof VIEWS)[number]['id'];
+
+export const goTo = (id: ViewId): void => {
+  view.value = id;
+  try {
+    window.location.hash = id;
+  } catch {
+    // Some hosts do not let the page change its own hash; the view still switches.
+  }
+};
 
 const fromHash = (): ViewId => {
   const h = window.location.hash.replace(/^#\/?/, '');

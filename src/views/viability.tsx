@@ -3,7 +3,7 @@ import { GPUS, QUANT_LABEL } from '../data/gpus';
 import { makeSlot } from '../engine/defaults';
 import { evaluateSlot, type SlotResult } from '../engine/slot';
 import { fmtPct, fmtTps, fmtX } from '../engine/units';
-import { addSlot, setSlot, settings, slots } from '../state';
+import { addSlot, goTo, setSlot, settings, slots } from '../state';
 import { ChartCard, Heatmap, type HeatCell } from '../ui/charts';
 import { Field, SelectInput, Segmented, Toggle } from '../ui/controls';
 import { M, money } from '../ui/money';
@@ -149,7 +149,7 @@ export function ViabilityView() {
       const target = slots.value.find((x) => x.ownership === 'owned' && x.gpuId === selRow.gpuId);
       if (target) setSlot(target.id, { modelId: selModelId, label: `Owned ${gpuShort(selRow.gpuId)} · ${modelName(selModelId)}` });
     }
-    window.location.hash = '#/portfolio';
+    goTo('portfolio');
   };
 
   const buyRes = useMemo(() => {
